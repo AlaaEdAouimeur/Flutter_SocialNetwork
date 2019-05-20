@@ -1,0 +1,2 @@
+class LoggedIn {}
+class LoggedOut {}
