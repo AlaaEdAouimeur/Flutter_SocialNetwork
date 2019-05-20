@@ -38,8 +38,10 @@ class _HomePageState extends State<HomePage> {
                       .parentReference
                       .child(user)
                       .remove()
-                      .then((_) =>
-                          {print("user deleted"), Navigator.of(context).pop()});
+                      .then((_) => {
+                            print("user deleted"),
+                            Navigator.of(context).pop(),
+                          });
                 },
               ),
               FlatButton(
