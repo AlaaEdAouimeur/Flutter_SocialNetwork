@@ -6,15 +6,14 @@ import 'package:redux_example/routes/namedRoutes.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final String title = "Redux Example";
+  final String title = "The Project Quote";
 
   Widget build(BuildContext context) {
     return new StoreProvider(
-      store: store,
-      child: new MaterialApp(
-        title: title,
-        home: Routes('/'),
-      ),
-    );
+        store: store,
+        child: new MaterialApp(
+          title: title,
+          home: Routes(),
+        ));
   }
 }

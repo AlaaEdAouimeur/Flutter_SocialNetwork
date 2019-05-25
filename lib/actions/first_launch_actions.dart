@@ -1,0 +1,2 @@
+class FirstTime {}
+class NotFirstTime {}

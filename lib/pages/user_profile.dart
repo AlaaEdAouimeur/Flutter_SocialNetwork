@@ -91,9 +91,6 @@ class UserProfileState extends State<UserProfile> {
   }
 
   Future<FirebaseUser> googleLogin() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
     GoogleSignInAccount account = await _googleSignIn.signIn();
     GoogleSignInAuthentication _googleAuth = await account.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -101,35 +98,21 @@ class UserProfileState extends State<UserProfile> {
       idToken: _googleAuth.idToken,
     );
     user = await _auth.signInWithCredential(credential);
-    // setState(() {
-    //   isLoggedIn = true;
-    //   isLoading = false;
-    // });
     print("Display Name : " + user.displayName);
     return user;
   }
 
   Future<FirebaseUser> loginWithFacebook() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
     final result = await facebookLogin.logInWithReadPermissions(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final AuthCredential credential = FacebookAuthProvider.getCredential(
             accessToken: result.accessToken.token);
         user = await _auth.signInWithCredential(credential);
-        // setState(() {
-        //   isLoggedIn = true;
-        //   isLoading = false;
-        // });
         break;
 
       case FacebookLoginStatus.error:
         print("Error with login");
-        // setState(() {
-        //   isLoading = false;
-        // });
         break;
       default:
         print("Default case");

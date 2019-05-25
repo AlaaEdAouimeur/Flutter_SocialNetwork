@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../viewModel/userProfileTab.dart';
 import '../widgets/login_page.dart';
 import '../widgets/user_profile.dart';
+import '../pages/complete_profile_mandatory.dart';
 
 class UserProfileTab extends StatefulWidget {
   @override
@@ -35,7 +36,11 @@ class UserProfileState extends State<UserProfileTab> {
       converter: ViewModel.fromStore,
       builder: (BuildContext context, ViewModel vm) {
         if (!vm.isLoggedIn) {
-          return LoginPage(vm);
+          if (vm.firstTime) {
+            return CompleteProfile(vm);
+          } else {
+            return LoginPage(vm);
+          }
         } else {
           return UserProfile(vm);
         }

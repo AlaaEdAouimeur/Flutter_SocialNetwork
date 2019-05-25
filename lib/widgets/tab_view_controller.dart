@@ -19,6 +19,10 @@ class TabViewController {
         break;
 
       case 3:
+        return Text("Search");
+        break;
+
+      case 4:
         return UserProfileTab();
         break;
 

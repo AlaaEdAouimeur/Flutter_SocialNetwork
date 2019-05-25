@@ -6,11 +6,13 @@ import '../viewModel/userProfileTab.dart';
 class LoginFunctions {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  FirebaseUser user;
   final facebookLogin = FacebookLogin();
+  FirebaseUser user;
 
   Future<void> logout(ViewModel vm) async {
     vm.changeLoadingState(true);
+    if(_googleSignIn != null) _googleSignIn.signOut();
+    if(facebookLogin != null) facebookLogin.logOut();
     await _auth.signOut();
   }
 
@@ -31,6 +33,7 @@ class LoginFunctions {
     final result = await facebookLogin.logInWithReadPermissions(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
+        print("I am here bitches");
         final AuthCredential credential = FacebookAuthProvider.getCredential(
             accessToken: result.accessToken.token);
         user = await _auth.signInWithCredential(credential);

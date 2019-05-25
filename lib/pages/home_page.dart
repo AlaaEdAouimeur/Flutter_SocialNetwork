@@ -56,45 +56,48 @@ class _HomePageState extends State<HomePage> {
 
   Widget appBar() {
     return PreferredSize(
-      preferredSize: Size.fromHeight(40.0),
-      child: AppBar(
-        title: Text(
-          "The Project Quote",
-          style: TextStyle(
-            fontSize: 12.0,
-            letterSpacing: 1.0,
-            wordSpacing: 1.0,
-            color: AppColor.brightRed,
+      preferredSize: Size.fromHeight(20.0),
+      child: Container(
+        width: 100,
+        height: 50,
+        color: Colors.red,
+        child: AppBar(
+          title: Text(
+            "The Project Quote",
+            style: TextStyle(
+              fontSize: 12.0,
+              letterSpacing: 0.5,
+              wordSpacing: 1.0,
+              color: AppColor.brightRed,
+            ),
+            textAlign: TextAlign.center,
           ),
+          backgroundColor: AppColor.offWhite,
+          elevation: 0,
         ),
-        backgroundColor: AppColor.offWhite,
-        elevation: 0,
       ),
     );
   }
 
   Widget bottomNavigator() {
-    return new Theme(
-      data: ThemeData(
-        canvasColor: AppColor.brown,
-      ),
-      child: PreferredSize(
-        preferredSize: Size.fromHeight(20.0),
-        child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home), title: Text("Home")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.book), title: Text("Blog")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.note_add), title: Text("Write")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person), title: Text("User")),
-          ],
-          currentIndex: _selectedIndex,
-          type: BottomNavigationBarType.shifting,
-          onTap: itemTapped,
-        ),
+    return new PreferredSize(
+      preferredSize: Size.fromHeight(40.0),
+      child: BottomNavigationBar(
+        fixedColor: AppColor.offWhite,
+        iconSize: 15,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Home")),
+          BottomNavigationBarItem(icon: Icon(Icons.book), title: Text("Blog")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.note_add), title: Text("Write")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search), title: Text("Search")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), title: Text("User")),
+        ],
+        currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        onTap: itemTapped,
       ),
     );
   }
