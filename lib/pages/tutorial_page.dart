@@ -5,7 +5,7 @@ import '../viewModel/userProfileTab.dart';
 import '../pages/login_page.dart';
 
 class TutorialPage extends StatefulWidget {
-  ViewModel viewModel;
+  final ViewModel viewModel;
   TutorialPage(this.viewModel);
   TutorialPageState createState() => TutorialPageState(viewModel);
 }

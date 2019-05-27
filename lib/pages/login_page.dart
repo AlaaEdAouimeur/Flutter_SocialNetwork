@@ -8,32 +8,31 @@ class LoginPage extends StatelessWidget {
   LoginPage(this.vm);
 
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text("You are not logged in"),
-          Text("Login to track your profile"),
-          googleLoginButton(context),
-        ],
+    return Material(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            loginWithEmailPassword(),
+            googleLoginButton(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget showAlertBox() {
-    return AlertDialog(
-      title: Text(
-          "Account already exist with same email. Try logging in with google."),
-      actions: <Widget>[
-        FlatButton(
-          child: Text("Okay"),
-          onPressed: () => {print("Button Pressed")},
-        ),
-      ],
-    );
+  Widget loginWithEmailPassword() {
+    return Column(
+        children: <Widget>[
+          RaisedButton(
+            child: Text("Sign Up"),
+            onPressed: () => print("pressed"),
+          ),
+        ],
+      );
   }
 
-  Widget googleLoginButton(BuildContext context) {
+  Widget googleLoginButton() {
     return RaisedButton(
       child: Text("Login with google"),
       onPressed: () => loginFunctions.LoginFunctions()
@@ -58,7 +57,6 @@ class LoginPage extends StatelessWidget {
               })
           .catchError((e) => {
                 print(e),
-                showAlertBox(),
                 vm.changeLoadingState(false),
               }),
     );
