@@ -10,26 +10,38 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            loginWithEmailPassword(),
-            googleLoginButton(),
-          ],
+        heightFactor: 0.5,
+        child: Container(
+          color: Colors.black,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              loginWithEmailPassword(),
+              googleLoginButton(),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget loginWithEmailPassword() {
-    return Column(
+    return Container(
+      color: Color.fromRGBO(255, 255, 255, 1),
+      child: Column(
         children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              labelText: "EMAIL"
+            ),
+          ),
           RaisedButton(
             child: Text("Sign Up"),
             onPressed: () => print("pressed"),
           ),
         ],
-      );
+      ),
+    );
   }
 
   Widget googleLoginButton() {
