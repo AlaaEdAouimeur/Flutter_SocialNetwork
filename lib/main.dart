@@ -13,7 +13,11 @@ class MyApp extends StatelessWidget {
         store: store,
         child: new MaterialApp(
           title: title,
-          home: Routes(),
+          theme: ThemeData(fontFamily: 'OpenSans'),
+          home: Scaffold(
+            body: Routes(),
+            resizeToAvoidBottomPadding: false,
+          ),
         ));
   }
 }
