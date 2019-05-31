@@ -5,15 +5,28 @@ import '../functions/instances.dart' as userInstance;
 
 class LoginPage extends StatelessWidget {
   final ViewModel vm;
-  LoginPage(this.vm);
+  LoginPage(this.vm) {
+    _focusNode.addListener(_focusNodeListener);
+    print("constructor");
+  }
+
+  FocusNode _focusNode = new FocusNode();
+
+  Future<Null> _focusNodeListener() async {
+    if (_focusNode.hasFocus){
+      print('TextField got the focus');
+    } else {
+      print('TextField lost the focus');
+    }
+  }
 
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.red,
       child: Center(
-        heightFactor: 0.5,
         child: Container(
           padding: EdgeInsets.all(20.0),
-          color: Colors.black,
+          color: Colors.red,
           child: GestureDetector(
             onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
             child: Column(

@@ -55,7 +55,10 @@ flutter:
   fonts:
     - family: OpenSans
       fonts:
-        - asset: assets/fonts/OpenSans-Light.ttf
+      - asset: assets/fonts/OpenSans-Light.ttf
+    - family: LatoLight
+      fonts:
+      - asset: assets/fonts/Lato-Light.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

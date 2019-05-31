@@ -13,10 +13,9 @@ class MyApp extends StatelessWidget {
         store: store,
         child: new MaterialApp(
           title: title,
-          theme: ThemeData(fontFamily: 'OpenSans'),
+          theme: ThemeData(fontFamily: 'LatoLight'),
           home: Scaffold(
             body: Routes(),
-            resizeToAvoidBottomPadding: false,
           ),
         ));
   }
