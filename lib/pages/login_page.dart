@@ -15,10 +15,32 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   final ViewModel vm;
   bool loginMode = true;
+  bool isLoading = false;
   LoginPageState(this.vm);
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final retypePasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    retypePasswordController.dispose();
+    super.dispose();
+  }
 
   Widget build(BuildContext context) {
-    return Material(
+    return vm.isLoading == true
+        ?
+    Container(
+      width: 20.0,
+      child: Center(child: CircularProgressIndicator(
+        backgroundColor: Colors.red,
+        strokeWidth: 7.0,
+      )),
+    )
+        :
+    Material(
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         body: Container(
@@ -62,7 +84,7 @@ class LoginPageState extends State<LoginPage> {
     return GestureDetector(
         child: Container(
           width: double.infinity,
-          child: loginMode == false ? Text(
+          child: loginMode == true ? Text(
             "New to The Project Quote? Sign Up",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -144,38 +166,84 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
+  BoxDecoration buttonDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(40.0),
+      border: Border.all(
+        color: Colors.transparent,
+        style: BorderStyle.solid,
+        width: 1.0,
+      ),
+    );
+  }
+
   Widget loginWithEmailPassword() {
     return Column(
       children: <Widget>[
         TextField(
           decoration: textFieldDecoration("EMAIL"),
+          keyboardType: TextInputType.emailAddress,
+          onEditingComplete: () {
+            print("Completed");
+          },
+          onChanged: (value) {
+            print("Changed + " + value);
+          },
+          controller: emailController,
         ),
         SizedBox(
           height: 10.0,
         ),
         TextField(
           decoration: textFieldDecoration("PASSWORD"),
+          keyboardType: TextInputType.text,
           obscureText: true,
+          controller: passwordController,
         ),
         loginMode == false ?
-        TextField(
-          decoration: textFieldDecoration("RETYPE PASSWORD"),
-          obscureText: true,
-        )
+          TextField(
+            decoration: textFieldDecoration("RETYPE PASSWORD"),
+            obscureText: true,
+            controller: retypePasswordController,
+          )
             :
-        SizedBox(height: 0),
+          SizedBox(height: 0),
         SizedBox(height: 10),
-        Container(
-          color: Colors.white,
-          width: double.infinity,
-          padding: EdgeInsets.all(15.0),
-          child: Center(
-            child: GestureDetector(
-                child: loginMode == false ?
-                Text("Sign In") :
-                Text("Sign Up"),
-                onTap: () => print("tapped")),
+        GestureDetector(
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(15.0),
+            child: Center(
+              child: loginMode == true ?
+              Text("Sign In") :
+              Text("Sign Up"),
+            ),
+            decoration: buttonDecoration(),
           ),
+          onTap: () {
+            loginMode == true
+                ?
+            loginFunctions.LoginFunctions()
+                .emailLogin(vm, emailController.text, passwordController.text)
+                .then((user) =>
+                  {
+                    userInstance.UserInstance.user = user,
+                  vm.changeLoginState(true),
+                  vm.changeLoadingState(false),
+                  })
+                .catchError((e) => print(e))
+                :
+            loginFunctions.LoginFunctions()
+                .emailSignUp(vm, emailController.text, passwordController.text)
+                .then((user) =>
+            {
+            userInstance.UserInstance.user = user,
+            vm.changeLoginState(true),
+            vm.changeLoadingState(false),
+            })
+                .catchError((e) => print(e));
+          }
         ),
         SizedBox(
           height: 10.0,
@@ -186,7 +254,7 @@ class LoginPageState extends State<LoginPage> {
 
   Widget googleLoginButton() {
     return Container(
-      color: Colors.white,
+      decoration: buttonDecoration(),
       width: double.infinity,
       padding: EdgeInsets.all(10.0),
       child: Center(

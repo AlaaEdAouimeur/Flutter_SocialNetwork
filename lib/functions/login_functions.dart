@@ -28,6 +28,18 @@ class LoginFunctions {
     return user;
   }
 
+  Future<FirebaseUser> emailLogin(ViewModel vm, String email, String password) async {
+    vm.changeLoadingState(true);
+    user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    return user;
+  }
+
+  Future<FirebaseUser> emailSignUp(ViewModel vm, String email, String password) async {
+    vm.changeLoadingState(true);
+    user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+    return user;
+  }
+
   Future<FirebaseUser> loginWithFacebook(ViewModel vm) async {
     vm.changeLoadingState(true);
     final result = await facebookLogin.logInWithReadPermissions(['email']);
