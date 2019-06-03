@@ -36,7 +36,7 @@ class TutorialPageState extends State<TutorialPage> {
         onPressed: () => {
               print("Pressed"),
               SharedPreferences.getInstance().then((prefs) => {
-                    prefs.setBool("firstTime", false),
+                    prefs.setBool("firstUse", false),
                     viewModel.changeFirstTimeState(false),
                     Navigator.push(
                       context,

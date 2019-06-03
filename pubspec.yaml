@@ -45,7 +45,8 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-      - assets/images/logo.png
+    - assets/images/logo.png
+    - assets/images/google_icon.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -58,7 +59,7 @@ flutter:
       - asset: assets/fonts/OpenSans-Light.ttf
     - family: LatoLight
       fonts:
-      - asset: assets/fonts/Lato-Light.ttf
+        - asset: assets/fonts/Lato-Light.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
