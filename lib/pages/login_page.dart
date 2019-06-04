@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final ViewModel vm;
+  ViewModel vm;
   bool loginMode = true;
   bool isLoading = false;
   LoginPageState(this.vm);
@@ -222,6 +222,7 @@ class LoginPageState extends State<LoginPage> {
             decoration: buttonDecoration(),
           ),
           onTap: () {
+            print(vm.isLoading);
             loginMode == true
                 ?
             loginFunctions.LoginFunctions()
@@ -243,6 +244,7 @@ class LoginPageState extends State<LoginPage> {
             vm.changeLoadingState(false),
             })
                 .catchError((e) => print(e));
+            print(vm.isLoading);
           }
         ),
         SizedBox(

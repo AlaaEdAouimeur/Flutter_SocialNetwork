@@ -36,6 +36,7 @@ class LoginFunctions {
 
   Future<FirebaseUser> emailSignUp(ViewModel vm, String email, String password) async {
     vm.changeLoadingState(true);
+    print(vm.isLoading);
     user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     return user;
   }

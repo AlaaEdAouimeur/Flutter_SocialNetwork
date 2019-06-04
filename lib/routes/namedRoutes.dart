@@ -19,10 +19,16 @@ class RoutesState extends State<Routes> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) => {
-          firstUse = prefs.getBool("firstUse"),
-          viewModel.changeFirstTimeState(true),
-          viewModel.changeLoadingState(false),
-        });
+      firstUse = prefs.getBool("firstUse"),
+      firstUse == null
+      ?
+        viewModel.changeFirstTimeState(true)
+      :
+        viewModel.changeFirstTimeState(false),
+      Future.delayed(Duration(seconds: 3)).then((value) => {
+        viewModel.changeLoadingState(false),
+      }),
+    });
   }
 
   Widget build(BuildContext context) {
