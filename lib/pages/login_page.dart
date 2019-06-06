@@ -4,7 +4,7 @@ import '../viewModel/userProfileTab.dart';
 import '../functions/instances.dart' as userInstance;
 
 class LoginPage extends StatefulWidget {
-  final ViewModel vm;
+  ViewModel vm;
   LoginPage(this.vm);
   @override
   State<StatefulWidget> createState() {
@@ -222,7 +222,6 @@ class LoginPageState extends State<LoginPage> {
             decoration: buttonDecoration(),
           ),
           onTap: () {
-            print(vm.isLoading);
             loginMode == true
                 ?
             loginFunctions.LoginFunctions()
@@ -230,21 +229,26 @@ class LoginPageState extends State<LoginPage> {
                 .then((user) =>
                   {
                     userInstance.UserInstance.user = user,
-                  vm.changeLoginState(true),
-                  vm.changeLoadingState(false),
+                    vm.changeLoginState(true),
+                    vm.changeLoadingState(false),
                   })
-                .catchError((e) => print(e))
+                .catchError((e) => {
+                  print(e),
+                  vm.changeLoadingState(false),
+                })
                 :
             loginFunctions.LoginFunctions()
                 .emailSignUp(vm, emailController.text, passwordController.text)
                 .then((user) =>
-            {
-            userInstance.UserInstance.user = user,
-            vm.changeLoginState(true),
-            vm.changeLoadingState(false),
-            })
-                .catchError((e) => print(e));
-            print(vm.isLoading);
+                {
+                  userInstance.UserInstance.user = user,
+                  vm.changeLoginState(true),
+                  vm.changeLoadingState(false),
+                })
+                .catchError((e) => {
+                  print(e),
+                  vm.changeLoadingState(false),
+            });
           }
         ),
         SizedBox(
