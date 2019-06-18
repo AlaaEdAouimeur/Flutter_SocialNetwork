@@ -7,12 +7,13 @@ class UserDataModel {
   String contactNumber;
   String email;
   String profilePictureURL;
+  String loginProvider;
   DateTime dateOfBirth;
   String gender;
   String instagramUserName;
   DateTime createdAt;
 
-  UserDataModel(this.key, this.name, this.username, this.contactNumber, this.email, this.profilePictureURL, this.dateOfBirth, this.gender, this.instagramUserName, this.createdAt);
+  UserDataModel(this.key, this.name, this.username, this.contactNumber, this.email, this.loginProvider, this.profilePictureURL, this.dateOfBirth, this.gender, this.instagramUserName, this.createdAt);
 
   UserDataModel.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.value['key'],
@@ -20,6 +21,7 @@ class UserDataModel {
         username = snapshot.value['username'],
         contactNumber = snapshot.value['contactNumber'],
         email = snapshot.value['email'],
+        loginProvider = snapshot.value['loginProvider'],
         profilePictureURL = snapshot.value['profilePictureUrl'],
         dateOfBirth = snapshot.value['dateOfBirth'],
         gender = snapshot.value['gender'],

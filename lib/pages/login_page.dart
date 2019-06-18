@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import '../viewModel/userProfileTab.dart';
 import '../functions/instances.dart' as userInstance;
-
+import 'package:firebase_auth/firebase_auth.dart';
 class LoginPage extends StatefulWidget {
-  ViewModel vm;
+  final ViewModel vm;
+
   LoginPage(this.vm);
+
   @override
   State<StatefulWidget> createState() {
     return new LoginPageState(vm);
@@ -15,11 +17,13 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   ViewModel vm;
   bool loginMode = true;
-  bool isLoading = false;
+
   LoginPageState(this.vm);
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final retypePasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -30,19 +34,8 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget build(BuildContext context) {
-    return vm.isLoading == true
-        ?
-    Container(
-      width: 20.0,
-      child: Center(child: CircularProgressIndicator(
-        backgroundColor: Colors.red,
-        strokeWidth: 7.0,
-      )),
-    )
-        :
-    Material(
+    return Material(
       child: Scaffold(
-        resizeToAvoidBottomPadding: true,
         body: Container(
           child: ListView(
             children: <Widget>[
@@ -52,7 +45,7 @@ class LoginPageState extends State<LoginPage> {
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.96,
                   padding: EdgeInsets.all(20.0),
-                  color: Colors.blueAccent,
+                  color: Colors.teal,
                   child: GestureDetector(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -60,12 +53,12 @@ class LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         Image.asset(
                           'assets/images/logo.png',
-                          width: 70,
+                          width: 50,
                         ),
                         SizedBox(height: 10),
                         headingBox(),
-                        loginWithEmailPassword(),
-                        googleLoginButton(),
+                        loginWithEmailPassword(context),
+                        googleLoginButton(context),
                         SizedBox(height: 10),
                         signUpOption(),
                       ],
@@ -80,47 +73,57 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
+  void showDialogBox(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: Center(
+              child: Text("Loading"),
+            ),
+          );
+        });
+  }
+
+  void hideDialogBox(BuildContext context) {
+    Navigator.pop(context);
+  }
+
   Widget signUpOption() {
     return GestureDetector(
         child: Container(
           width: double.infinity,
-          child: loginMode == true ? Text(
-            "New to The Project Quote? Sign Up",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              decorationStyle: TextDecorationStyle.solid,
-              decoration: TextDecoration.underline,
-            ),
-          ) :
-          Text(
-            "Back to Login",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              decorationStyle: TextDecorationStyle.solid,
-              decoration: TextDecoration.underline,
-            ),
-          ),
+          child: loginMode == true
+              ? Text(
+                  "New to The Project Quote? Sign Up",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    decorationStyle: TextDecorationStyle.solid,
+                    decoration: TextDecoration.underline,
+                  ),
+                )
+              : Text(
+                  "Back to Login",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    decorationStyle: TextDecorationStyle.solid,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
         ),
         onTap: () {
-          if(loginMode == false) {
-            setState(() {
-              loginMode = true;
-            });
-          } else {
-            setState(() {
-              loginMode = false;
-            });
-          }
-        }
-    );
+          setState(() {
+            loginMode = !loginMode;
+          });
+        });
   }
 
   Widget headingBox() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget> [
+      children: <Widget>[
         Text(
           "Hello",
           style: TextStyle(
@@ -158,18 +161,17 @@ class LoginPageState extends State<LoginPage> {
       ),
       focusedBorder: new UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.grey ,
-            width: 1.5,
-            style: BorderStyle.solid,
-          )
-      ),
+        color: Colors.grey,
+        width: 1.5,
+        style: BorderStyle.solid,
+      )),
     );
   }
 
   BoxDecoration buttonDecoration() {
     return BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(40.0),
+      borderRadius: BorderRadius.circular(10.0),
       border: Border.all(
         color: Colors.transparent,
         style: BorderStyle.solid,
@@ -178,87 +180,128 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget loginWithEmailPassword() {
-    return Column(
-      children: <Widget>[
-        TextField(
-          decoration: textFieldDecoration("EMAIL"),
-          keyboardType: TextInputType.emailAddress,
-          onEditingComplete: () {
-            print("Completed");
-          },
-          onChanged: (value) {
-            print("Changed + " + value);
-          },
-          controller: emailController,
-        ),
-        SizedBox(
-          height: 10.0,
-        ),
-        TextField(
-          decoration: textFieldDecoration("PASSWORD"),
-          keyboardType: TextInputType.text,
-          obscureText: true,
-          controller: passwordController,
-        ),
-        loginMode == false ?
-          TextField(
-            decoration: textFieldDecoration("RETYPE PASSWORD"),
-            obscureText: true,
-            controller: retypePasswordController,
-          )
-            :
-          SizedBox(height: 0),
-        SizedBox(height: 10),
-        GestureDetector(
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(15.0),
-            child: Center(
-              child: loginMode == true ?
-              Text("Sign In") :
-              Text("Sign Up"),
-            ),
-            decoration: buttonDecoration(),
+  String validateEmail(String value) {
+    if (!value.contains('@')) {
+      return "Enter a valid email address";
+    }
+    return "";
+  }
+
+  String validatePassword(String value) {
+    if (value.length < 6 || value.length > 14) {
+      return "Password must be of length 8 to 14 character";
+    }
+    return "";
+  }
+
+  String validateRetypePassword(String value) {
+    if (value.compareTo(retypePasswordController.value.toString()) != 0) {
+      return "Passwords do not match";
+    }
+    return "";
+  }
+
+  Widget loginWithEmailPassword(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            decoration: textFieldDecoration("EMAIL"),
+            keyboardType: TextInputType.emailAddress,
+            controller: emailController,
+            validator: validateEmail,
           ),
-          onTap: () {
-            loginMode == true
-                ?
-            loginFunctions.LoginFunctions()
-                .emailLogin(vm, emailController.text, passwordController.text)
-                .then((user) =>
-                  {
-                    userInstance.UserInstance.user = user,
-                    vm.changeLoginState(true),
-                    vm.changeLoadingState(false),
-                  })
-                .catchError((e) => {
-                  print(e),
-                  vm.changeLoadingState(false),
-                })
-                :
-            loginFunctions.LoginFunctions()
-                .emailSignUp(vm, emailController.text, passwordController.text)
-                .then((user) =>
-                {
-                  userInstance.UserInstance.user = user,
-                  vm.changeLoginState(true),
-                  vm.changeLoadingState(false),
-                })
-                .catchError((e) => {
-                  print(e),
-                  vm.changeLoadingState(false),
-            });
-          }
-        ),
-        SizedBox(
-          height: 10.0,
-        ),
-      ],
+          TextFormField(
+            decoration: textFieldDecoration("PASSWORD"),
+            keyboardType: TextInputType.text,
+            obscureText: true,
+            controller: passwordController,
+            validator: validatePassword,
+          ),
+          loginMode == false
+              ? TextFormField(
+                  decoration: textFieldDecoration("RETYPE PASSWORD"),
+                  obscureText: true,
+                  controller: retypePasswordController,
+                  validator: validateRetypePassword,
+                )
+              : SizedBox(height: 0),
+          SizedBox(height: 5),
+          GestureDetector(
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(15.0),
+                child: Center(
+                  child: loginMode == true ? Text("Sign In") : Text("Sign Up"),
+                ),
+                decoration: buttonDecoration(),
+              ),
+              onTap: () {
+                if (_formKey.currentState.validate()) {
+                  showDialogBox(context);
+                  loginMode == true ? login() : signUp();
+                }
+              }),
+          SizedBox(
+            height: 10.0,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget googleLoginButton() {
+  void saveUserDataToDatabase(FirebaseUser user) {
+    //var value = {"name": ""};
+    print(
+      user.displayName + "\n" +
+          user.email + "\n" +
+          user.isAnonymous.toString() + "\n" +
+          user.isEmailVerified.toString() + "\n" +
+          //user.phoneNumber + "\n" +
+          user.photoUrl + "\n" +
+          user.providerId + "\n" +
+          user.uid
+    );
+    /*databaseReferences.DatabaseReferences().postDatabaseReference.push().set(value).then((value) => {
+      print("Data Stored"),
+    });*/
+  }
+
+  void login() {
+    loginFunctions.LoginFunctions()
+        .emailLogin(vm, emailController.text, passwordController.text)
+        .then((user) => {
+              userInstance.UserInstance.user = user,
+              saveUserDataToDatabase(user),
+              vm.changeLoginState(true),
+              vm.changeLoadingState(false),
+              hideDialogBox(context),
+            })
+        .catchError((e) => {
+              print(e),
+              vm.changeLoadingState(false),
+              hideDialogBox(context),
+            });
+  }
+
+  void signUp() {
+    loginFunctions.LoginFunctions()
+        .emailSignUp(vm, emailController.text, passwordController.text)
+        .then((user) => {
+              userInstance.UserInstance.user = user,
+              vm.changeLoginState(true),
+              vm.changeLoadingState(false),
+              hideDialogBox(context),
+            })
+        .catchError((e) => {
+              print(e),
+              vm.changeLoadingState(false),
+              hideDialogBox(context),
+            });
+  }
+
+  Widget googleLoginButton(BuildContext context) {
     return Container(
       decoration: buttonDecoration(),
       width: double.infinity,
@@ -279,6 +322,7 @@ class LoginPageState extends State<LoginPage> {
           onTap: () => loginFunctions.LoginFunctions()
               .googleLogin(vm)
               .then((user) => {
+                    saveUserDataToDatabase(user),
                     userInstance.UserInstance.user = user,
                     vm.changeLoginState(true),
                     vm.changeLoadingState(false),
