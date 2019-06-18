@@ -9,8 +9,7 @@ class LoginFunctions {
   final facebookLogin = FacebookLogin();
   FirebaseUser user;
 
-  Future<void> logout(ViewModel vm) async {
-    vm.changeLoadingState(true);
+  Future<void> logout() async {
     if(_googleSignIn != null) _googleSignIn.signOut();
     if(facebookLogin != null) facebookLogin.logOut();
     await _auth.signOut();

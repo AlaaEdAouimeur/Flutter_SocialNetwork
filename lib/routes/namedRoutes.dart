@@ -34,7 +34,9 @@ class RoutesState extends State<Routes> {
                             return HomePage();
                           } else {
                             print("Progress Indicator");
-                            return CircularProgressIndicator();
+                            return CircularProgressIndicator(
+                              backgroundColor: Colors.green,
+                            );
                           }
                         } else {
                           print("Login Page");

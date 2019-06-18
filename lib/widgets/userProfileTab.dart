@@ -1,50 +1,91 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import '../models/app_state.dart';
 import 'package:flutter/material.dart';
-import '../viewModel/userProfileTab.dart';
-import '../widgets/login_page.dart';
-import '../widgets/user_profile.dart';
-import '../pages/complete_profile_mandatory.dart';
+import '../functions/login_functions.dart' as loginFunctions;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserProfileTab extends StatefulWidget {
-  @override
-  UserProfileState createState() => UserProfileState();
+  UserProfileTab();
+
+  UserProfileTabState createState() => UserProfileTabState();
 }
 
-class UserProfileState extends State<UserProfileTab> {
-  FirebaseUser user;
-
-  @override
+class UserProfileTabState extends State<UserProfileTab> {
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, ViewModel>(
-      converter: ViewModel.fromStore,
-      builder: (BuildContext context, ViewModel vm) {
-        return Container(
-          child: vm.isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : userProfile(),
-        );
-      },
-    );
+    return FutureBuilder(
+        future: FirebaseAuth.instance.currentUser(),
+        builder: (BuildContext context, AsyncSnapshot<FirebaseUser> user) {
+          if (user.hasData) {
+            if (user.data != null) {
+              return new Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.red,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: 30,
+                                child: Center(
+                                  child: Text(user.data.displayName),
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Center(
+                                  child: Text("Username"),
+                                ),
+                              ),
+                              RaisedButton(
+                                child: Text("Logout"),
+                                onPressed: () =>
+                                    loginFunctions.LoginFunctions().logout(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Text(user.data.uid),
+                      Text(user.data.providerId),
+                      Text(user.data.isEmailVerified.toString()),
+                      Text(user.data.email),
+                      Text(user.data.photoUrl),
+                      Text(user.data.displayName),
+                    ],
+                  ),
+                ],
+              );
+            } else {
+              return new CircularProgressIndicator(
+                backgroundColor: Colors.green,
+              );
+            }
+          } else {
+            return Container(
+              child: Center(
+                child: new CircularProgressIndicator(
+                  backgroundColor: Colors.red,
+                ),
+              ),
+            );
+          }
+        });
   }
 
-  Widget userProfile() {
-    return StoreConnector<AppState, ViewModel>(
-      converter: ViewModel.fromStore,
-      builder: (BuildContext context, ViewModel vm) {
-        if (!vm.isLoggedIn) {
-          if (vm.firstTime) {
-            return CompleteProfile(vm);
-          } else {
-            return LoginPage(vm);
-          }
-        } else {
-          return UserProfile(vm);
-        }
-      },
+  Widget logoutButton() {
+    return RaisedButton(
+      child: Text("Logout"),
+      onPressed: () => loginFunctions.LoginFunctions().logout(),
     );
   }
 }
