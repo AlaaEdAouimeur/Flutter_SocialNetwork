@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
+import '../database/databaseReferences.dart' as databaseReferences;
+import 'home_page.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage();
+
   @override
   State<StatefulWidget> createState() {
     return new LoginPageState();
@@ -11,7 +15,9 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   bool loginMode = true;
+
   LoginPageState();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final retypePasswordController = TextEditingController();
@@ -71,7 +77,7 @@ class LoginPageState extends State<LoginPage> {
         builder: (BuildContext context) {
           return Container(
             child: Center(
-              child: Text("Loading"),
+              child: CircularProgressIndicator(),
             ),
           );
         });
@@ -244,20 +250,35 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void saveUserDataToDatabase(FirebaseUser user) {
-    //var value = {"name": ""};
-    print(
-      user.displayName + "\n" +
-          user.email + "\n" +
-          user.isAnonymous.toString() + "\n" +
-          user.isEmailVerified.toString() + "\n" +
-          //user.phoneNumber + "\n" +
-          user.photoUrl + "\n" +
-          user.providerId + "\n" +
-          user.uid
-    );
-    /*databaseReferences.DatabaseReferences().postDatabaseReference.push().set(value).then((value) => {
-      print("Data Stored"),
-    });*/
+    var value = {
+      "name": user.displayName,
+      "email": user.email,
+      "isEmailVerified": user.isEmailVerified,
+      "profilePictureUrl": user.photoUrl,
+      "uid": user.uid,
+    };
+    print(user.displayName +
+        "\n" +
+        user.email +
+        "\n" +
+        user.isAnonymous.toString() +
+        "\n" +
+        user.isEmailVerified.toString() +
+        "\n" +
+        //user.phoneNumber + "\n" +
+        user.photoUrl +
+        "\n" +
+        user.providerId +
+        "\n" +
+        user.uid);
+
+    databaseReferences.DatabaseReferences()
+        .userDatabaseReference
+        .push()
+        .set(value)
+        .then((value) => {
+              print("Data Stored"),
+            });
   }
 
   void login() {
@@ -292,33 +313,35 @@ class LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.all(10.0),
       child: Center(
         child: GestureDetector(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'assets/images/google_icon.png',
-                width: 30,
-              ),
-              SizedBox(width: 10.0),
-              Text("Login with google"),
-            ],
-          ),
-          onTap: () => loginFunctions.LoginFunctions()
-              .googleLogin()
-              .then((user) => {
-                    saveUserDataToDatabase(user),
-                  })
-              .catchError((e) => print(e)),
-        ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'assets/images/google_icon.png',
+                  width: 30,
+                ),
+                SizedBox(width: 10.0),
+                Text("Login with google"),
+              ],
+            ),
+            onTap: () => {
+                  showDialogBox(context),
+                  loginFunctions.LoginFunctions()
+                      .googleLogin()
+                      .then((user) => {
+                            saveUserDataToDatabase(user),
+                          })
+                      .then((_) => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage())))
+                      .catchError((e) => print(e)),
+                }),
       ),
     );
   }
 
   Widget facebookLoginButton() {
     return RaisedButton(
-      child: Text("Login with facebook"),
-      onPressed: () => loginFunctions.LoginFunctions()
-          .loginWithFacebook()
-    );
+        child: Text("Login with facebook"),
+        onPressed: () => loginFunctions.LoginFunctions().loginWithFacebook());
   }
 }

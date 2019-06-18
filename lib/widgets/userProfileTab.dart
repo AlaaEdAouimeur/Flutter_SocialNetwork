@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
+import '../pages/login_page.dart';
 
 class UserProfileTab extends StatefulWidget {
   UserProfileTab();
@@ -44,8 +45,13 @@ class UserProfileTabState extends State<UserProfileTab> {
                               ),
                               RaisedButton(
                                 child: Text("Logout"),
-                                onPressed: () =>
-                                    loginFunctions.LoginFunctions().logout(),
+                                onPressed: () => loginFunctions.LoginFunctions()
+                                    .logout()
+                                    .then((_) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginPage()))),
                               ),
                             ],
                           ),

@@ -18,8 +18,8 @@ class RoutesState extends State<Routes> {
         converter: ViewModel.fromStore,
         builder: (BuildContext context, ViewModel vm) {
           return new FutureBuilder(
-              future: SharedPreferences.getInstance().then((prefs) =>
-                  prefs.getBool("firstUse")),
+              future: SharedPreferences.getInstance()
+                  .then((prefs) => prefs.getBool("firstUse")),
               builder: (BuildContext context, AsyncSnapshot firstUse) {
                 if (!firstUse.hasData) {
                   print("Tutorial Page");
@@ -42,12 +42,9 @@ class RoutesState extends State<Routes> {
                           print("Login Page");
                           return LoginPage();
                         }
-                      }
-                  );
+                      });
                 }
-              }
-          );
-        }
-    );
+              });
+        });
   }
 }
