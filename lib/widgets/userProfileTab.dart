@@ -24,7 +24,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                         Container(
                           width: 60,
                           height: 60,
-                          color: Colors.red,
+                          child: Image.network(user.data.photoUrl),
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 20),
