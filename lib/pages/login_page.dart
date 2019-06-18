@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
-import '../viewModel/userProfileTab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 class LoginPage extends StatefulWidget {
-  final ViewModel vm;
-  LoginPage(this.vm);
+  LoginPage();
   @override
   State<StatefulWidget> createState() {
-    return new LoginPageState(vm);
+    return new LoginPageState();
   }
 }
 
 class LoginPageState extends State<LoginPage> {
-  ViewModel vm;
   bool loginMode = true;
-  LoginPageState(this.vm);
+  LoginPageState();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final retypePasswordController = TextEditingController();
@@ -265,31 +262,25 @@ class LoginPageState extends State<LoginPage> {
 
   void login() {
     loginFunctions.LoginFunctions()
-        .emailLogin(vm, emailController.text, passwordController.text)
+        .emailLogin(emailController.text, passwordController.text)
         .then((user) => {
               saveUserDataToDatabase(user),
-              vm.changeLoginState(true),
-              vm.changeLoadingState(false),
               hideDialogBox(context),
             })
         .catchError((e) => {
               print(e),
-              vm.changeLoadingState(false),
               hideDialogBox(context),
             });
   }
 
   void signUp() {
     loginFunctions.LoginFunctions()
-        .emailSignUp(vm, emailController.text, passwordController.text)
+        .emailSignUp(emailController.text, passwordController.text)
         .then((user) => {
-              vm.changeLoginState(true),
-              vm.changeLoadingState(false),
               hideDialogBox(context),
             })
         .catchError((e) => {
               print(e),
-              vm.changeLoadingState(false),
               hideDialogBox(context),
             });
   }
@@ -313,7 +304,7 @@ class LoginPageState extends State<LoginPage> {
             ],
           ),
           onTap: () => loginFunctions.LoginFunctions()
-              .googleLogin(vm)
+              .googleLogin()
               .then((user) => {
                     saveUserDataToDatabase(user),
                   })
@@ -327,15 +318,7 @@ class LoginPageState extends State<LoginPage> {
     return RaisedButton(
       child: Text("Login with facebook"),
       onPressed: () => loginFunctions.LoginFunctions()
-          .loginWithFacebook(vm)
-          .then((_) => {
-                vm.changeLoginState(true),
-                vm.changeLoadingState(false),
-              })
-          .catchError((e) => {
-                print(e),
-                vm.changeLoadingState(false),
-              }),
+          .loginWithFacebook()
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import '../viewModel/userProfileTab.dart';
 
 class LoginFunctions {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,8 +14,7 @@ class LoginFunctions {
     await _auth.signOut();
   }
 
-  Future<FirebaseUser> googleLogin(ViewModel vm) async {
-    vm.changeLoadingState(true);
+  Future<FirebaseUser> googleLogin() async {
     GoogleSignInAccount account = await _googleSignIn.signIn();
     GoogleSignInAuthentication _googleAuth = await account.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -27,21 +25,17 @@ class LoginFunctions {
     return user;
   }
 
-  Future<FirebaseUser> emailLogin(ViewModel vm, String email, String password) async {
-    vm.changeLoadingState(true);
+  Future<FirebaseUser> emailLogin(String email, String password) async {
     user = await _auth.signInWithEmailAndPassword(email: email, password: password);
     return user;
   }
 
-  Future<FirebaseUser> emailSignUp(ViewModel vm, String email, String password) async {
-    vm.changeLoadingState(true);
-    print(vm.isLoading);
+  Future<FirebaseUser> emailSignUp(String email, String password) async {
     user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     return user;
   }
 
-  Future<FirebaseUser> loginWithFacebook(ViewModel vm) async {
-    vm.changeLoadingState(true);
+  Future<FirebaseUser> loginWithFacebook() async {
     final result = await facebookLogin.logInWithReadPermissions(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -53,11 +47,9 @@ class LoginFunctions {
 
       case FacebookLoginStatus.error:
         print("Error with login");
-        vm.changeLoadingState(false);
         break;
 
       default:
-        vm.changeLoadingState(false);
         print("Default case");
     }
     return user;

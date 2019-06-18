@@ -40,7 +40,7 @@ class TutorialPageState extends State<TutorialPage> {
                     viewModel.changeFirstTimeState(false),
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage(viewModel)),
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     ),
                   }),
             },

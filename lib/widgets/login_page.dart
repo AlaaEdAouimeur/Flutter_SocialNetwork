@@ -36,7 +36,7 @@ class LoginPage extends StatelessWidget {
     return RaisedButton(
       child: Text("Login with google"),
       onPressed: () => loginFunctions.LoginFunctions()
-          .googleLogin(vm)
+          .googleLogin()
           .then((user) => {
                 vm.changeLoginState(true),
                 vm.changeLoadingState(false),
@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
     return RaisedButton(
       child: Text("Login with facebook"),
       onPressed: () => loginFunctions.LoginFunctions()
-          .loginWithFacebook(vm)
+          .loginWithFacebook()
           .then((_) => {
                 vm.changeLoginState(true),
                 vm.changeLoadingState(false),

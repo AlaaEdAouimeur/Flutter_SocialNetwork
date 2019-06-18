@@ -40,7 +40,7 @@ class RoutesState extends State<Routes> {
                           }
                         } else {
                           print("Login Page");
-                          return LoginPage(vm);
+                          return LoginPage();
                         }
                       }
                   );
