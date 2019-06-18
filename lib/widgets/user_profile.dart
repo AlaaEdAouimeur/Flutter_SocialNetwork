@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import '../viewModel/userProfileTab.dart';
-import '../functions/instances.dart' as userInstance;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserProfile extends StatefulWidget {
@@ -13,7 +12,7 @@ class UserProfile extends StatefulWidget {
 class UserProfileState extends State<UserProfile> {
   final ViewModel vm;
   UserProfileState(this.vm);
-  FirebaseUser user = userInstance.UserInstance.user;
+  FirebaseUser user;
 
   Widget build(BuildContext context) {
     return Column(

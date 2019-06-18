@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import '../viewModel/userProfileTab.dart';
-import '../functions/instances.dart' as userInstance;
 import 'package:firebase_auth/firebase_auth.dart';
 class LoginPage extends StatefulWidget {
   final ViewModel vm;
-
   LoginPage(this.vm);
-
   @override
   State<StatefulWidget> createState() {
     return new LoginPageState(vm);
@@ -17,9 +14,7 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   ViewModel vm;
   bool loginMode = true;
-
   LoginPageState(this.vm);
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final retypePasswordController = TextEditingController();
@@ -272,7 +267,6 @@ class LoginPageState extends State<LoginPage> {
     loginFunctions.LoginFunctions()
         .emailLogin(vm, emailController.text, passwordController.text)
         .then((user) => {
-              userInstance.UserInstance.user = user,
               saveUserDataToDatabase(user),
               vm.changeLoginState(true),
               vm.changeLoadingState(false),
@@ -289,7 +283,6 @@ class LoginPageState extends State<LoginPage> {
     loginFunctions.LoginFunctions()
         .emailSignUp(vm, emailController.text, passwordController.text)
         .then((user) => {
-              userInstance.UserInstance.user = user,
               vm.changeLoginState(true),
               vm.changeLoadingState(false),
               hideDialogBox(context),
@@ -323,9 +316,6 @@ class LoginPageState extends State<LoginPage> {
               .googleLogin(vm)
               .then((user) => {
                     saveUserDataToDatabase(user),
-                    userInstance.UserInstance.user = user,
-                    vm.changeLoginState(true),
-                    vm.changeLoadingState(false),
                   })
               .catchError((e) => print(e)),
         ),

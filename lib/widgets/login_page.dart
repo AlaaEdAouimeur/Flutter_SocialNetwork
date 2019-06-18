@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import '../viewModel/userProfileTab.dart';
-import '../functions/instances.dart' as userInstance;
 
 class LoginPage extends StatelessWidget {
   final ViewModel vm;
@@ -39,7 +38,6 @@ class LoginPage extends StatelessWidget {
       onPressed: () => loginFunctions.LoginFunctions()
           .googleLogin(vm)
           .then((user) => {
-                userInstance.UserInstance.user = user,
                 vm.changeLoginState(true),
                 vm.changeLoadingState(false),
               })
