@@ -3,6 +3,7 @@ import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
 import '../database/databaseReferences.dart' as databaseReferences;
 import 'home_page.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage();
@@ -249,6 +250,25 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
+  void checkIfUserAlreadyExist(user) {
+    databaseReferences.DatabaseReferences()
+        .userDatabaseReference
+        .once()
+        .then((snapshot) => {
+              userExistCallback(snapshot, user),
+            });
+  }
+
+  void userExistCallback(DataSnapshot snapshot, FirebaseUser user) {
+    if (snapshot.value != null) {
+      for (var value in snapshot.value.values) {
+        print(value["email"]);
+        if (value["email"] == user.email) return;
+      }
+    }
+    saveUserDataToDatabase(user);
+  }
+
   void saveUserDataToDatabase(FirebaseUser user) {
     var value = {
       "name": user.displayName,
@@ -257,21 +277,6 @@ class LoginPageState extends State<LoginPage> {
       "profilePictureUrl": user.photoUrl,
       "uid": user.uid,
     };
-    print(user.displayName +
-        "\n" +
-        user.email +
-        "\n" +
-        user.isAnonymous.toString() +
-        "\n" +
-        user.isEmailVerified.toString() +
-        "\n" +
-        //user.phoneNumber + "\n" +
-        user.photoUrl +
-        "\n" +
-        user.providerId +
-        "\n" +
-        user.uid);
-
     databaseReferences.DatabaseReferences()
         .userDatabaseReference
         .push()
@@ -329,7 +334,7 @@ class LoginPageState extends State<LoginPage> {
                   loginFunctions.LoginFunctions()
                       .googleLogin()
                       .then((user) => {
-                            saveUserDataToDatabase(user),
+                            checkIfUserAlreadyExist(user),
                           })
                       .then((_) => Navigator.push(context,
                           MaterialPageRoute(builder: (context) => HomePage())))
