@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../database/databaseReferences.dart' as databaseReferences;
 import 'home_page.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../models/ld_user_info.dart' as userDatabase;
 
 class LoginPage extends StatefulWidget {
   LoginPage();
@@ -273,17 +274,23 @@ class LoginPageState extends State<LoginPage> {
     var value = {
       "name": user.displayName,
       "email": user.email,
-      "isEmailVerified": user.isEmailVerified,
-      "profilePictureUrl": user.photoUrl,
+      "isEmailVerified": user.isEmailVerified.toString(),
+      "profilePictureUrl": user.photoUrl.toString(),
       "uid": user.uid,
     };
     databaseReferences.DatabaseReferences()
         .userDatabaseReference
         .push()
         .set(value)
-        .then((value) => {
-              print("Data Stored"),
+        .then((_) => {
+              print("Data Stored to firebase"),
+              saveDataToLocalDatabase(userDatabase.UserInfo.fromJson(value)),
             });
+  }
+
+  void saveDataToLocalDatabase(var user) {
+    print("Inserting data to local database");
+    userDatabase.UserInfo().insert(user);
   }
 
   void login() {

@@ -9,14 +9,18 @@ class DBProvider {
   static Database _database;
 
   Future<Database> get database async {
+    print("getting database" + _database.isOpen.toString() + " : " + _database.toString());
     if (_database != null) return _database;
+    print("getting database 1");
 
     // if _database is null we instantiate it
     _database = await initDB();
+    print("getting database 2");
     return _database;
   }
 
   initDB() async {
+    print("initializing database");
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "UserInfo.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
