@@ -11,11 +11,6 @@ String clientToJson(UserInfo data) {
   return json.encode(dyn);
 }
 
-void insert(UserInfo newUser) async {
-  final db = await database.DBProvider.db.database;
-  await db.insert("Client", newUser.toJson());
-}
-
 class UserInfo {
   String uid;
   String name;
@@ -72,4 +67,29 @@ class UserInfo {
         "isEmailVerified": isEmailVerified,
         "createdAt": createdAt,
       };
+
+  insert(UserInfo newUser) async {
+    final db = await database.DBProvider.db.database;
+    var res = await db.insert("UserInfo", newUser.toJson());
+    return res;
+  }
+
+  read(String email) async {
+    final db = await database.DBProvider.db.database;
+    var res =await  db.query("UserInfo", where: "email = ?", whereArgs: [email]);
+    return res.isNotEmpty ? UserInfo.fromJson(res.first) : Null ;
+  }
+
+  updateUserInfo(UserInfo userInfo) async {
+    final db = await database.DBProvider.db.database;
+    var res = await db.update("UserInfo", userInfo.toJson(),
+        where: "email = ?", whereArgs: [userInfo.email]);
+    return res;
+  }
+
+  deleteUserInfo(String email) async {
+    final db = await database.DBProvider.db.database;
+    db.delete("UserInfo", where: "email = ?", whereArgs: [email]);
+  }
+
 }
