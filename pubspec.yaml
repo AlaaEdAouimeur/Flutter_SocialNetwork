@@ -33,6 +33,8 @@ dependencies:
   flutter_facebook_login: ^2.0.0
   carousel_slider: ^1.3.0
   shared_preferences: ^0.5.2+1
+  sqflite: ^1.0.0
+  path_provider: ^0.4.1
 
 dev_dependencies:
   flutter_test:
@@ -56,7 +58,7 @@ flutter:
   fonts:
     - family: OpenSans
       fonts:
-      - asset: assets/fonts/OpenSans-Light.ttf
+        - asset: assets/fonts/OpenSans-Light.ttf
     - family: LatoLight
       fonts:
         - asset: assets/fonts/Lato-Light.ttf
