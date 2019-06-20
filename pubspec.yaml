@@ -35,6 +35,7 @@ dependencies:
   shared_preferences: ^0.5.2+1
   sqflite: ^1.0.0
   path_provider: ^0.4.1
+  eva_icons_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,9 @@ flutter:
     - family: LatoLight
       fonts:
         - asset: assets/fonts/Lato-Light.ttf
+    - family: MyFlutterApp
+      fonts:
+        - asset: assets/fonts/MyFlutterApp.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
