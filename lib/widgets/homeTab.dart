@@ -12,6 +12,14 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  List colors = [
+    Colors.red,
+    Colors.green,
+    Colors.brown,
+    Colors.blue,
+    Colors.deepPurple
+  ];
+
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
@@ -23,10 +31,13 @@ class _HomeTabState extends State<HomeTab> {
                     .postDatabaseReference,
                 itemBuilder: (BuildContext context, DataSnapshot snapshot,
                     Animation<double> animation, int index) {
-                  return new Container(
-//                    color: Colors.red,
-                    margin: EdgeInsets.only(
-                        left: 25.0, right: 25.0, top: 20.0, bottom: 10.0),
+                  return Container(
+                    padding: EdgeInsets.only(
+                      left: 25.0,
+                      right: 25.0,
+                      top: 20.0,
+                      bottom: 10.0,
+                    ),
                     child: shortPostBody(snapshot),
                   );
                 }),
@@ -40,14 +51,21 @@ class _HomeTabState extends State<HomeTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          snapshot.value['writeup'],
-          style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 0.1,
-              height: 1.1,
-              fontSize: 18),
-          textAlign: TextAlign.left,
+        Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.width - 80,
+          ),
+          child: Text(
+            snapshot.value['writeup'],
+            style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 0.1,
+                height: 1.1,
+                fontSize: 18),
+            textAlign: TextAlign.left,
+            softWrap: true,
+            overflow: TextOverflow.fade,
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,8 +87,33 @@ class _HomeTabState extends State<HomeTab> {
               child: Row(
                 children: <Widget>[
                   Icon(
-                    EvaIcons.email,
+                    EvaIcons.arrowCircleDownOutline,
                     color: Colors.white,
+                    size: 18,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Icon(
+                    EvaIcons.arrowCircleUpOutline,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Icon(
+                    EvaIcons.share,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Icon(
+                    EvaIcons.expand,
+                    color: Colors.white,
+                    size: 18,
                   ),
                 ],
               ),
@@ -82,10 +125,9 @@ class _HomeTabState extends State<HomeTab> {
         ),
         Center(
           child: Container(
-            width: 200,
+            width: MediaQuery.of(context).size.width -50,
             child: Divider(
-              height: 1.0,
-              color: Color.fromRGBO(100, 100, 100, 1),
+              color: Colors.white,
             ),
           ),
         ),
