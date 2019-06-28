@@ -12,26 +12,30 @@ class WriteTabState extends State<WriteTab> {
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController writeupController = TextEditingController();
-    return Column(
-      children: <Widget>[
-        TextField(
-          decoration: InputDecoration(
-            helperText: "Enter your name",
+    return Container(
+      color: Colors.brown,
+      child: Column(
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              helperText: "Enter your name",
+            ),
+            controller: nameController,
           ),
-          controller: nameController,
-        ),
-        TextField(
-          decoration: InputDecoration(
-            helperText: "Enter your writeup",
+          TextField(
+            decoration: InputDecoration(
+              helperText: "Enter your writing",
+            ),
+            controller: writeupController,
+            keyboardType: TextInputType.multiline,
           ),
-          controller: writeupController,
-        ),
-        RaisedButton(
-          child: Text("Submit"),
-          onPressed: () =>
-              insertData(nameController.text, writeupController.text),
-        )
-      ],
+          RaisedButton(
+            child: Text("Submit"),
+            onPressed: () =>
+                insertData(nameController.text, writeupController.text),
+          )
+        ],
+      ),
     );
   }
 

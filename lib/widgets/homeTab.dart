@@ -20,6 +20,10 @@ class _HomeTabState extends State<HomeTab> {
     Colors.deepPurple
   ];
 
+  var containerHeight;
+  var boxConstraint;
+  bool showFull = false;
+
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
@@ -48,24 +52,34 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget shortPostBody(DataSnapshot snapshot) {
+    containerHeight =
+        showFull ? double.infinity : MediaQuery.of(context).size.width - 80;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.width - 80,
+        GestureDetector(
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: containerHeight,
+            ),
+            child: Text(
+              snapshot.value['writeup'],
+              style: TextStyle(
+                  color: Colors.white,
+                  letterSpacing: 0.1,
+                  height: 1.1,
+                  fontSize: 18),
+              textAlign: TextAlign.left,
+              softWrap: true,
+              overflow: TextOverflow.fade,
+            ),
           ),
-          child: Text(
-            snapshot.value['writeup'],
-            style: TextStyle(
-                color: Colors.white,
-                letterSpacing: 0.1,
-                height: 1.1,
-                fontSize: 18),
-            textAlign: TextAlign.left,
-            softWrap: true,
-            overflow: TextOverflow.fade,
-          ),
+          onTap: () {
+            print("tap");
+            setState(() {
+              showFull = !showFull;
+            });
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,14 +121,6 @@ class _HomeTabState extends State<HomeTab> {
                     color: Colors.white,
                     size: 18,
                   ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Icon(
-                    EvaIcons.expand,
-                    color: Colors.white,
-                    size: 18,
-                  ),
                 ],
               ),
             )
@@ -125,7 +131,7 @@ class _HomeTabState extends State<HomeTab> {
         ),
         Center(
           child: Container(
-            width: MediaQuery.of(context).size.width -50,
+            width: MediaQuery.of(context).size.width - 50,
             child: Divider(
               color: Colors.white,
             ),
