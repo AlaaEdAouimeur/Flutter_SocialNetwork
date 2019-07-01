@@ -59,14 +59,14 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.home),
             title: Text("Home"),
           ),
-          BottomNavigationBarItem(
+         /* BottomNavigationBarItem(
             icon: Icon(Icons.book),
             title: Text("Blog"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.note_add),
             title: Text("Write"),
-          ),
+          ),*/
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text("Search"),

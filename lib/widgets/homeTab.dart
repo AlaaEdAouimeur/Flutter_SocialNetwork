@@ -3,6 +3,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'writeTab.dart';
 
 class HomeTab extends StatefulWidget {
   HomeTab({Key key}) : super(key: key);
@@ -25,28 +26,46 @@ class _HomeTabState extends State<HomeTab> {
   bool showFull = false;
 
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: FirebaseAnimatedList(
-                query: databaseReference.DatabaseReferences()
-                    .postDatabaseReference,
-                itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                    Animation<double> animation, int index) {
-                  return Container(
-                    padding: EdgeInsets.only(
-                      left: 25.0,
-                      right: 25.0,
-                      top: 20.0,
-                      bottom: 10.0,
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.border_color),
+        backgroundColor: Colors.orange,
+        onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WriteTab(),
+              ),
+            ),
+      ),
+      body: Container(
+        color: Colors.black,
+        child: Column(
+          children: <Widget>[
+            Flexible(
+              child: FirebaseAnimatedList(
+                  query: databaseReference.DatabaseReferences()
+                      .postDatabaseReference,
+                  defaultChild: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
-                    child: shortPostBody(snapshot),
-                  );
-                }),
-          ),
-        ],
+                  ),
+                  itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                      Animation<double> animation, int index) {
+                    return Container(
+                      padding: EdgeInsets.only(
+                        left: 25.0,
+                        right: 25.0,
+                        top: 20.0,
+                        bottom: 10.0,
+                      ),
+                      child: shortPostBody(snapshot),
+                    );
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }

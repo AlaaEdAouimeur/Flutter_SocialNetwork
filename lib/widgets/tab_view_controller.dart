@@ -10,19 +10,19 @@ class TabViewController {
         return HomeTab();
         break;
 
-      case 1:
+      case 7:
         return Text("Blog");
         break;
 
-      case 2:
+      case 3:
         return WriteTab();
         break;
 
-      case 3:
+      case 1:
         return Text("Search");
         break;
 
-      case 4:
+      case 2:
         return UserProfileTab();
         break;
 
