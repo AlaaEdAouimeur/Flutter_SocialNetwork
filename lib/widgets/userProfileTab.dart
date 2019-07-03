@@ -36,7 +36,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                                   child: Text(
                                     user.data.displayName,
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.green,
                                     ),
                                   ),
                                 ),

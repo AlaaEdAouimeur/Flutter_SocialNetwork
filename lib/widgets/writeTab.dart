@@ -4,14 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
-
   WriteTabState createState() => WriteTabState();
 }
 
 class WriteTabState extends State<WriteTab> {
+  Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
+  TextEditingController writeupController = TextEditingController();
   Widget build(BuildContext context) {
-    Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
-    TextEditingController writeupController = TextEditingController();
     return Material(
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
@@ -23,7 +22,7 @@ class WriteTabState extends State<WriteTab> {
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height - 150,
-                child: TextField(
+                child: TextFormField(
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Start writing...',
@@ -55,6 +54,6 @@ class WriteTabState extends State<WriteTab> {
         .then((value) => {
               print("Data Stored"),
             });
-    setState(() {});
+    Navigator.pop(context);
   }
 }
