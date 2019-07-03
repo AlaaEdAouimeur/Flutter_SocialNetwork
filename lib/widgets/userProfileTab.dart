@@ -13,7 +13,7 @@ class UserProfileTabState extends State<UserProfileTab> {
   double rowHeight = 45;
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey,
+      color: Colors.white,
       padding: EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
       child: FutureBuilder(
           future: FirebaseAuth.instance.currentUser(),

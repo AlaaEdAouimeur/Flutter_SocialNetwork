@@ -13,6 +13,10 @@ class UserDataModel {
   String instagramUserName;
   DateTime createdAt;
   bool isEmailVerified;
+  int followers;
+  int followings;
+  int posts;
+  String location;
 
   UserDataModel(
       this.uid,
@@ -26,7 +30,10 @@ class UserDataModel {
       this.gender,
       this.instagramUserName,
       this.isEmailVerified,
-      this.createdAt);
+      this.createdAt,
+      this.followers,
+      this.followings,
+      this.posts);
 
   UserDataModel.fromSnapshot(DataSnapshot snapshot)
       : uid = snapshot.value['uid'],
@@ -40,5 +47,8 @@ class UserDataModel {
         gender = snapshot.value['gender'],
         instagramUserName = snapshot.value['instagramUsername'],
         isEmailVerified = snapshot.value['isEmailVerified'],
-        createdAt = snapshot.value['createdAt'];
+        createdAt = snapshot.value['createdAt'],
+        followers = snapshot.value['followers'],
+        followings = snapshot.value['followings'],
+        posts = snapshot.value['posts'];
 }
