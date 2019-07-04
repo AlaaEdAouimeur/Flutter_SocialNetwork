@@ -251,13 +251,14 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void checkIfUserAlreadyExist(user) {
-    databaseReferences.DatabaseReferences()
-        .userDatabaseReference
-        .once()
-        .then((snapshot) => {
-              userExistCallback(snapshot, user),
-            });
+  bool checkIfUserAlreadyExist(email) {
+//    databaseReferences.DatabaseReferences()
+//        .userDatabaseReference
+//        .where("email", isEqualTo: email)
+//        .snapshots()
+//        .listen((data) => {
+//          return data.documents.length == 0
+//    });
   }
 
   void userExistCallback(DataSnapshot snapshot, FirebaseUser user) {
@@ -280,8 +281,8 @@ class LoginPageState extends State<LoginPage> {
     };
     databaseReferences.DatabaseReferences()
         .userDatabaseReference
-        .push()
-        .set(value)
+        .document()
+        .setData(value)
         .then((_) => {
               print("Data Stored to firebase"),
               saveDataToLocalDatabase(userDatabase.UserInfo.fromJson(value)),
@@ -341,7 +342,7 @@ class LoginPageState extends State<LoginPage> {
                   loginFunctions.LoginFunctions()
                       .googleLogin()
                       .then((user) => {
-                            checkIfUserAlreadyExist(user),
+                            saveUserDataToDatabase(user),
                           })
                       .then((_) => Navigator.push(context,
                           MaterialPageRoute(builder: (context) => HomePage())))

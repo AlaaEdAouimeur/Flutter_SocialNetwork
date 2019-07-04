@@ -41,29 +41,29 @@ class _HomeTabState extends State<HomeTab> {
         color: Colors.black,
         child: Column(
           children: <Widget>[
-            Flexible(
-              child: FirebaseAnimatedList(
-                  query: databaseReference.DatabaseReferences()
-                      .postDatabaseReference,
-                  defaultChild: Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    return Container(
-                      padding: EdgeInsets.only(
-                        left: 25.0,
-                        right: 25.0,
-                        top: 20.0,
-                        bottom: 10.0,
-                      ),
-                      child: shortPostBody(snapshot),
-                    );
-                  }),
-            ),
+//            Flexible(
+//              child: FirebaseAnimatedList(
+//                  query: databaseReference.DatabaseReferences()
+//                      .postDatabaseReference,
+//                  defaultChild: Container(
+//                    width: MediaQuery.of(context).size.width,
+//                    child: Center(
+//                      child: CircularProgressIndicator(),
+//                    ),
+//                  ),
+//                  itemBuilder: (BuildContext context, DataSnapshot snapshot,
+//                      Animation<double> animation, int index) {
+//                    return Container(
+//                      padding: EdgeInsets.only(
+//                        left: 25.0,
+//                        right: 25.0,
+//                        top: 20.0,
+//                        bottom: 10.0,
+//                      ),
+//                      child: shortPostBody(snapshot),
+//                    );
+//                  }),
+//            ),
           ],
         ),
       ),

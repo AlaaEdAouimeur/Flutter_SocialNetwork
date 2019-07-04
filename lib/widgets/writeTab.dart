@@ -49,11 +49,8 @@ class WriteTabState extends State<WriteTab> {
     var value = {"name": name, "writeup": writeup};
     databaseReferences.DatabaseReferences()
         .postDatabaseReference
-        .push()
-        .set(value)
-        .then((value) => {
-              print("Data Stored"),
-            });
+    .document()
+    .setData(value);
     Navigator.pop(context);
   }
 }

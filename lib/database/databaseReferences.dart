@@ -1,13 +1,12 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseReferences {
-  DatabaseReference postDatabaseReference, parentReference,
+  CollectionReference postDatabaseReference,
       userDatabaseReference;
 
   DatabaseReferences() {
-    final FirebaseDatabase database = FirebaseDatabase.instance;
-    parentReference = database.reference();
-    postDatabaseReference = database.reference().child('posts');
-    userDatabaseReference = database.reference().child('users');
+    final Firestore firestore = Firestore.instance;
+    postDatabaseReference = firestore.collection('posts');
+    userDatabaseReference = firestore.collection('users');
   }
 }
