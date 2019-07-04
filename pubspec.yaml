@@ -25,7 +25,6 @@ dependencies:
   cupertino_icons: ^0.1.2
   redux:
   flutter_redux:
-  redux_logging:
   firebase_core: ^0.4.0+6
   firebase_database: ^3.0.3
   google_sign_in: ^4.0.1+3
