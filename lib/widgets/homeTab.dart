@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'writeTab.dart';
@@ -41,36 +40,51 @@ class _HomeTabState extends State<HomeTab> {
         color: Colors.black,
         child: Column(
           children: <Widget>[
-//            Flexible(
-//              child: FirebaseAnimatedList(
-//                  query: databaseReference.DatabaseReferences()
-//                      .postDatabaseReference,
-//                  defaultChild: Container(
-//                    width: MediaQuery.of(context).size.width,
-//                    child: Center(
-//                      child: CircularProgressIndicator(),
-//                    ),
-//                  ),
-//                  itemBuilder: (BuildContext context, DataSnapshot snapshot,
-//                      Animation<double> animation, int index) {
-//                    return Container(
-//                      padding: EdgeInsets.only(
-//                        left: 25.0,
-//                        right: 25.0,
-//                        top: 20.0,
-//                        bottom: 10.0,
-//                      ),
-//                      child: shortPostBody(snapshot),
-//                    );
-//                  }),
-//            ),
+            Flexible(
+              child: streamBuilder(),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget shortPostBody(DataSnapshot snapshot) {
+  Widget streamBuilder() {
+    return StreamBuilder<QuerySnapshot>(
+        stream: databaseReference.DatabaseReferences()
+            .postDatabaseReference
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return new Container(
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+              break;
+            default:
+              return new ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                 return new Container(
+                   padding: EdgeInsets.only(
+                     left: 25.0,
+                     right: 25.0,
+                     top: 20.0,
+                     bottom: 10.0,
+                   ),
+                   child: shortPostBody(snapshot.data.documents[index]),
+                 );
+                }
+              );
+              break;
+          }
+        });
+  }
+
+  Widget shortPostBody(DocumentSnapshot snapshot) {
     containerHeight =
         showFull ? double.infinity : MediaQuery.of(context).size.width - 80;
     return Column(
@@ -82,7 +96,7 @@ class _HomeTabState extends State<HomeTab> {
               maxHeight: containerHeight,
             ),
             child: Text(
-              snapshot.value['writeup'],
+              snapshot.data['writeup'],
               style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 0.1,
@@ -106,7 +120,7 @@ class _HomeTabState extends State<HomeTab> {
             Container(
 //              color: Colors.orange,
               child: Text(
-                snapshot.value['name'],
+                snapshot.data['name'],
                 style: TextStyle(
                   color: Colors.green,
                   letterSpacing: 1.0,

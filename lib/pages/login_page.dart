@@ -3,7 +3,6 @@ import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
 import '../database/databaseReferences.dart' as databaseReferences;
 import 'home_page.dart';
-import 'package:firebase_database/firebase_database.dart';
 import '../models/ld_user_info.dart' as userDatabase;
 
 class LoginPage extends StatefulWidget {
@@ -43,7 +42,10 @@ class LoginPageState extends State<LoginPage> {
                 onTap: () =>
                     FocusScope.of(context).requestFocus(new FocusNode()),
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.96,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.96,
                   padding: EdgeInsets.all(20.0),
                   color: Colors.teal,
                   child: GestureDetector(
@@ -95,23 +97,23 @@ class LoginPageState extends State<LoginPage> {
           width: double.infinity,
           child: loginMode == true
               ? Text(
-                  "New to The Project Quote? Sign Up",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    decorationStyle: TextDecorationStyle.solid,
-                    decoration: TextDecoration.underline,
-                  ),
-                )
+            "New to The Project Quote? Sign Up",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              decorationStyle: TextDecorationStyle.solid,
+              decoration: TextDecoration.underline,
+            ),
+          )
               : Text(
-                  "Back to Login",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    decorationStyle: TextDecorationStyle.solid,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+            "Back to Login",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              decorationStyle: TextDecorationStyle.solid,
+              decoration: TextDecoration.underline,
+            ),
+          ),
         ),
         onTap: () {
           setState(() {
@@ -161,10 +163,10 @@ class LoginPageState extends State<LoginPage> {
       ),
       focusedBorder: new UnderlineInputBorder(
           borderSide: BorderSide(
-        color: Colors.grey,
-        width: 1.5,
-        style: BorderStyle.solid,
-      )),
+            color: Colors.grey,
+            width: 1.5,
+            style: BorderStyle.solid,
+          )),
     );
   }
 
@@ -221,11 +223,11 @@ class LoginPageState extends State<LoginPage> {
           ),
           loginMode == false
               ? TextFormField(
-                  decoration: textFieldDecoration("RETYPE PASSWORD"),
-                  obscureText: true,
-                  controller: retypePasswordController,
-                  validator: validateRetypePassword,
-                )
+            decoration: textFieldDecoration("RETYPE PASSWORD"),
+            obscureText: true,
+            controller: retypePasswordController,
+            validator: validateRetypePassword,
+          )
               : SizedBox(height: 0),
           SizedBox(height: 5),
           GestureDetector(
@@ -251,24 +253,15 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  bool checkIfUserAlreadyExist(email) {
-//    databaseReferences.DatabaseReferences()
-//        .userDatabaseReference
-//        .where("email", isEqualTo: email)
-//        .snapshots()
-//        .listen((data) => {
-//          return data.documents.length == 0
-//    });
-  }
-
-  void userExistCallback(DataSnapshot snapshot, FirebaseUser user) {
-    if (snapshot.value != null) {
-      for (var value in snapshot.value.values) {
-        print(value["email"]);
-        if (value["email"] == user.email) return;
-      }
-    }
-    saveUserDataToDatabase(user);
+  void checkIfUserAlreadyExist(user) {
+    print("Checking user if already exist");
+    databaseReferences
+        .DatabaseReferences()
+        .userDatabaseReference
+        .where("email", isEqualTo: user.email)
+        .snapshots()
+        .where((event) => event.documents.length != 0)
+        .listen((data) => print("length of data : " + data.documents.length.toString()));
   }
 
   void saveUserDataToDatabase(FirebaseUser user) {
@@ -279,14 +272,6 @@ class LoginPageState extends State<LoginPage> {
       "profilePictureUrl": user.photoUrl.toString(),
       "uid": user.uid,
     };
-    databaseReferences.DatabaseReferences()
-        .userDatabaseReference
-        .document()
-        .setData(value)
-        .then((_) => {
-              print("Data Stored to firebase"),
-              saveDataToLocalDatabase(userDatabase.UserInfo.fromJson(value)),
-            });
   }
 
   void saveDataToLocalDatabase(var user) {
@@ -297,26 +282,30 @@ class LoginPageState extends State<LoginPage> {
   void login() {
     loginFunctions.LoginFunctions()
         .emailLogin(emailController.text, passwordController.text)
-        .then((user) => {
-              saveUserDataToDatabase(user),
-              hideDialogBox(context),
-            })
-        .catchError((e) => {
-              print(e),
-              hideDialogBox(context),
-            });
+        .then((user) =>
+    {
+    saveUserDataToDatabase(user),
+    hideDialogBox(context),
+    })
+        .catchError((e) =>
+    {
+    print(e),
+    hideDialogBox(context),
+    });
   }
 
   void signUp() {
     loginFunctions.LoginFunctions()
         .emailSignUp(emailController.text, passwordController.text)
-        .then((user) => {
-              hideDialogBox(context),
-            })
-        .catchError((e) => {
-              print(e),
-              hideDialogBox(context),
-            });
+        .then((user) =>
+    {
+    hideDialogBox(context),
+    })
+        .catchError((e) =>
+    {
+    print(e),
+    hideDialogBox(context),
+    });
   }
 
   Widget googleLoginButton(BuildContext context) {
@@ -337,17 +326,20 @@ class LoginPageState extends State<LoginPage> {
                 Text("Login with google"),
               ],
             ),
-            onTap: () => {
-                  showDialogBox(context),
-                  loginFunctions.LoginFunctions()
-                      .googleLogin()
-                      .then((user) => {
-                            saveUserDataToDatabase(user),
-                          })
-                      .then((_) => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePage())))
-                      .catchError((e) => print(e)),
-                }),
+            onTap: () =>
+            {
+            showDialogBox(context),
+            loginFunctions.LoginFunctions()
+                .googleLogin()
+                .then((user) =>
+            {
+            checkIfUserAlreadyExist(user),
+            })
+                .then((_) =>
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage())))
+                .catchError((e) => print(e)),
+            }),
       ),
     );
   }
