@@ -4,6 +4,7 @@ import '../database/databaseReferences.dart' as databaseReference;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'writeTab.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeTab extends StatefulWidget {
   HomeTab({Key key}) : super(key: key);
@@ -15,6 +16,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   var containerHeight;
   var boxConstraint;
+  Future<FirebaseUser> currentUser = FirebaseAuth.instance.currentUser();
   bool showFull = false;
 
   Widget build(BuildContext context) {
@@ -93,8 +95,36 @@ class _HomeTabState extends State<HomeTab> {
         .postDatabaseReference
         .document(documentID)
         .updateData({
-      "downvotes": FieldValue.increment(-1),
+      "downvotes": FieldValue.increment(1),
     });
+  }
+
+  void updateUpvotedUserList(String documentID) {
+    print("Updating up user list");
+    currentUser
+        .then(
+          (user) => databaseReference.DatabaseReferences()
+                  .postDatabaseReference
+                  .document(documentID)
+                  .updateData({
+                "upvotedUsers": FieldValue.arrayUnion([user.uid]),
+              }),
+        )
+        .then(
+          (_) => print("updated"),
+        );
+  }
+
+  void updateDownvotedUserList(String documentID) {
+    print("Updating down user list");
+    currentUser.then(
+      (user) => databaseReference.DatabaseReferences()
+              .postDatabaseReference
+              .document(documentID)
+              .updateData({
+            "downvotedUsers": FieldValue.arrayRemove([user.uid]),
+          }),
+    );
   }
 
   Widget shortPostBody(DocumentSnapshot snapshot) {
@@ -168,6 +198,7 @@ class _HomeTabState extends State<HomeTab> {
                         onTap: () => {
                               print("Upvoting"),
                               upVote(snapshot.documentID),
+                              updateUpvotedUserList(snapshot.documentID),
                             },
                       ),
                       Text(
@@ -184,13 +215,15 @@ class _HomeTabState extends State<HomeTab> {
                   Column(
                     children: <Widget>[
                       GestureDetector(
-                        child: Icon(
-                          EvaIcons.arrowCircleDownOutline,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                        onTap: () => downVote(snapshot.documentID),
-                      ),
+                          child: Icon(
+                            EvaIcons.arrowCircleDownOutline,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          onTap: () => {
+                                downVote(snapshot.documentID),
+                                updateDownvotedUserList(snapshot.documentID),
+                              }),
                       Text(
                         snapshot.data['downvotes'] == null
                             ? "0"
