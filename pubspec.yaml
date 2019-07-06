@@ -36,6 +36,7 @@ dependencies:
   path_provider: ^0.4.1
   eva_icons_flutter: ^2.0.0
   cloud_firestore: ^0.12.6
+  intl: ^0.15.8
 
 dev_dependencies:
   flutter_test:

@@ -266,6 +266,12 @@ class LoginPageState extends State<LoginPage> {
       "isEmailVerified": user.isEmailVerified.toString(),
       "profilePictureUrl": user.photoUrl.toString(),
       "uid": user.uid,
+      "createdAt": DateTime.now(),
+      "followers": 0,
+      "followings": 0,
+      "posts": 0,
+      "location": null,
+      "username": null,
     };
     checkIfUserAlreadyExist(user.email).then((val) => val
         ? null

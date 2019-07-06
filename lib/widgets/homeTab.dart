@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'writeTab.dart';
+import 'package:intl/intl.dart';
 
 class HomeTab extends StatefulWidget {
   HomeTab({Key key}) : super(key: key);
@@ -12,14 +13,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  List colors = [
-    Colors.red,
-    Colors.green,
-    Colors.brown,
-    Colors.blue,
-    Colors.deepPurple
-  ];
-
   var containerHeight;
   var boxConstraint;
   bool showFull = false;
@@ -53,6 +46,7 @@ class _HomeTabState extends State<HomeTab> {
     return StreamBuilder<QuerySnapshot>(
         stream: databaseReference.DatabaseReferences()
             .postDatabaseReference
+            .orderBy('createdAt', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
@@ -66,22 +60,41 @@ class _HomeTabState extends State<HomeTab> {
               break;
             default:
               return new ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                 return new Container(
-                   padding: EdgeInsets.only(
-                     left: 25.0,
-                     right: 25.0,
-                     top: 20.0,
-                     bottom: 10.0,
-                   ),
-                   child: shortPostBody(snapshot.data.documents[index]),
-                 );
-                }
-              );
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    return new Container(
+                      padding: EdgeInsets.only(
+                        left: 25.0,
+                        right: 25.0,
+                        top: 20.0,
+                        bottom: 10.0,
+                      ),
+                      child: shortPostBody(snapshot.data.documents[index]),
+                    );
+                  });
               break;
           }
         });
+  }
+
+  void upVote(String documentID) {
+    databaseReference.DatabaseReferences()
+        .postDatabaseReference
+        .document(documentID)
+        .updateData({
+      "upvotes": FieldValue.increment(1),
+    }).then(
+      (_) => print("Upvoted"),
+    );
+  }
+
+  void downVote(String documentID) {
+    databaseReference.DatabaseReferences()
+        .postDatabaseReference
+        .document(documentID)
+        .updateData({
+      "downvotes": FieldValue.increment(-1),
+    });
   }
 
   Widget shortPostBody(DocumentSnapshot snapshot) {
@@ -114,11 +127,23 @@ class _HomeTabState extends State<HomeTab> {
             });
           },
         ),
+        Container(
+          child: Text(
+            DateFormat.yMMMd()
+                .format(snapshot.data['createdAt'].toDate())
+                .toString(),
+            style: TextStyle(
+              color: Colors.white,
+              letterSpacing: 1.0,
+              fontSize: 14.0,
+              height: 2.0,
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-//              color: Colors.orange,
               child: Text(
                 snapshot.data['name'],
                 style: TextStyle(
@@ -130,30 +155,79 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ),
             Container(
-//              color: Colors.red,
               child: Row(
                 children: <Widget>[
-                  Icon(
-                    EvaIcons.arrowCircleDownOutline,
-                    color: Colors.white,
-                    size: 18,
+                  Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Icon(
+                          EvaIcons.arrowCircleUpOutline,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        onTap: () => {
+                              print("Upvoting"),
+                              upVote(snapshot.documentID),
+                            },
+                      ),
+                      Text(
+                        snapshot.data['upvotes'] == null
+                            ? "0"
+                            : snapshot.data['upvotes'].toString(),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     width: 4,
                   ),
-                  Icon(
-                    EvaIcons.arrowCircleUpOutline,
-                    color: Colors.white,
-                    size: 18,
+                  Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Icon(
+                          EvaIcons.arrowCircleDownOutline,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        onTap: () => downVote(snapshot.documentID),
+                      ),
+                      Text(
+                        snapshot.data['downvotes'] == null
+                            ? "0"
+                            : snapshot.data['downvotes'].toString(),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     width: 4,
                   ),
-                  Icon(
-                    EvaIcons.share,
-                    color: Colors.white,
-                    size: 18,
-                  ),
+                  GestureDetector(
+                    child: Icon(
+                      Icons.info,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                    onTap: () => showModalBottomSheet<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return new Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              new ListTile(
+                                leading: new Icon(Icons.warning),
+                                title: new Text('Report'),
+                                onTap: () => print(""),
+                              ),
+                              new ListTile(
+                                leading: new Icon(Icons.share),
+                                title: new Text('Share'),
+                                onTap: () => print(""),
+                              ),
+                            ],
+                          );
+                        }),
+                  )
                 ],
               ),
             )

@@ -4,12 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
+
   WriteTabState createState() => WriteTabState();
 }
 
 class WriteTabState extends State<WriteTab> {
   Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
   TextEditingController writeupController = TextEditingController();
+
   Widget build(BuildContext context) {
     return Material(
       child: Container(
@@ -35,7 +37,8 @@ class WriteTabState extends State<WriteTab> {
               RaisedButton(
                 child: Text("Submit"),
                 onPressed: () => user.then((user) => {
-                      insertData(user.displayName, writeupController.text),
+                      insertData(
+                          user.displayName, writeupController.text, user.uid),
                     }),
               )
             ],
@@ -45,12 +48,22 @@ class WriteTabState extends State<WriteTab> {
     );
   }
 
-  void insertData(String name, String writeup) {
-    var value = {"name": name, "writeup": writeup};
+  void insertData(String name, String writeup, String uid) {
+    var value = {
+      "uid": uid,
+      "name": name,
+      "writeup": writeup,
+      "createdAt": DateTime.now(),
+      "upvotes": 0,
+      "downvotes": 0,
+    };
     databaseReferences.DatabaseReferences()
         .postDatabaseReference
-    .document()
-    .setData(value);
-    Navigator.pop(context);
+        .document()
+        .setData(value)
+        .then((_) => {
+              print("Data Set"),
+              Navigator.pop(context),
+            });
   }
 }
