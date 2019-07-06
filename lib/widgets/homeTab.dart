@@ -16,8 +16,13 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   var containerHeight;
   var boxConstraint;
-  Future<FirebaseUser> currentUser = FirebaseAuth.instance.currentUser();
+  FirebaseUser currentUser;
   bool showFull = false;
+
+  @override
+  void initState() {
+    FirebaseAuth.instance.currentUser().then((user) => currentUser = user);
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,9 +90,7 @@ class _HomeTabState extends State<HomeTab> {
         .document(documentID)
         .updateData({
       "upvotes": FieldValue.increment(1),
-    }).then(
-      (_) => print("Upvoted"),
-    );
+    });
   }
 
   void downVote(String documentID) {
@@ -100,31 +103,21 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   void updateUpvotedUserList(String documentID) {
-    print("Updating up user list");
-    currentUser
-        .then(
-          (user) => databaseReference.DatabaseReferences()
-                  .postDatabaseReference
-                  .document(documentID)
-                  .updateData({
-                "upvotedUsers": FieldValue.arrayUnion([user.uid]),
-              }),
-        )
-        .then(
-          (_) => print("updated"),
-        );
+    databaseReference.DatabaseReferences()
+        .postDatabaseReference
+        .document(documentID)
+        .updateData({
+      "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
+    });
   }
 
   void updateDownvotedUserList(String documentID) {
-    print("Updating down user list");
-    currentUser.then(
-      (user) => databaseReference.DatabaseReferences()
-              .postDatabaseReference
-              .document(documentID)
-              .updateData({
-            "downvotedUsers": FieldValue.arrayRemove([user.uid]),
-          }),
-    );
+    databaseReference.DatabaseReferences()
+        .postDatabaseReference
+        .document(documentID)
+        .updateData({
+      "downvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
+    });
   }
 
   Widget shortPostBody(DocumentSnapshot snapshot) {
@@ -196,7 +189,6 @@ class _HomeTabState extends State<HomeTab> {
                           size: 18,
                         ),
                         onTap: () => {
-                              print("Upvoting"),
                               upVote(snapshot.documentID),
                               updateUpvotedUserList(snapshot.documentID),
                             },
