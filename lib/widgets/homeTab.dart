@@ -18,6 +18,8 @@ class _HomeTabState extends State<HomeTab> {
   var boxConstraint;
   FirebaseUser currentUser;
   bool showFull = false;
+  IconData upIcon;
+  IconData downIcon;
 
   @override
   void initState() {
@@ -84,40 +86,77 @@ class _HomeTabState extends State<HomeTab> {
         });
   }
 
-  void upVote(String documentID) {
-    databaseReference.DatabaseReferences()
-        .postDatabaseReference
-        .document(documentID)
-        .updateData({
-      "upvotes": FieldValue.increment(1),
-    });
+  FutureBuilder getUpIcon(String documentID) {
+    List userIds;
+    return new FutureBuilder(
+      future: getUpvotedUserList(documentID),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done){
+          print(snapshot.hasData.toString());
+          if(snapshot.data['upvotedUsers'] != null) {
+            userIds = snapshot.data['upvotedUsers'];
+            if(userIds.contains(currentUser.uid))
+              upIcon = EvaIcons.arrowCircleUp;
+            else
+              upIcon = EvaIcons.arrowCircleUpOutline;
+          }
+        };
+        return Icon(
+          upIcon,
+          color: Colors.white,
+          size: 18,
+        );
+      },
+      initialData: Icon(
+        EvaIcons.arrowCircleUpOutline,
+        color: Colors.white,
+        size: 18,
+      ),
+    );
+  }
+  
+  Future<DocumentSnapshot> getUpvotedUserList(String documentID) {
+    return databaseReference.DatabaseReferences().postDatabaseReference
+        .document(documentID).get();
+  }
+  void upVote(String documentID) async {
+    DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
+    List userIds = snapshot.data["upvotedUsers"];
+    if(userIds.contains(currentUser.uid)) {
+      databaseReference.DatabaseReferences()
+          .postDatabaseReference
+          .document(documentID)
+          .updateData({
+        "upvotes": FieldValue.increment(-1),
+      });
+    } else {
+      databaseReference.DatabaseReferences()
+          .postDatabaseReference
+          .document(documentID)
+          .updateData({
+        "upvotes": FieldValue.increment(1),
+      });
+    }
   }
 
-  void downVote(String documentID) {
-    databaseReference.DatabaseReferences()
-        .postDatabaseReference
-        .document(documentID)
-        .updateData({
-      "downvotes": FieldValue.increment(1),
-    });
-  }
-
-  void updateUpvotedUserList(String documentID) {
-    databaseReference.DatabaseReferences()
-        .postDatabaseReference
-        .document(documentID)
-        .updateData({
-      "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
-    });
-  }
-
-  void updateDownvotedUserList(String documentID) {
-    databaseReference.DatabaseReferences()
-        .postDatabaseReference
-        .document(documentID)
-        .updateData({
-      "downvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
-    });
+  void updateUpvotedUserList(String documentID) async {
+    DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
+    List userIds = snapshot.data["upvotedUsers"];
+    if(userIds.contains(currentUser.uid)) {
+      databaseReference.DatabaseReferences()
+          .postDatabaseReference
+          .document(documentID)
+          .updateData({
+        "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
+      });
+    } else {
+      databaseReference.DatabaseReferences()
+          .postDatabaseReference
+          .document(documentID)
+          .updateData({
+        "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
+      });
+    }
   }
 
   Widget shortPostBody(DocumentSnapshot snapshot) {
@@ -183,11 +222,7 @@ class _HomeTabState extends State<HomeTab> {
                   Column(
                     children: <Widget>[
                       GestureDetector(
-                        child: Icon(
-                          EvaIcons.arrowCircleUpOutline,
-                          color: Colors.white,
-                          size: 18,
-                        ),
+                        child: getUpIcon(snapshot.documentID),
                         onTap: () => {
                               upVote(snapshot.documentID),
                               updateUpvotedUserList(snapshot.documentID),
@@ -197,29 +232,6 @@ class _HomeTabState extends State<HomeTab> {
                         snapshot.data['upvotes'] == null
                             ? "0"
                             : snapshot.data['upvotes'].toString(),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Column(
-                    children: <Widget>[
-                      GestureDetector(
-                          child: Icon(
-                            EvaIcons.arrowCircleDownOutline,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                          onTap: () => {
-                                downVote(snapshot.documentID),
-                                updateDownvotedUserList(snapshot.documentID),
-                              }),
-                      Text(
-                        snapshot.data['downvotes'] == null
-                            ? "0"
-                            : snapshot.data['downvotes'].toString(),
                         style: TextStyle(color: Colors.white),
                       ),
                     ],

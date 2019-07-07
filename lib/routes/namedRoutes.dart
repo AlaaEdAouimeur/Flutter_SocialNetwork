@@ -22,7 +22,6 @@ class RoutesState extends State<Routes> {
                   .then((prefs) => prefs.getBool("firstUse")),
               builder: (BuildContext context, AsyncSnapshot firstUse) {
                 if (!firstUse.hasData) {
-                  print("Tutorial Page");
                   return TutorialPage(vm);
                 } else {
                   return new FutureBuilder(
@@ -30,16 +29,13 @@ class RoutesState extends State<Routes> {
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.hasData) {
                           if (snapshot.data != null) {
-                            print("Home Page");
                             return HomePage();
                           } else {
-                            print("Progress Indicator");
                             return CircularProgressIndicator(
                               backgroundColor: Colors.green,
                             );
                           }
                         } else {
-                          print("Login Page");
                           return LoginPage();
                         }
                       });
