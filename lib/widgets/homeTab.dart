@@ -23,6 +23,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
+    super.initState();
     FirebaseAuth.instance.currentUser().then((user) => currentUser = user);
   }
 
@@ -91,16 +92,16 @@ class _HomeTabState extends State<HomeTab> {
     return new FutureBuilder(
       future: getUpvotedUserList(documentID),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done){
-          print(snapshot.hasData.toString());
-          if(snapshot.data['upvotedUsers'] != null) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data['upvotedUsers'] != null) {
             userIds = snapshot.data['upvotedUsers'];
-            if(userIds.contains(currentUser.uid))
+            if (userIds.contains(currentUser.uid))
               upIcon = EvaIcons.arrowCircleUp;
             else
               upIcon = EvaIcons.arrowCircleUpOutline;
           }
-        };
+        }
+        ;
         return Icon(
           upIcon,
           color: Colors.white,
@@ -114,15 +115,18 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-  
+
   Future<DocumentSnapshot> getUpvotedUserList(String documentID) {
-    return databaseReference.DatabaseReferences().postDatabaseReference
-        .document(documentID).get();
+    return databaseReference.DatabaseReferences()
+        .postDatabaseReference
+        .document(documentID)
+        .get();
   }
+
   void upVote(String documentID) async {
     DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
     List userIds = snapshot.data["upvotedUsers"];
-    if(userIds.contains(currentUser.uid)) {
+    if (userIds.contains(currentUser.uid)) {
       databaseReference.DatabaseReferences()
           .postDatabaseReference
           .document(documentID)
@@ -142,7 +146,7 @@ class _HomeTabState extends State<HomeTab> {
   void updateUpvotedUserList(String documentID) async {
     DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
     List userIds = snapshot.data["upvotedUsers"];
-    if(userIds.contains(currentUser.uid)) {
+    if (userIds.contains(currentUser.uid)) {
       databaseReference.DatabaseReferences()
           .postDatabaseReference
           .document(documentID)
@@ -219,22 +223,12 @@ class _HomeTabState extends State<HomeTab> {
             Container(
               child: Row(
                 children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      GestureDetector(
-                        child: getUpIcon(snapshot.documentID),
-                        onTap: () => {
-                              upVote(snapshot.documentID),
-                              updateUpvotedUserList(snapshot.documentID),
-                            },
-                      ),
-                      Text(
-                        snapshot.data['upvotes'] == null
-                            ? "0"
-                            : snapshot.data['upvotes'].toString(),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
+                  GestureDetector(
+                    child: getUpIcon(snapshot.documentID),
+                    onTap: () => {
+                          upVote(snapshot.documentID),
+                          updateUpvotedUserList(snapshot.documentID),
+                        },
                   ),
                   SizedBox(
                     width: 4,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
 import '../pages/login_page.dart';
+import '../database/databaseReferences.dart' as databaseReference;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProfileTab extends StatefulWidget {
   UserProfileTab();
@@ -10,22 +12,40 @@ class UserProfileTab extends StatefulWidget {
 }
 
 class UserProfileTabState extends State<UserProfileTab> {
+  FirebaseUser currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.currentUser().then((user) => currentUser = user);
+  }
+
   double rowHeight = 45;
+
+  Future<DocumentSnapshot> getDocumentFromQuery() {
+
+  }
   Widget build(BuildContext context) {
+    print("UID : " + currentUser.uid);
     return Container(
       color: Colors.white,
       padding: EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
       child: FutureBuilder(
-          future: FirebaseAuth.instance.currentUser(),
-          builder: (BuildContext context, AsyncSnapshot<FirebaseUser> user) {
-            if (user.hasData) {
-              if (user.data != null) {
+          future: databaseReference.DatabaseReferences()
+              .userDatabaseReference
+              .where("uid", isEqualTo: currentUser.uid)
+              .limit(1)
+              .getDocuments(),
+          builder: (BuildContext context, AsyncSnapshot query) {
+            DocumentSnapshot snapshot = await getDocumentFromQuery();
+            if (snapshot.hasData) {
+              if (snapshot.data != null) {
                 return new ListView(
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        profilePicture(user.data.photoUrl),
+                        profilePicture(snapshot.data["profilePictureUrl"]),
                         Padding(
                           padding: EdgeInsets.only(left: 20),
                           child: Column(
@@ -34,7 +54,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                                 height: 30,
                                 child: Center(
                                   child: Text(
-                                    user.data.displayName,
+                                    snapshot.data["name"],
                                     style: TextStyle(
                                       color: Colors.green,
                                     ),
@@ -75,7 +95,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                             "posts",
                           ),
                           Text(
-                            "1",
+                            snapshot.data["posts"],
                             style: TextStyle(),
                             textAlign: TextAlign.right,
                           ),
@@ -123,7 +143,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                             "Email",
                           ),
                           Text(
-                            user.data.email,
+                            snapshot.data["email"],
                             style: TextStyle(),
                             textAlign: TextAlign.right,
                           ),
