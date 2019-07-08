@@ -55,7 +55,7 @@ class WriteTabState extends State<WriteTab> {
       "writeup": writeup,
       "createdAt": DateTime.now(),
       "upvotes": 0,
-      "downvotes": 0,
+      "upvotedUsers": [],
     };
     databaseReferences.DatabaseReferences()
         .postDatabaseReference
