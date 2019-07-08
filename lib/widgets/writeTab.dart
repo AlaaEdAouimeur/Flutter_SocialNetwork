@@ -11,6 +11,8 @@ class WriteTab extends StatefulWidget {
 class WriteTabState extends State<WriteTab> {
   Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
   TextEditingController writeupController = TextEditingController();
+  String loadingText = "sending";
+  IconData loadingIcon = Icons.cloud_upload;
 
   Widget build(BuildContext context) {
     return Material(
@@ -48,6 +50,14 @@ class WriteTabState extends State<WriteTab> {
     );
   }
 
+  void changeStringAndIcon() {
+    print("Setting State");
+    setState(() {
+      loadingText = "submitted";
+      loadingIcon = Icons.done;
+    });
+  }
+
   void insertData(String name, String writeup, String uid) {
     var value = {
       "uid": uid,
@@ -57,13 +67,37 @@ class WriteTabState extends State<WriteTab> {
       "upvotes": 0,
       "upvotedUsers": [],
     };
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Material(
+            child: Container(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Icon(loadingIcon),
+                    Text(loadingText),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
     databaseReferences.DatabaseReferences()
         .postDatabaseReference
         .document()
         .setData(value)
         .then((_) => {
-              print("Data Set"),
-              Navigator.pop(context),
+              changeStringAndIcon(),
+      print("Here"),
+              Future.delayed(
+                  Duration(seconds: 2),
+                  () => {print("After 2 seconds"),
+
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                      }),
             });
   }
 }
