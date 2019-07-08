@@ -17,35 +17,57 @@ class UserProfileTabState extends State<UserProfileTab> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((user) => currentUser = user);
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    setState(() {
+      currentUser = user;
+    });
   }
 
   double rowHeight = 45;
 
-  Future<DocumentSnapshot> getDocumentFromQuery() {
-
-  }
   Widget build(BuildContext context) {
-    print("UID : " + currentUser.uid);
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-      child: FutureBuilder(
-          future: databaseReference.DatabaseReferences()
-              .userDatabaseReference
-              .where("uid", isEqualTo: currentUser.uid)
-              .limit(1)
-              .getDocuments(),
-          builder: (BuildContext context, AsyncSnapshot query) {
-            DocumentSnapshot snapshot = await getDocumentFromQuery();
-            if (snapshot.hasData) {
-              if (snapshot.data != null) {
+    if(currentUser == null) {
+      return new Container(
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      return Container(
+        color: Colors.white,
+        padding: EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: databaseReference
+                .DatabaseReferences()
+                .userDatabaseReference
+                .where("uid", isEqualTo: currentUser.uid)
+                .limit(1)
+                .snapshots(),
+            builder: (BuildContext context,
+                AsyncSnapshot<QuerySnapshot> query) {
+              if (query.connectionState == ConnectionState.waiting) {
+                return new Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else {
+                DocumentSnapshot snapshot = query.data.documents[0];
                 return new ListView(
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        profilePicture(snapshot.data["profilePictureUrl"]),
+                        profilePicture(snapshot["profilePictureUrl"]),
                         Padding(
                           padding: EdgeInsets.only(left: 20),
                           child: Column(
@@ -54,7 +76,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                                 height: 30,
                                 child: Center(
                                   child: Text(
-                                    snapshot.data["name"],
+                                    snapshot["name"],
                                     style: TextStyle(
                                       color: Colors.green,
                                     ),
@@ -95,7 +117,8 @@ class UserProfileTabState extends State<UserProfileTab> {
                             "posts",
                           ),
                           Text(
-                            snapshot.data["posts"],
+                            snapshot["posts"] == null ? "0" : snapshot["posts"]
+                                .toString(),
                             style: TextStyle(),
                             textAlign: TextAlign.right,
                           ),
@@ -111,7 +134,9 @@ class UserProfileTabState extends State<UserProfileTab> {
                             "followers",
                           ),
                           Text(
-                            "10",
+                            snapshot["followers"] == null
+                                ? "0"
+                                : snapshot["followers"].toString(),
                             style: TextStyle(),
                             textAlign: TextAlign.right,
                           ),
@@ -124,10 +149,12 @@ class UserProfileTabState extends State<UserProfileTab> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "following",
+                            "followings",
                           ),
                           Text(
-                            "15",
+                            snapshot["followings"] == null
+                                ? "0"
+                                : snapshot["followings"].toString(),
                             style: TextStyle(),
                             textAlign: TextAlign.right,
                           ),
@@ -143,7 +170,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                             "Email",
                           ),
                           Text(
-                            snapshot.data["email"],
+                            snapshot["email"],
                             style: TextStyle(),
                             textAlign: TextAlign.right,
                           ),
@@ -168,31 +195,21 @@ class UserProfileTabState extends State<UserProfileTab> {
                     ),
                     RaisedButton(
                       child: Text("Logout"),
-                      onPressed: () => loginFunctions.LoginFunctions()
-                          .logout()
-                          .then((_) => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()))),
+                      onPressed: () =>
+                          loginFunctions.LoginFunctions()
+                              .logout()
+                              .then((_) =>
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginPage()))),
                     ),
                   ],
                 );
-              } else {
-                return new CircularProgressIndicator(
-                  backgroundColor: Colors.green,
-                );
               }
-            } else {
-              return Container(
-                child: Center(
-                  child: new CircularProgressIndicator(
-                    backgroundColor: Colors.red,
-                  ),
-                ),
-              );
-            }
-          }),
-    );
+            }),
+      );
+    }
   }
 
   Widget profilePicture(String photoUrl) {
