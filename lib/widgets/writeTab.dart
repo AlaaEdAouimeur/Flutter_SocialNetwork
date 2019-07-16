@@ -94,7 +94,6 @@ class WriteTabState extends State<WriteTab> {
               Future.delayed(
                   Duration(seconds: 2),
                   () => {print("After 2 seconds"),
-
                         Navigator.pop(context),
                         Navigator.pop(context),
                       }),

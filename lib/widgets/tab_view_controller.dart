@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'homeTab.dart';
 import 'userProfileTab.dart';
 import 'writeTab.dart';
+import 'SearchTab.dart';
 
 class TabViewController {
   Widget showBody(index) {
@@ -19,7 +20,7 @@ class TabViewController {
         break;
 
       case 1:
-        return Text("Search");
+        return SearchTab();
         break;
 
       case 2:
