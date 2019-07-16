@@ -40,7 +40,8 @@ class WriteTabState extends State<WriteTab> {
                 child: Text("Submit"),
                 onPressed: () => user.then((user) => {
                       insertData(
-                          user.displayName, writeupController.text, user.uid),
+                          user.displayName, writeupController.text, user.uid
+                      ),
                     }),
               )
             ],

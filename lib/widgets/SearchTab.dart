@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../database/databaseReferences.dart' as databaseReference;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchTab extends StatefulWidget {
   SearchTab({Key key}) : super(key: key);
@@ -44,32 +46,48 @@ class SearchTabState extends State<SearchTab> {
                 ),
               ),
             ),
-            Container(
-              width: widthOfContainer,
-              height: 40,
-              color: Colors.green,
-              child: Text(
-                "Category",
-                style: TextStyle(
-                  backgroundColor: Colors.green,
-                ),
-              ),
-            ),
-            Container(
-              width: widthOfContainer,
-              height: 120,
-              color: Colors.red,
-              child: ListView(
-                children: <Widget>[
-                  Container(),
-                ],
-              ),
+            Flexible(
+              child: categoryList(widthOfContainer),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+Widget categoryList(double widthOfContainer) {
+  return StreamBuilder<QuerySnapshot>(
+      stream: databaseReference.DatabaseReferences()
+          .categoryDatabaseReference
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return new Container(
+              width: widthOfContainer,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+            break;
+          default:
+            return new ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  return categoryListBuilder(snapshot.data.documents[index]);
+                });
+            break;
+        }
+      });
+}
+
+Widget categoryListBuilder(DocumentSnapshot snapshot) {
+  return new Container(
+    child: Text(snapshot["category_name"]),
+  );
 }
 
 class UserSearch extends SearchDelegate<String> {
