@@ -84,9 +84,42 @@ Widget categoryList(double widthOfContainer) {
       });
 }
 
+Widget suggestionList() {
+  return StreamBuilder<QuerySnapshot>(
+      stream: databaseReference.DatabaseReferences()
+          .userDatabaseReference
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return new Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+            break;
+          default:
+            return new ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  return categoryListBuilder(snapshot.data.documents[index]);
+                });
+            break;
+        }
+      });
+}
+
+Widget suggestionsListBuilder(DocumentSnapshot snapshot) {
+  return new Container(
+    child: Text(snapshot["name"]),
+  );
+}
+
 Widget categoryListBuilder(DocumentSnapshot snapshot) {
   return new Container(
-    child: Text(snapshot["category_name"]),
+    child: Text(snapshot["category_name"] == null ? "Null" : snapshot["category_name"]),
   );
 }
 
@@ -144,13 +177,8 @@ class UserSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
-    final suggestionList = query.isEmpty ? suggestion : sampleData;
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-            leading: Icon(Icons.share),
-            title: Text(suggestionList[index]),
-          ),
-      itemCount: suggestionList.length,
+    return Container(
+      child: suggestionList(),
     );
   }
 }
