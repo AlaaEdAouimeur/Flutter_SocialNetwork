@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
@@ -40,8 +41,7 @@ class WriteTabState extends State<WriteTab> {
                 child: Text("Submit"),
                 onPressed: () => user.then((user) => {
                       insertData(
-                          user.displayName, writeupController.text, user.uid
-                      ),
+                          user.displayName, writeupController.text, user.uid),
                     }),
               )
             ],
@@ -51,12 +51,19 @@ class WriteTabState extends State<WriteTab> {
     );
   }
 
-  void changeStringAndIcon() {
-    print("Setting State");
-    setState(() {
-      loadingText = "submitted";
-      loadingIcon = Icons.done;
-    });
+  void updateUser(String uid) {
+    databaseReferences.DatabaseReferences()
+        .userDatabaseReference
+        .where('uid', isEqualTo: uid)
+        .getDocuments()
+        .then((query) => {
+              print(query.documents.first.documentID),
+              databaseReferences.DatabaseReferences()
+                  .userDatabaseReference
+                  .document(query.documents.first.documentID)
+                  .updateData({"posts": FieldValue.increment(1)}).then(
+                      (data) => print("User value updated")),
+            });
   }
 
   void insertData(String name, String writeup, String uid) {
@@ -90,11 +97,12 @@ class WriteTabState extends State<WriteTab> {
         .document()
         .setData(value)
         .then((_) => {
-              changeStringAndIcon(),
-      print("Here"),
+              updateUser(uid),
+              print("Here"),
               Future.delayed(
                   Duration(seconds: 2),
-                  () => {print("After 2 seconds"),
+                  () => {
+                        print("After 2 seconds"),
                         Navigator.pop(context),
                         Navigator.pop(context),
                       }),
