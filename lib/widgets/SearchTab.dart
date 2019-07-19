@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:strings/strings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SearchTab extends StatefulWidget {
   SearchTab({Key key}) : super(key: key);
@@ -106,7 +107,8 @@ Widget suggestionList(String query) {
                 shrinkWrap: true,
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  return suggestionsListBuilder(snapshot.data.documents[index], context);
+                  return suggestionsListBuilder(
+                      snapshot.data.documents[index], context);
                 });
             break;
         }
@@ -116,7 +118,6 @@ Widget suggestionList(String query) {
 Widget suggestionsListBuilder(DocumentSnapshot snapshot, context) {
   return new Container(
     width: MediaQuery.of(context).size.width - 20,
-    color: Colors.red,
     margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,53 +125,84 @@ Widget suggestionsListBuilder(DocumentSnapshot snapshot, context) {
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width - 110,
-          color: Colors.yellow,
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: new DecorationImage(
-                  fit: BoxFit.fill,
-                  image: new NetworkImage(snapshot["profilePictureUrl"]),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: new NetworkImage(snapshot["profilePictureUrl"]),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-            Expanded(
-              child: Text(
-                camelize(snapshot["name"]),
-                style: TextStyle(
-
+                SizedBox(
+                  width: 10.0,
                 ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ),
-          ]),
+                Expanded(
+                  child: Text(
+                    camelize(snapshot["name"]),
+                    style: TextStyle(),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              ]),
         ),
         SizedBox(
           width: 10.0,
         ),
         Container(
           width: 80.0,
-          color: Colors.green,
           child: FlatButton(
             child: Text(
-              "Follow",
+              getFollowButtonText(),
               style: TextStyle(
                 color: Colors.blue,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            onPressed: () {
+              followUser(snapshot.documentID, snapshot["uid"]);
+            },
           ),
         )
       ],
     ),
   );
+}
+
+getFollowButtonText() {
+  return "Follow";
+}
+
+Future<FirebaseUser> getCurrentUser() {
+  return FirebaseAuth.instance.currentUser();
+}
+
+followUser(String documentID, String uid) async {
+  FirebaseUser currentUser = await getCurrentUser();
+  databaseReference.DatabaseReferences()
+      .userDatabaseReference
+      .document(documentID)
+      .updateData({
+    "followers": FieldValue.arrayUnion([currentUser.uid])
+  });
+  databaseReference.DatabaseReferences()
+      .userDatabaseReference
+      .where('uid', isEqualTo: currentUser.uid)
+      .getDocuments()
+      .then((query) => {
+            databaseReference.DatabaseReferences()
+                .userDatabaseReference
+                .document(query.documents[0].documentID)
+                .updateData({
+              "following": FieldValue.arrayUnion([uid])
+            }),
+          });
 }
 
 Widget categoryListBuilder(DocumentSnapshot snapshot) {
