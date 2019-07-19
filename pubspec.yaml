@@ -37,6 +37,7 @@ dependencies:
   eva_icons_flutter: ^2.0.0
   cloud_firestore: ^0.12.6
   intl: ^0.15.8
+  strings: ^0.1.0
 
 dev_dependencies:
   flutter_test:

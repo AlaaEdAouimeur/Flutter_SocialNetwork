@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../pages/login_page.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:strings/strings.dart';
 
 class UserProfileTab extends StatefulWidget {
   UserProfileTab();
@@ -76,7 +77,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                                 height: 30,
                                 child: Center(
                                   child: Text(
-                                    snapshot["name"],
+                                    camelize(snapshot["name"]),
                                     style: TextStyle(
                                       color: Colors.green,
                                     ),

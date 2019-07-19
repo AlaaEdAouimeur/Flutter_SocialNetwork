@@ -261,8 +261,8 @@ class LoginPageState extends State<LoginPage> {
 
   void saveUserDataToDatabase(FirebaseUser user) {
     var value = {
-      "name": user.displayName,
-      "email": user.email,
+      "name": user.displayName.toLowerCase(),
+      "email": user.email.toLowerCase(),
       "isEmailVerified": user.isEmailVerified.toString(),
       "profilePictureUrl": user.photoUrl.toString(),
       "uid": user.uid,
