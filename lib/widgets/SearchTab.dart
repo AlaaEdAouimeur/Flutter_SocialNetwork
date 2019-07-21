@@ -97,7 +97,6 @@ class SearchTabState extends State<SearchTab> {
     return StreamBuilder<QuerySnapshot>(
         stream: databaseReference.DatabaseReferences()
             .userDatabaseReference
-            .where('name', isGreaterThanOrEqualTo: query)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
@@ -109,17 +108,33 @@ class SearchTabState extends State<SearchTab> {
               );
               break;
             default:
+              List userList = new List();
+              for(int i = 0; i < snapshot.data.documents.length; i++) {
+                userList.add(snapshot.data.documents[i]);
+                print(snapshot.data.documents[i]["name"]);
+              }
+              List filteredList = filterList(userList, query);
               return new ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: snapshot.data.documents.length,
+                  itemCount: filteredList.length,
                   itemBuilder: (context, index) {
                     return suggestionsListBuilder(
-                        snapshot.data.documents[index], context);
+                        filteredList[index], context);
                   });
               break;
           }
         });
+  }
+
+  filterList(List userList, String query) {
+    List filteredList = new List();
+    for(int i = 0; i < userList.length; i++) {
+      if(userList[i]["name"].toString().contains(query) || userList[i]["username"].toString().contains(query)) {
+        filteredList.add(userList[i]);
+      }
+    }
+    return filteredList;
   }
 
   Widget suggestionsListBuilder(DocumentSnapshot snapshot, context) {
