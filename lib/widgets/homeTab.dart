@@ -101,7 +101,6 @@ class _HomeTabState extends State<HomeTab> {
               upIcon = EvaIcons.arrowCircleUpOutline;
           }
         }
-        ;
         return Icon(
           upIcon,
           color: Colors.white,
