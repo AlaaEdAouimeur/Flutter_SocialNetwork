@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../viewModel/userProfileTab.dart';
 import '../animations/slideAnimation.dart';
 import '../animations/dialogBoxAnimation.dart';
+import 'package:flutter/services.dart';
 
 class TutorialPage extends StatefulWidget {
   final ViewModel viewModel;
@@ -20,6 +21,9 @@ class TutorialPageState extends State<TutorialPage> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   Widget build(BuildContext context) {
@@ -127,9 +131,9 @@ class TutorialPageState extends State<TutorialPage> {
               ShowUp(
                 delay: 6200,
                 child: RaisedButton(
-                  color: Colors.red,
+                  color: Colors.teal,
                   child: Text(
-                    "Login To Continue",
+                    "LOGIN TO CONTINUE",
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () => {
