@@ -118,8 +118,10 @@ class SearchTabHelperClass {
   filterList(List userList, String query) {
     List filteredList = new List();
     for (int i = 0; i < userList.length; i++) {
-      if (userList[i]["name"].toString().contains(query) ||
-          userList[i]["username"].toString().contains(query)) {
+      if ((userList[i]["name"].toString().contains(query) ||
+          userList[i]["username"].toString().contains(query)) &&
+          userList[i]["uid"].toString() != currentUser.uid
+      ) {
         filteredList.add(userList[i]);
       }
     }

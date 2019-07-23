@@ -42,26 +42,28 @@ class LoginPageState extends State<LoginPage> {
               GestureDetector(
                 onTap: () =>
                     FocusScope.of(context).requestFocus(new FocusNode()),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.96,
-                  padding: EdgeInsets.all(20.0),
-                  color: Colors.teal,
-                  child: GestureDetector(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/images/logo.png',
-                          width: 50,
-                        ),
-                        SizedBox(height: 10),
-                        headingBox(),
-                        loginWithEmailPassword(context),
-                        googleLoginButton(context),
-                        SizedBox(height: 10),
-                        signUpOption(),
-                      ],
+                child: SafeArea(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    padding: EdgeInsets.all(20.0),
+                    color: Colors.teal,
+                    child: GestureDetector(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/images/logo.png',
+                            width: 50,
+                          ),
+                          SizedBox(height: 10),
+                          headingBox(),
+                          loginWithEmailPassword(context),
+                          googleLoginButton(context),
+                          SizedBox(height: 10),
+                          signUpOption(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
