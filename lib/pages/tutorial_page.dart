@@ -26,6 +26,17 @@ class TutorialPageState extends State<TutorialPage> {
     ]);
   }
 
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     TextStyle introTextStyle = TextStyle(
       color: Colors.white,
