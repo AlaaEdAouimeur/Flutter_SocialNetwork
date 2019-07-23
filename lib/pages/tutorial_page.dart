@@ -1,105 +1,149 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../viewModel/userProfileTab.dart';
-import '../pages/login_page.dart';
+import '../animations/slideAnimation.dart';
+import '../animations/dialogBoxAnimation.dart';
 
 class TutorialPage extends StatefulWidget {
   final ViewModel viewModel;
+
   TutorialPage(this.viewModel);
+
   TutorialPageState createState() => TutorialPageState(viewModel);
 }
 
 class TutorialPageState extends State<TutorialPage> {
-  int _currentIndex = 0;
-  Widget widgetToShow;
   ViewModel viewModel;
+
   TutorialPageState(this.viewModel);
-  List<Widget> introWidgetList;
 
   @override
   void initState() {
     super.initState();
   }
 
-  void loadNextPage() {}
-
   Widget build(BuildContext context) {
-    introWidgetList = [
-      Text("Read stories"),
-      Text("Blogs on multiple topics"),
-      Text("Write your own tales, stories and blogs"),
-      Text("Follow writers"),
-      RaisedButton(
-        color: Colors.red,
-        child: Text("Login To Continue"),
-        onPressed: () => {
-              print("Pressed"),
-              SharedPreferences.getInstance().then((prefs) => {
-                    prefs.setBool("firstUse", false),
-                    viewModel.changeFirstTimeState(false),
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    ),
-                  }),
-            },
-      ),
-    ];
+    TextStyle introTextStyle = TextStyle(
+      color: Colors.white,
+      fontSize: 20.0,
+    );
 
     return Material(
       child: Container(
-          color: Colors.teal,
-          child: Stack(
+          width: MediaQuery.of(context).size.width,
+          color: Colors.black,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CarouselSlider(
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-                height: double.infinity,
-                viewportFraction: 1.0,
-                items: [0, 1, 2, 3, 4].map((i) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.orangeAccent,
-                                  Colors.greenAccent
-                                ]),
-                          ),
-                          child: Center(
-                            child: introWidgetList[i],
-                          ));
-                    },
-                  );
-                }).toList(),
+              ShowUp(
+                delay: 100,
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 70,
+                ),
               ),
-              Positioned(
-                  bottom: 10.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [0, 1, 2, 3, 4].map<Widget>((index) {
-                      return Container(
-                        width: 8.0,
-                        height: 8.0,
-                        margin: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 2.0),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: _currentIndex == index
-                                ? Color.fromRGBO(0, 0, 0, 0.9)
-                                : Color.fromRGBO(0, 0, 0, 0.4)),
-                      );
-                    }).toList(),
-                  )),
+              SizedBox(height: 30.0,),
+              ShowUp(
+                delay: 1300,
+                child: Container(
+                  child: Text(
+                    "READ STORIES",
+                    style: introTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 2400,
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                  child: Divider(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 2500,
+                child: Container(
+                  child: Text(
+                    "BLOGS ON \nMULTIPLE TOPICS",
+                    style: introTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 3600,
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                  child: Divider(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 3700,
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: Text(
+                    "WRITE TALES, BLOGS AND STORIES",
+                    style: introTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 4800,
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                  child: Divider(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 4900,
+                child: Container(
+                  child: Text(
+                    "FOLLOW WRITERS",
+                    style: introTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 6100,
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                  child: Divider(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ShowUp(
+                delay: 6200,
+                child: RaisedButton(
+                  color: Colors.red,
+                  child: Text(
+                    "Login To Continue",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () => {
+                        print("Pressed"),
+                        SharedPreferences.getInstance().then((prefs) => {
+//                              prefs.setBool("firstUse", false),
+//                              viewModel.changeFirstTimeState(false),
+                              showDialog(context: context, builder: (BuildContext context) {
+                                return DialogBox();
+                              })
+                            }),
+                      },
+                ),
+              ),
             ],
           )),
     );
