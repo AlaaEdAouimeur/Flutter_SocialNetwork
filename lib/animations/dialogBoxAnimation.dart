@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import '../functions/login_functions.dart' as loginFunctions;
+import '../HelperClasses/DatabaseHelperClass.dart';
+import '../pages/home_page.dart';
 
 class DialogBox extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class DialogBoxState extends State<DialogBox>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
+  DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass();
 
   @override
   void initState() {
@@ -70,7 +74,9 @@ class DialogBoxState extends State<DialogBox>
                               ),
                               Text(
                                 "CONTINUE WITH FACEBOOK",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue),
                               )
                             ],
                           ),
@@ -101,14 +107,25 @@ class DialogBoxState extends State<DialogBox>
                               Text(
                                 "CONTINUE WITH GOOGLE",
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red
-                                ),
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
                               )
                             ],
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          loginFunctions.LoginFunctions()
+                              .googleLogin()
+                              .then((user) => {
+                                    databaseHelperClass
+                                        .saveUserDataToDatabase(user),
+                                  })
+                              .then((_) => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage())))
+                              .catchError((e) => print(e));
+                        },
                       ),
                     ),
                   ],

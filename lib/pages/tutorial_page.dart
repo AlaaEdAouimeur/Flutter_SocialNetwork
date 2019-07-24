@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../viewModel/userProfileTab.dart';
 import '../animations/slideAnimation.dart';
-import '../animations/dialogBoxAnimation.dart';
+import '../HelperClasses/TutorialPageHelperClass.dart';
 
 class TutorialPage extends StatefulWidget {
   final ViewModel viewModel;
@@ -14,19 +13,21 @@ class TutorialPage extends StatefulWidget {
 
 class TutorialPageState extends State<TutorialPage> {
   ViewModel viewModel;
-
   TutorialPageState(this.viewModel);
+  TutorialPageHelperClass tutorialPageHelperClass;
 
   @override
   void initState() {
     super.initState();
+    tutorialPageHelperClass = new TutorialPageHelperClass();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Widget build(BuildContext context) {
-    TextStyle introTextStyle = TextStyle(
-      color: Colors.white,
-      fontSize: 20.0,
-    );
 
     return Material(
       child: Container(
@@ -42,108 +43,18 @@ class TutorialPageState extends State<TutorialPage> {
                   width: 70,
                 ),
               ),
-              SizedBox(height: 30.0,),
-              ShowUp(
-                delay: 1300,
-                child: Container(
-                  child: Text(
-                    "READ STORIES",
-                    style: introTextStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              SizedBox(
+                height: 30.0,
               ),
-              ShowUp(
-                delay: 2400,
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                  child: Divider(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              ShowUp(
-                delay: 2500,
-                child: Container(
-                  child: Text(
-                    "BLOGS ON \nMULTIPLE TOPICS",
-                    style: introTextStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              ShowUp(
-                delay: 3600,
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                  child: Divider(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              ShowUp(
-                delay: 3700,
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  child: Text(
-                    "WRITE TALES, BLOGS AND STORIES",
-                    style: introTextStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              ShowUp(
-                delay: 4800,
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                  child: Divider(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              ShowUp(
-                delay: 4900,
-                child: Container(
-                  child: Text(
-                    "FOLLOW WRITERS",
-                    style: introTextStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              ShowUp(
-                delay: 6100,
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                  child: Divider(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              ShowUp(
-                delay: 6200,
-                child: RaisedButton(
-                  color: Colors.red,
-                  child: Text(
-                    "Login To Continue",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () => {
-                        print("Pressed"),
-                        SharedPreferences.getInstance().then((prefs) => {
-//                              prefs.setBool("firstUse", false),
-//                              viewModel.changeFirstTimeState(false),
-                              showDialog(context: context, builder: (BuildContext context) {
-                                return DialogBox();
-                              })
-                            }),
-                      },
-                ),
-              ),
+              tutorialPageHelperClass.tutorialPageText(1300,  "READ STORIES"),
+              tutorialPageHelperClass.tutorialPageDivider(2400),
+              tutorialPageHelperClass.tutorialPageText(2500,  "BLOGS ON MULTIPLE TOPICS"),
+              tutorialPageHelperClass.tutorialPageDivider(3600),
+              tutorialPageHelperClass.tutorialPageText(3700,  "WRITE TALES, BLOGS AND STORIES"),
+              tutorialPageHelperClass.tutorialPageDivider(4800),
+              tutorialPageHelperClass.tutorialPageText(4900,  "FOLLOW WRITERS"),
+              tutorialPageHelperClass.tutorialPageDivider(6100),
+              tutorialPageHelperClass.tutorialPageLoginButton(6200, context),
             ],
           )),
     );
