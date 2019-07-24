@@ -41,8 +41,7 @@ class UserProfileTabState extends State<UserProfileTab> {
     } else {
       return Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
+          color: Colors.black,
         ),
         child: StreamBuilder<QuerySnapshot>(
             stream: databaseReference.DatabaseReferences()
@@ -64,32 +63,39 @@ class UserProfileTabState extends State<UserProfileTab> {
                 return new ListView(
                   children: <Widget>[
                     Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Colors.black),
-                        color: Colors.red,
-                        image: new DecorationImage(
-                          image:
-                              new NetworkImage(snapshot["profilePictureUrl"]),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
+                      color: Colors.white,
                       child: Column(
                         children: <Widget>[
-                          Container(
-                            height: 30,
-                            child: Center(
-                              child: Text(
-                                camelize(snapshot["name"]),
-                                style: TextStyle(
-                                  color: Colors.green,
+                          Center(
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 10.0),
+                              width: 120,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.white, width: 3.0),
+                                image: new DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: new NetworkImage(
+                                      snapshot["profilePictureUrl"]),
                                 ),
                               ),
                             ),
+                          ),
+                          Text(
+                            camelize(snapshot["name"]),
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0,
+                            ),
+                          ),
+                          Text(
+                            "Delhi",
+                            style: TextStyle(),
+                            textAlign: TextAlign.right,
                           ),
                         ],
                       ),
