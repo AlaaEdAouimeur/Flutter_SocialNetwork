@@ -40,8 +40,10 @@ class UserProfileTabState extends State<UserProfileTab> {
       );
     } else {
       return Container(
-        color: Colors.white,
-        padding: EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
+        ),
         child: StreamBuilder<QuerySnapshot>(
             stream: databaseReference.DatabaseReferences()
                 .userDatabaseReference
@@ -61,29 +63,36 @@ class UserProfileTabState extends State<UserProfileTab> {
                 DocumentSnapshot snapshot = query.data.documents[0];
                 return new ListView(
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        profilePicture(snapshot["profilePictureUrl"]),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                height: 30,
-                                child: Center(
-                                  child: Text(
-                                    camelize(snapshot["name"]),
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                    ),
-                                  ),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: Colors.black),
+                        color: Colors.red,
+                        image: new DecorationImage(
+                          image:
+                              new NetworkImage(snapshot["profilePictureUrl"]),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: 30,
+                            child: Center(
+                              child: Text(
+                                camelize(snapshot["name"]),
+                                style: TextStyle(
+                                  color: Colors.green,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10.0),
@@ -208,20 +217,6 @@ class UserProfileTabState extends State<UserProfileTab> {
             }),
       );
     }
-  }
-
-  Widget profilePicture(String photoUrl) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: new DecorationImage(
-          fit: BoxFit.fill,
-          image: new NetworkImage(photoUrl),
-        ),
-      ),
-    );
   }
 
   Widget logoutButton() {
