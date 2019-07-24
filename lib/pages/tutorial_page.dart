@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../animations/slideAnimation.dart';
 import '../HelperClasses/TutorialPageHelperClass.dart';
+import 'package:flutter/services.dart';
 
 class TutorialPage extends StatefulWidget {
   TutorialPage();
@@ -15,10 +16,19 @@ class TutorialPageState extends State<TutorialPage> {
   void initState() {
     super.initState();
     tutorialPageHelperClass = new TutorialPageHelperClass();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp
+    ]);
   }
 
   @override
   void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     super.dispose();
   }
 
