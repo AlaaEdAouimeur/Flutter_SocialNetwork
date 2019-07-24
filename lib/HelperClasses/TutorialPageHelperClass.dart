@@ -42,11 +42,10 @@ class TutorialPageHelperClass {
       child: RaisedButton(
         color: Colors.red,
         child: Text(
-          "Login To Continue",
+          "LOGIN TO CONTINUE",
           style: TextStyle(color: Colors.white),
         ),
         onPressed: () => {
-          print("Pressed"),
           SharedPreferences.getInstance().then((prefs) => {
 //                              prefs.setBool("firstUse", false),
 //                              viewModel.changeFirstTimeState(false),

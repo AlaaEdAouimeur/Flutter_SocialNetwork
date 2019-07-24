@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import '../viewModel/userProfileTab.dart';
 import '../animations/slideAnimation.dart';
 import '../HelperClasses/TutorialPageHelperClass.dart';
 
 class TutorialPage extends StatefulWidget {
-  final ViewModel viewModel;
-
-  TutorialPage(this.viewModel);
-
-  TutorialPageState createState() => TutorialPageState(viewModel);
+  TutorialPage();
+  TutorialPageState createState() => TutorialPageState();
 }
 
 class TutorialPageState extends State<TutorialPage> {
-  ViewModel viewModel;
-  TutorialPageState(this.viewModel);
+  TutorialPageState();
   TutorialPageHelperClass tutorialPageHelperClass;
 
   @override

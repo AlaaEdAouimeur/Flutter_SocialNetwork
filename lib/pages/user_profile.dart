@@ -4,17 +4,16 @@ import '../database/databaseReferences.dart' as databaseReference;
 import 'package:strings/strings.dart';
 
 class SearchedUserProfile extends StatefulWidget {
-  String documentID;
+  final String documentID;
   SearchedUserProfile(this.documentID);
 
   @override
-  SearchedUserProfileState createState() => SearchedUserProfileState(this.documentID);
+  SearchedUserProfileState createState() => SearchedUserProfileState();
 }
 
 class SearchedUserProfileState extends State<SearchedUserProfile> {
-  String documentID;
   double rowHeight = 45;
-  SearchedUserProfileState(this.documentID);
+  SearchedUserProfileState();
   Widget build(BuildContext context) {
     return Material(
       child: Container(
@@ -24,7 +23,7 @@ class SearchedUserProfileState extends State<SearchedUserProfile> {
             future: databaseReference
                 .DatabaseReferences()
                 .userDatabaseReference
-            .document(documentID)
+            .document(widget.documentID)
             .get(),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {

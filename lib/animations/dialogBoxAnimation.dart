@@ -81,7 +81,19 @@ class DialogBoxState extends State<DialogBox>
                             ],
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          loginFunctions.LoginFunctions()
+                              .loginWithFacebook()
+                              .then((user) => {
+                            databaseHelperClass
+                                .saveUserDataToDatabase(user),
+                          })
+                              .then((_) => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage())))
+                              .catchError((e) => print(e));
+                        },
                       ),
                     ),
                     SizedBox(
