@@ -64,7 +64,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
-                      color: Colors.white,
+                      color: Color.fromRGBO(198,42,68,1),
                       child: Column(
                         children: <Widget>[
                           Center(

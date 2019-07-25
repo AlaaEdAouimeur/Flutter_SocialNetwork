@@ -40,7 +40,6 @@ class _HomeTabState extends State<HomeTab> {
             ),
       ),
       body: Container(
-        color: Colors.black,
         child: Column(
           children: <Widget>[
             Flexible(
@@ -53,6 +52,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget streamBuilder() {
+    String dropdownValue = 'TPQ Selected';
     return StreamBuilder<QuerySnapshot>(
         stream: databaseReference.DatabaseReferences()
             .postDatabaseReference
@@ -69,19 +69,80 @@ class _HomeTabState extends State<HomeTab> {
               );
               break;
             default:
-              return new ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    return new Container(
-                      padding: EdgeInsets.only(
-                        left: 25.0,
-                        right: 25.0,
-                        top: 20.0,
-                        bottom: 10.0,
+              return SafeArea(
+                child: new Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red,
+                            offset: Offset(100, 100),
+                          )
+                        ]
                       ),
-                      child: shortPostBody(snapshot.data.documents[index]),
-                    );
-                  });
+                      height: 50.0,
+                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/images/logo.png',
+                            width: 30,
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                            margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(0, 128, 128, 0.2),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: DropdownButton<String>(
+                              value: dropdownValue,
+                              style: TextStyle(
+                                color: Colors.teal,
+                              ),
+                              icon: Icon(
+                                EvaIcons.arrowIosDownward,
+                                color: Colors.teal,
+                              ),
+                              underline: Container(),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  dropdownValue = newValue;
+                                });
+                              },
+                              items: <String>[
+                                'TPQ Selected',
+                                'Friends',
+                                'Top',
+                                'All'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (context, index) {
+                            return new Container(
+                              color: Color.fromRGBO(7, 8, 11, 1),
+                              padding: EdgeInsets.all(15.0),
+                              child:
+                                  shortPostBody(snapshot.data.documents[index]),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              );
               break;
           }
         });
@@ -165,116 +226,118 @@ class _HomeTabState extends State<HomeTab> {
   Widget shortPostBody(DocumentSnapshot snapshot) {
     containerHeight =
         showFull ? double.infinity : MediaQuery.of(context).size.width - 80;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        GestureDetector(
-          child: Container(
-            constraints: BoxConstraints(
-              maxHeight: containerHeight,
-            ),
-            child: Text(
-              snapshot.data['writeup'],
-              style: TextStyle(
-                  color: Colors.white,
-                  letterSpacing: 0.1,
-                  height: 1.1,
-                  fontSize: 18),
-              textAlign: TextAlign.left,
-              softWrap: true,
-              overflow: TextOverflow.fade,
-            ),
-          ),
-          onTap: () {
-            print("tap");
-            setState(() {
-              showFull = !showFull;
-            });
-          },
-        ),
-        Container(
-          child: Text(
-            DateFormat.yMMMd()
-                .format(snapshot.data['createdAt'].toDate())
-                .toString(),
-            style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 1.0,
-              fontSize: 14.0,
-              height: 2.0,
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          GestureDetector(
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: containerHeight,
+              ),
               child: Text(
-                snapshot.data['name'],
+                snapshot.data['writeup'],
                 style: TextStyle(
-                  color: Colors.green,
-                  letterSpacing: 1.0,
-                  fontSize: 14.0,
-                  height: 2.0,
+                    color: Colors.white,
+                    letterSpacing: 0.2,
+                    height: 1.1,
+                    fontSize: 20),
+                textAlign: TextAlign.left,
+                softWrap: true,
+                overflow: TextOverflow.fade,
+              ),
+            ),
+            onTap: () {
+              print("tap");
+              setState(() {
+                showFull = !showFull;
+              });
+            },
+          ),
+          Container(
+            child: Text(
+              DateFormat.yMMMd()
+                  .format(snapshot.data['createdAt'].toDate())
+                  .toString(),
+              style: TextStyle(
+                color: Color.fromRGBO(255, 255, 255, 0.5),
+                letterSpacing: 0.5,
+                fontSize: 9.0,
+                height: 2.0,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  snapshot.data['name'],
+                  style: TextStyle(
+                    color: Color.fromRGBO(255, 255, 255, 0.7),
+                    letterSpacing: 0.5,
+                    fontSize: 11.0,
+                    height: 2.0,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              child: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    child: getUpIcon(snapshot.documentID),
-                    onTap: () => {
-                          upVote(snapshot.documentID),
-                          updateUpvotedUserList(snapshot.documentID),
-                        },
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  GestureDetector(
-                    child: Icon(
-                      Icons.info,
-                      color: Colors.white,
-                      size: 18,
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      child: getUpIcon(snapshot.documentID),
+                      onTap: () => {
+                            upVote(snapshot.documentID),
+                            updateUpvotedUserList(snapshot.documentID),
+                          },
                     ),
-                    onTap: () => showModalBottomSheet<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return new Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              new ListTile(
-                                leading: new Icon(Icons.warning),
-                                title: new Text('Report'),
-                                onTap: () => print(""),
-                              ),
-                              new ListTile(
-                                leading: new Icon(Icons.share),
-                                title: new Text('Share'),
-                                onTap: () => print(""),
-                              ),
-                            ],
-                          );
-                        }),
-                  )
-                ],
+                    SizedBox(
+                      width: 4,
+                    ),
+                    GestureDetector(
+                      child: Icon(
+                        Icons.info,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                      onTap: () => showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return new Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                new ListTile(
+                                  leading: new Icon(Icons.warning),
+                                  title: new Text('Report'),
+                                  onTap: () => print(""),
+                                ),
+                                new ListTile(
+                                  leading: new Icon(Icons.share),
+                                  title: new Text('Share'),
+                                  onTap: () => print(""),
+                                ),
+                              ],
+                            );
+                          }),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+          ),
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width - 50,
+              child: Divider(
+                color: Colors.white,
               ),
-            )
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-        ),
-        Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width - 50,
-            child: Divider(
-              color: Colors.white,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
