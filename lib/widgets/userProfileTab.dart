@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
-import '../pages/login_page.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:strings/strings.dart';
+import '../pages/tutorial_page.dart';
 
 class UserProfileTab extends StatefulWidget {
   UserProfileTab();
@@ -31,7 +31,7 @@ class UserProfileTabState extends State<UserProfileTab> {
   double rowHeight = 45;
 
   Widget build(BuildContext context) {
-    if(currentUser == null) {
+    if (currentUser == null) {
       return new Container(
         width: MediaQuery.of(context).size.width,
         child: Center(
@@ -40,23 +40,20 @@ class UserProfileTabState extends State<UserProfileTab> {
       );
     } else {
       return Container(
-        color: Colors.white,
-        padding: EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+        decoration: BoxDecoration(
+          color: Colors.black,
+        ),
         child: StreamBuilder<QuerySnapshot>(
-            stream: databaseReference
-                .DatabaseReferences()
+            stream: databaseReference.DatabaseReferences()
                 .userDatabaseReference
                 .where("uid", isEqualTo: currentUser.uid)
                 .limit(1)
                 .snapshots(),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot> query) {
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> query) {
               if (query.connectionState == ConnectionState.waiting) {
                 return new Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -65,29 +62,43 @@ class UserProfileTabState extends State<UserProfileTab> {
                 DocumentSnapshot snapshot = query.data.documents[0];
                 return new ListView(
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        profilePicture(snapshot["profilePictureUrl"]),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                height: 30,
-                                child: Center(
-                                  child: Text(
-                                    camelize(snapshot["name"]),
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                    ),
-                                  ),
+                    Container(
+                      padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
+                      color: Color.fromRGBO(198,42,68,1),
+                      child: Column(
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 10.0),
+                              width: 120,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.white, width: 3.0),
+                                image: new DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: new NetworkImage(
+                                      snapshot["profilePictureUrl"]),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Text(
+                            camelize(snapshot["name"]),
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0,
+                            ),
+                          ),
+                          Text(
+                            "Delhi",
+                            style: TextStyle(),
+                            textAlign: TextAlign.right,
+                          ),
+                        ],
+                      ),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10.0),
@@ -118,8 +129,9 @@ class UserProfileTabState extends State<UserProfileTab> {
                             "posts",
                           ),
                           Text(
-                            snapshot["posts"] == null ? "0" : snapshot["posts"]
-                                .toString(),
+                            snapshot["posts"] == null
+                                ? "0"
+                                : snapshot["posts"].toString(),
                             style: TextStyle(),
                             textAlign: TextAlign.right,
                           ),
@@ -196,14 +208,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                     ),
                     RaisedButton(
                       child: Text("Logout"),
-                      onPressed: () =>
-                          loginFunctions.LoginFunctions()
-                              .logout()
-                              .then((_) =>
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginPage()))),
+                      onPressed: () => loginFunctions.LoginFunctions()
+                          .logout()
+                          .then((_) => Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TutorialPage()),
+                                (Route<dynamic> route) => false,
+                              )),
                     ),
                   ],
                 );
@@ -211,20 +223,6 @@ class UserProfileTabState extends State<UserProfileTab> {
             }),
       );
     }
-  }
-
-  Widget profilePicture(String photoUrl) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: new DecorationImage(
-          fit: BoxFit.fill,
-          image: new NetworkImage(photoUrl),
-        ),
-      ),
-    );
   }
 
   Widget logoutButton() {
