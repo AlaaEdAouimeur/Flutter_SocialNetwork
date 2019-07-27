@@ -36,6 +36,7 @@ class LoginFunctions {
   }
 
   Future<FirebaseUser> loginWithFacebook() async {
+    print("Inside facebook login function");
     final result = await facebookLogin.logInWithReadPermissions(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:

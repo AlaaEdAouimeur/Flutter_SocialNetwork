@@ -92,7 +92,9 @@ class DialogBoxState extends State<DialogBox>
                               context,
                               MaterialPageRoute(
                                   builder: (context) => HomePage())))
-                              .catchError((e) => print(e));
+                              .catchError((e) => {
+
+                          });
                         },
                       ),
                     ),

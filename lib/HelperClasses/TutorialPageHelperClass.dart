@@ -40,7 +40,7 @@ class TutorialPageHelperClass {
     return ShowUp(
       delay: delay,
       child: RaisedButton(
-        color: Colors.red,
+        color: Colors.teal,
         child: Text(
           "LOGIN TO CONTINUE",
           style: TextStyle(color: Colors.white),
