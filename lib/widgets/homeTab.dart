@@ -41,12 +41,12 @@ class _HomeTabState extends State<HomeTab> {
       case "TPQ Selected":
         query = databaseReference.DatabaseReferences()
             .postDatabaseReference
-            .orderBy('createdAt', descending: true)
             .where("tpqSelected", isEqualTo: true)
+            .orderBy('createdAt', descending: true)
             .snapshots();
         break;
 
-      case "Friends":
+      case "Following":
         query = databaseReference.DatabaseReferences()
             .postDatabaseReference
             .orderBy('createdAt', descending: true)
@@ -116,7 +116,7 @@ class _HomeTabState extends State<HomeTab> {
                               },
                               items: <String>[
                                 'TPQ Selected',
-                                'Friends',
+                                'Following',
                                 'All'
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
