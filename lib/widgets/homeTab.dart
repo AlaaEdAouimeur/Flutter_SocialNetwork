@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'writeTab.dart';
-import '../widgets/PostBody.dart';
+import 'PostList.dart';
 
 class HomeTab extends StatefulWidget {
+
   HomeTab({Key key}) : super(key: key);
 
   @override
@@ -13,6 +13,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  ScrollController scrollController;
 
   @override
   void initState() {
@@ -21,16 +22,6 @@ class _HomeTabState extends State<HomeTab> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.border_color),
-        backgroundColor: Colors.orange,
-        onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WriteTab(),
-              ),
-            ),
-      ),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -62,7 +53,7 @@ class _HomeTabState extends State<HomeTab> {
               break;
             default:
               return SafeArea(
-                child: new Column(
+                child: Column(
                   children: <Widget>[
                     Container(
                       color: Colors.white,
@@ -116,27 +107,7 @@ class _HomeTabState extends State<HomeTab> {
                     Expanded(
                       child: Container(
                         color: Color.fromRGBO(7, 8, 11, 1),
-                        child: ListView.builder(
-                            itemCount: snapshot.data.documents.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: <Widget>[
-                                  new Container(
-                                    margin: EdgeInsets.all(25.0),
-                                    child:
-                                        PostBody(snapshot.data.documents[index]),
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width/2,
-                                      child: Divider(
-                                        color: Color.fromRGBO(255, 255, 255, 0.3),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
+                        child: PostList(snapshot),
                       ),
                     ),
                   ],

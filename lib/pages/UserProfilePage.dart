@@ -3,18 +3,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:strings/strings.dart';
 
-class SearchedUserProfile extends StatefulWidget {
+class UserProfilePage extends StatefulWidget {
   final String documentID;
-  SearchedUserProfile(this.documentID);
+  UserProfilePage(this.documentID);
 
   @override
-  SearchedUserProfileState createState() => SearchedUserProfileState();
+  UserProfilePageState createState() => UserProfilePageState();
 }
 
-class SearchedUserProfileState extends State<SearchedUserProfile> {
+class UserProfilePageState extends State<UserProfilePage> {
   double rowHeight = 45;
-  SearchedUserProfileState();
+  UserProfilePageState();
   Widget build(BuildContext context) {
+    print("DocumentID: " + widget.documentID);
     return Material(
       child: Container(
         color: Colors.white,

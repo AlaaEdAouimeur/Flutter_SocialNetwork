@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:strings/strings.dart';
-import '../pages/user_profile.dart';
+import '../pages/UserProfilePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SearchTabHelperClass {
@@ -88,7 +88,7 @@ class SearchTabHelperClass {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        SearchedUserProfile(snapshot.documentID),
+                        UserProfilePage(snapshot.documentID),
                   ),
                 ),
           ),

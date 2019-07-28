@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/tab_view_controller.dart' as tabController;
-import 'package:redux_example/appColors.dart' as AppColor;
+import '../widgets/homeTab.dart';
+import '../widgets/SearchTab.dart';
+import '../widgets/userProfileTab.dart';
+import '../widgets/writeTab.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -9,75 +11,81 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
+  PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = new PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: tabController.TabViewController().showBody(_selectedIndex),
       bottomNavigationBar: bottomNavigator(),
-      backgroundColor: AppColor.offWhite,
-    );
-  }
-
-  Widget appBar() {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(20.0),
-      child: Container(
-        width: 100,
-        height: 50,
-        color: Colors.red,
-        child: AppBar(
-          title: Text(
-            "The Project Quote",
-            style: TextStyle(
-              fontSize: 12.0,
-              letterSpacing: 0.5,
-              wordSpacing: 1.0,
-              color: AppColor.brightRed,
-            ),
-            textAlign: TextAlign.center,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.border_color),
+        backgroundColor: Colors.orange,
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WriteTab(),
           ),
-          backgroundColor: AppColor.offWhite,
-          elevation: 0,
         ),
+      ),
+      body: PageView(
+        onPageChanged: onPageChanged,
+        controller: _pageController,
+        children: <Widget>[
+          HomeTab(),
+          SearchTab(),
+          UserProfileTab(),
+        ],
       ),
     );
   }
 
   Widget bottomNavigator() {
-    return new PreferredSize(
-      preferredSize: Size.fromHeight(40.0),
-      child: BottomNavigationBar(
-        selectedItemColor: Colors.white,
-        backgroundColor: Colors.black,
-        unselectedItemColor: Colors.white30,
-        iconSize: 15,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text("Home"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text("Discover"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text("Profile"),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: itemTapped,
-      ),
+    return BottomNavigationBar(
+      selectedItemColor: Colors.white,
+      backgroundColor: Colors.black,
+      unselectedItemColor: Colors.white30,
+      iconSize: 15,
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          title: Text("Home"),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          title: Text("Discover"),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          title: Text("Profile"),
+        ),
+      ],
+      currentIndex: _selectedIndex,
+      type: BottomNavigationBarType.fixed,
+      onTap: itemTapped,
     );
   }
 
   void itemTapped(int index) {
+    _pageController.jumpToPage(index);
+  }
+
+  void onPageChanged(int value) {
     setState(() {
-      _selectedIndex = index;
+      this._selectedIndex = value;
     });
   }
 }

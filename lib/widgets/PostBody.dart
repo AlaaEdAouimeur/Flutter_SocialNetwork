@@ -4,10 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import '../database/databaseReferences.dart' as databaseReference;
-
+import '../pages/UserProfilePage.dart';
 
 class PostBody extends StatefulWidget {
   final DocumentSnapshot snapshot;
+
   PostBody(this.snapshot);
 
   @override
@@ -18,8 +19,7 @@ class PostBodyState extends State<PostBody> {
   double containerHeight;
   bool showFull = false;
   FirebaseUser currentUser;
-  IconData upIcon;
-  IconData downIcon;
+  IconData upIcon = EvaIcons.arrowCircleUpOutline;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class PostBodyState extends State<PostBody> {
 
   Widget build(BuildContext context) {
     containerHeight =
-    showFull ? double.infinity : MediaQuery.of(context).size.width - 80;
+        showFull ? double.infinity : MediaQuery.of(context).size.width - 80;
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,17 +66,25 @@ class PostBodyState extends State<PostBody> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Container(
-                    child: Text(
-                      widget.snapshot.data['name'],
-                      style: TextStyle(
-                        color: Colors.teal,
-                        letterSpacing: 0.5,
-                        fontSize: 12.0,
-                        height: 1.0,
+                    child: GestureDetector(
+                      child: Text(
+                        widget.snapshot.data['name'],
+                        style: TextStyle(
+                          color: Colors.teal,
+                          letterSpacing: 0.5,
+                          fontSize: 12.0,
+                          height: 1.0,
+                        ),
                       ),
+                      onTap: () {
+                        openUserProfile();
+                      },
                     ),
                   ),
-                  Text(" | ", style: TextStyle(color: Colors.teal),),
+                  Text(
+                    " | ",
+                    style: TextStyle(color: Colors.teal),
+                  ),
                   Container(
                     child: Text(
                       DateFormat.yMMMd()
@@ -98,9 +106,9 @@ class PostBodyState extends State<PostBody> {
                     GestureDetector(
                       child: getUpIcon(widget.snapshot.documentID),
                       onTap: () => {
-                        upVote(widget.snapshot.documentID),
-                        updateUpvotedUserList(widget.snapshot.documentID),
-                      },
+                            upVote(widget.snapshot.documentID),
+                            updateUpvotedUserList(widget.snapshot.documentID),
+                          },
                     ),
                     SizedBox(
                       width: 4,
@@ -214,5 +222,23 @@ class PostBodyState extends State<PostBody> {
         "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
       });
     }
+  }
+
+  void openUserProfile() {
+    String uid = widget.snapshot.data["uid"];
+    databaseReference.DatabaseReferences()
+        .userDatabaseReference
+        .where("uid", isEqualTo: uid)
+        .getDocuments()
+        .then((query) => {
+              print("Data" + query.documents[0].documentID),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      UserProfilePage(query.documents[0].documentID),
+                ),
+              ),
+            });
   }
 }
