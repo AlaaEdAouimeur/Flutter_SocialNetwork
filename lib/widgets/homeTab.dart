@@ -5,7 +5,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'PostList.dart';
 
 class HomeTab extends StatefulWidget {
-
   HomeTab({Key key}) : super(key: key);
 
   @override
@@ -14,6 +13,8 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   ScrollController scrollController;
+  String dropdownValue = 'TPQ Selected';
+  Stream<QuerySnapshot> query;
 
   @override
   void initState() {
@@ -34,13 +35,38 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget streamBuilder() {
-    String dropdownValue = 'TPQ Selected';
-    return StreamBuilder<QuerySnapshot>(
-        stream: databaseReference.DatabaseReferences()
+  Stream<QuerySnapshot> buildQuery(dropdownValue) {
+    Stream<QuerySnapshot> query;
+    switch (dropdownValue) {
+      case "TPQ Selected":
+        query = databaseReference.DatabaseReferences()
             .postDatabaseReference
             .orderBy('createdAt', descending: true)
-            .snapshots(),
+            .where("tpqSelected", isEqualTo: true)
+            .snapshots();
+        break;
+
+      case "Friends":
+        query = databaseReference.DatabaseReferences()
+            .postDatabaseReference
+            .orderBy('createdAt', descending: true)
+            .snapshots();
+        break;
+
+      default:
+        query = databaseReference.DatabaseReferences()
+            .postDatabaseReference
+            .orderBy('createdAt', descending: true)
+            .snapshots();
+        break;
+    }
+    return query;
+  }
+
+  Widget streamBuilder() {
+    query = buildQuery(dropdownValue);
+    return StreamBuilder<QuerySnapshot>(
+        stream: query,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -91,7 +117,6 @@ class _HomeTabState extends State<HomeTab> {
                               items: <String>[
                                 'TPQ Selected',
                                 'Friends',
-                                'Top',
                                 'All'
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(

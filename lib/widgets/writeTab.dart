@@ -74,6 +74,7 @@ class WriteTabState extends State<WriteTab> {
       "createdAt": DateTime.now(),
       "upvotes": 0,
       "upvotedUsers": [],
+      "tpqSelected": false,
     };
     showDialog(
         context: context,
