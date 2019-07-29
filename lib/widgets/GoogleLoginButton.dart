@@ -29,27 +29,38 @@ class GoogleLoginButton extends StatelessWidget {
               ),
               Text(
                 "CONTINUE WITH GOOGLE",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
               )
             ],
           ),
         ),
       ),
       onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Center(
+                child: SizedBox(
+                  height: 50.0,
+                  width: 50.0,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            });
         loginFunctions.LoginFunctions()
             .googleLogin()
             .then((user) => {
-          databaseHelperClass
-              .saveUserDataToDatabase(user),
-        })
-            .then((_) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomePage())))
-            .catchError((e) =>
-            print("Hash code: " + e.hashCode.toString()));
+                  databaseHelperClass.saveUserDataToDatabase(user),
+                })
+            .then((_) => {
+                  Navigator.pop(context),
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage())),
+                })
+            .catchError((e) => {
+                  Navigator.pop(context),
+                });
       },
     );
   }

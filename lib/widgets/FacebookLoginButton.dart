@@ -30,28 +30,40 @@ class FacebookLoginButton extends StatelessWidget {
               ),
               Text(
                 "CONTINUE WITH FACEBOOK",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
               )
             ],
           ),
         ),
       ),
       onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Center(
+                child: SizedBox(
+                  height: 50.0,
+                  width: 50.0,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            });
         loginFunctions.LoginFunctions()
             .loginWithFacebook()
             .then((user) => {
-          databaseHelperClass
-              .saveUserDataToDatabase(user),
-        })
-            .then((_) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomePage())))
+                  databaseHelperClass.saveUserDataToDatabase(user),
+                })
+            .then((_) => {
+                  Navigator.pop(context),
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage())),
+                })
             .catchError((e) => {
-          loginErrorHandling.LoginErrorHandling(context, e.code).handleFacebookError(),
-        });
+                  Navigator.pop(context),
+                  loginErrorHandling.LoginErrorHandling(context, e.code)
+                      .handleLoginError(),
+                });
       },
     );
   }

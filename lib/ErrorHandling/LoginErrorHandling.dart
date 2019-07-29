@@ -7,9 +7,17 @@ class LoginErrorHandling {
 
   LoginErrorHandling(this.context, this.errorCode);
 
-  void handleFacebookError() {
+  void handleLoginError() {
     switch (errorCode) {
       case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
+        showDialog(
+            context: this.context,
+            builder: (BuildContext context) {
+              return LoginErrorDialogBox();
+            });
+        break;
+
+      default:
         showDialog(
             context: this.context,
             builder: (BuildContext context) {
