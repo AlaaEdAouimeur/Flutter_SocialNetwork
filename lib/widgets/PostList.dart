@@ -7,7 +7,6 @@ class DoubleHolder {
 }
 
 class PostList extends StatefulWidget {
-
   final AsyncSnapshot<QuerySnapshot> snapshot;
 
   PostList(this.snapshot, {Key key}) : super(key: key);
@@ -30,42 +29,39 @@ class PostListState extends State<PostList> {
   @override
   void initState() {
     super.initState();
-    scrollController = new ScrollController(initialScrollOffset: widget.getOffsetMethod());
+    scrollController =
+        new ScrollController(initialScrollOffset: widget.getOffsetMethod());
   }
 
   Widget build(BuildContext context) {
     return NotificationListener(
-      child: ListView.builder(
-        controller: scrollController,
-        itemCount: widget.snapshot.data.documents.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: <Widget>[
-              new Container(
-                margin: EdgeInsets.all(25.0),
-                child:
-                PostBody(widget.snapshot.data.documents[index]),
-              ),
-              Center(
-                child: Container(
-                  width:
-                  MediaQuery.of(context).size.width / 2,
-                  child: Divider(
-                    color: Color.fromRGBO(255, 255, 255, 0.3),
+        child: ListView.builder(
+          controller: scrollController,
+          itemCount: widget.snapshot.data.documents.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: <Widget>[
+                new Container(
+                  margin: EdgeInsets.all(25.0),
+                  child: PostBody(widget.snapshot.data.documents[index]),
+                ),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Divider(
+                      color: Color.fromRGBO(255, 255, 255, 0.3),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
-
-      ),
-      onNotification: (notification) {
-        if(notification is ScrollNotification) {
-          widget.setOffsetMethod(notification.metrics.pixels);
-        }
-        return true;
-      }
-    );
+              ],
+            );
+          },
+        ),
+        onNotification: (notification) {
+          if (notification is ScrollNotification) {
+            widget.setOffsetMethod(notification.metrics.pixels);
+          }
+          return true;
+        });
   }
 }

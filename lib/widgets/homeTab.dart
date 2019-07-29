@@ -5,19 +5,33 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'PostList.dart';
 
 class HomeTab extends StatefulWidget {
+  String dropdownValue;
   HomeTab({Key key}) : super(key: key);
 
   @override
   _HomeTabState createState() => _HomeTabState();
+
+  void setDropDownValue(String val) {
+    dropdownValue = val;
+  }
+
+  String getDropDownValue() {
+    return dropdownValue;
+  }
 }
 
 class _HomeTabState extends State<HomeTab> {
   ScrollController scrollController;
-  String dropdownValue = 'TPQ Selected';
   Stream<QuerySnapshot> query;
 
   @override
   void initState() {
+    widget.dropdownValue = "TPQ Selected";
+    if(widget.getDropDownValue() == null) {
+      print("Dropdown Value : " + widget.getDropDownValue().toString());
+      widget.setDropDownValue('TPQ Selected');
+      print("Dropdown Value : " + widget.getDropDownValue().toString());
+    }
     super.initState();
   }
 
@@ -64,7 +78,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget streamBuilder() {
-    query = buildQuery(dropdownValue);
+    query = buildQuery(widget.getDropDownValue());
     return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -100,7 +114,7 @@ class _HomeTabState extends State<HomeTab> {
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                             child: DropdownButton<String>(
-                              value: dropdownValue,
+                              value: widget.getDropDownValue(),
                               style: TextStyle(
                                 color: Colors.teal,
                               ),
@@ -111,7 +125,7 @@ class _HomeTabState extends State<HomeTab> {
                               underline: Container(),
                               onChanged: (String newValue) {
                                 setState(() {
-                                  dropdownValue = newValue;
+                                  widget.setDropDownValue(newValue);
                                 });
                               },
                               items: <String>[

@@ -4,7 +4,9 @@ import '../HelperClasses/TutorialPageHelperClass.dart';
 import 'package:flutter/services.dart';
 
 class TutorialPage extends StatefulWidget {
-  TutorialPage();
+  TutorialPage() {
+    print("Tutorial Page");
+  }
   TutorialPageState createState() => TutorialPageState();
 }
 
