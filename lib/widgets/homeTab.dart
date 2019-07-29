@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'PostList.dart';
+import '../widgets/CategoryDropdown.dart';
 
 class DropdownValueHolder {
   static String dropdownValue = "TPQ Selected";
 }
 
 class HomeTab extends StatefulWidget {
+
   String getDropdownValue() {
     return DropdownValueHolder.dropdownValue;
   }
@@ -27,6 +28,7 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   ScrollController scrollController;
+  String category;
   Stream<QuerySnapshot> query;
 
   @override
@@ -39,23 +41,32 @@ class _HomeTabState extends State<HomeTab> {
     super.dispose();
   }
 
+  categoryChanged() {
+    setState(() {
+      category = CategoryHelperFunction().getDropdownValue();
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              child: streamBuilder(),
-            ),
-          ],
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              CategoryDropdown(notifyParent: categoryChanged),
+              Flexible(
+                child: streamBuilder(),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Stream<QuerySnapshot> buildQuery(dropdownValue) {
+  Stream<QuerySnapshot> buildQuery() {
     Stream<QuerySnapshot> query;
-    switch (dropdownValue) {
+    switch (category) {
       case "TPQ Selected":
         query = databaseReference.DatabaseReferences()
             .postDatabaseReference
@@ -82,7 +93,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget streamBuilder() {
-    query = buildQuery(widget.getDropdownValue());
+    query = buildQuery();
     return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -96,65 +107,15 @@ class _HomeTabState extends State<HomeTab> {
               );
               break;
             default:
-              return SafeArea(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      color: Colors.white,
-                      height: 50.0,
-                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/images/logo.png',
-                            width: 30,
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                            margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(0, 128, 128, 0.2),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: DropdownButton<String>(
-                              value: widget.getDropdownValue(),
-                              style: TextStyle(
-                                color: Colors.teal,
-                              ),
-                              icon: Icon(
-                                EvaIcons.arrowIosDownward,
-                                color: Colors.teal,
-                              ),
-                              underline: Container(),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  widget.setDropdownValue(newValue);
-                                });
-                              },
-                              items: <String>[
-                                'TPQ Selected',
-                                'Following',
-                                'All'
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      color: Color.fromRGBO(7, 8, 11, 1),
+                      child: PostList(snapshot),
                     ),
-                    Expanded(
-                      child: Container(
-                        color: Color.fromRGBO(7, 8, 11, 1),
-                        child: PostList(snapshot),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               );
               break;
           }
