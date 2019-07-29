@@ -4,20 +4,25 @@ import '../database/databaseReferences.dart' as databaseReference;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'PostList.dart';
 
+class DropdownValueHolder {
+  static String dropdownValue = "TPQ Selected";
+}
+
 class HomeTab extends StatefulWidget {
-  String dropdownValue;
-  HomeTab({Key key}) : super(key: key);
+  String getDropdownValue() {
+    return DropdownValueHolder.dropdownValue;
+  }
+
+  void setDropdownValue(String dropdownValue) {
+    DropdownValueHolder.dropdownValue = dropdownValue;
+  }
+
+  HomeTab() {
+    print("Constructor called");
+  }
 
   @override
   _HomeTabState createState() => _HomeTabState();
-
-  void setDropDownValue(String val) {
-    dropdownValue = val;
-  }
-
-  String getDropDownValue() {
-    return dropdownValue;
-  }
 }
 
 class _HomeTabState extends State<HomeTab> {
@@ -26,13 +31,12 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
-    widget.dropdownValue = "TPQ Selected";
-    if(widget.getDropDownValue() == null) {
-      print("Dropdown Value : " + widget.getDropDownValue().toString());
-      widget.setDropDownValue('TPQ Selected');
-      print("Dropdown Value : " + widget.getDropDownValue().toString());
-    }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -78,7 +82,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget streamBuilder() {
-    query = buildQuery(widget.getDropDownValue());
+    query = buildQuery(widget.getDropdownValue());
     return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -114,7 +118,7 @@ class _HomeTabState extends State<HomeTab> {
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                             child: DropdownButton<String>(
-                              value: widget.getDropDownValue(),
+                              value: widget.getDropdownValue(),
                               style: TextStyle(
                                 color: Colors.teal,
                               ),
@@ -125,7 +129,7 @@ class _HomeTabState extends State<HomeTab> {
                               underline: Container(),
                               onChanged: (String newValue) {
                                 setState(() {
-                                  widget.setDropDownValue(newValue);
+                                  widget.setDropdownValue(newValue);
                                 });
                               },
                               items: <String>[
