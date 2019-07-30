@@ -101,8 +101,11 @@ class _HomeTabState extends State<HomeTab> {
             case ConnectionState.waiting:
               return new Container(
                 width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: CircularProgressIndicator(),
+                child: Container(
+                  color: Colors.black,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
               );
               break;

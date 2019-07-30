@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import '../pages/UserProfilePage.dart';
+import '../animations/fadeInAnimation.dart';
 
 class PostBody extends StatefulWidget {
   final DocumentSnapshot snapshot;
@@ -40,16 +41,19 @@ class PostBodyState extends State<PostBody> {
               constraints: BoxConstraints(
                 maxHeight: containerHeight,
               ),
-              child: Text(
-                widget.snapshot.data['writeup'],
-                style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 0.2,
-                    height: 1.1,
-                    fontSize: 20),
-                textAlign: TextAlign.left,
-                softWrap: true,
-                overflow: TextOverflow.fade,
+              child: FadeIn(
+                child: Text(
+                  widget.snapshot.data['writeup'],
+                  style: TextStyle(
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                      height: 1.1,
+                      fontSize: 20),
+                  textAlign: TextAlign.left,
+                  softWrap: true,
+                  overflow: TextOverflow.fade,
+                ),
+                delay: 0,
               ),
             ),
             onTap: () {
@@ -103,41 +107,56 @@ class PostBodyState extends State<PostBody> {
               Container(
                 child: Row(
                   children: <Widget>[
-                    GestureDetector(
-                      child: getUpIcon(widget.snapshot.documentID),
-                      onTap: () => {
-                            upVote(widget.snapshot.documentID),
-                            updateUpvotedUserList(widget.snapshot.documentID),
-                          },
+                    Column(
+                      children: <Widget>[
+                        GestureDetector(
+                          child: getUpIcon(widget.snapshot.documentID),
+                          onTap: () => {
+                                upVote(widget.snapshot.documentID),
+                                updateUpvotedUserList(widget.snapshot.documentID),
+                              },
+                        ),
+                        Text(
+                          "2",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       width: 4,
                     ),
-                    GestureDetector(
-                      child: Icon(
-                        Icons.info,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                      onTap: () => showModalBottomSheet<void>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return new Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                new ListTile(
-                                  leading: new Icon(Icons.warning),
-                                  title: new Text('Report'),
-                                  onTap: () => print(""),
-                                ),
-                                new ListTile(
-                                  leading: new Icon(Icons.share),
-                                  title: new Text('Share'),
-                                  onTap: () => print(""),
-                                ),
-                              ],
-                            );
-                          }),
+                    Column(
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Icon(
+                            Icons.info,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                          onTap: () => showModalBottomSheet<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return new Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    new ListTile(
+                                      leading: new Icon(Icons.warning),
+                                      title: new Text('Report'),
+                                      onTap: () => print(""),
+                                    ),
+                                    new ListTile(
+                                      leading: new Icon(Icons.share),
+                                      title: new Text('Share'),
+                                      onTap: () => print(""),
+                                    ),
+                                  ],
+                                );
+                              }),
+                        ),
+                        Text(""),
+                      ],
                     )
                   ],
                 ),
@@ -166,13 +185,13 @@ class PostBodyState extends State<PostBody> {
         return Icon(
           upIcon,
           color: Colors.white,
-          size: 18,
+          size: 24,
         );
       },
       initialData: Icon(
         EvaIcons.arrowCircleUpOutline,
         color: Colors.white,
-        size: 18,
+        size: 24,
       ),
     );
   }
