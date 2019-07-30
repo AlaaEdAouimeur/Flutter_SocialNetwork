@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
@@ -12,8 +13,7 @@ class WriteTab extends StatefulWidget {
 class WriteTabState extends State<WriteTab> {
   Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
   TextEditingController writeupController = TextEditingController();
-  String loadingText = "sending";
-  IconData loadingIcon = Icons.cloud_upload;
+  TextEditingController topicController = TextEditingController();
 
   Widget build(BuildContext context) {
     return Material(
@@ -30,6 +30,7 @@ class WriteTabState extends State<WriteTab> {
                   Container(
                     margin: EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
+                      controller: topicController,
                       style: TextStyle(
                         color: Colors.green,
                         fontSize: 24.0,
@@ -59,7 +60,7 @@ class WriteTabState extends State<WriteTab> {
                       child: Text("Submit"),
                       onPressed: () => user.then((user) => {
                             insertData(
-                                user.displayName, writeupController.text, user.uid),
+                                topicController.text, user.displayName, writeupController.text, user.uid),
                           }),
                     ),
                   )
@@ -87,9 +88,10 @@ class WriteTabState extends State<WriteTab> {
             });
   }
 
-  void insertData(String name, String writeup, String uid) {
+  void insertData(String topic, String name, String writeup, String uid) {
     var value = {
       "uid": uid,
+      "topic": topic,
       "name": name,
       "writeup": writeup,
       "createdAt": DateTime.now(),
@@ -104,7 +106,7 @@ class WriteTabState extends State<WriteTab> {
             child: SizedBox(
               height: 50.0,
               width: 50.0,
-              child: CircularProgressIndicator(),
+              child: Icon(EvaIcons.upload),
             ),
           );
         });
