@@ -69,7 +69,7 @@ class _HomeTabState extends State<HomeTab> {
     switch (category) {
       case "TPQ Selected":
         query = databaseReference.DatabaseReferences()
-            .postDatabaseReference
+            .posts
             .where("tpqSelected", isEqualTo: true)
             .orderBy('createdAt', descending: true)
             .snapshots();
@@ -77,14 +77,14 @@ class _HomeTabState extends State<HomeTab> {
 
       case "Following":
         query = databaseReference.DatabaseReferences()
-            .postDatabaseReference
+            .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
         break;
 
       default:
         query = databaseReference.DatabaseReferences()
-            .postDatabaseReference
+            .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
         break;

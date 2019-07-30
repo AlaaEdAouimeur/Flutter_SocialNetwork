@@ -15,7 +15,7 @@ class SearchTabHelperClass {
   Widget suggestionList(String query) {
     return StreamBuilder<QuerySnapshot>(
         stream: databaseReference.DatabaseReferences()
-            .userDatabaseReference
+            .users
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
@@ -131,7 +131,7 @@ class SearchTabHelperClass {
   Future<QuerySnapshot> getCurrentUserDbReference() async {
     FirebaseUser currentUser = await getCurrentUser();
     return databaseReference.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .where('uid', isEqualTo: currentUser.uid)
         .getDocuments();
   }
@@ -160,18 +160,18 @@ class SearchTabHelperClass {
   followUser(String documentID, snapshot) async {
     print("Follow");
     databaseReference.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .document(documentID)
         .updateData({
       "followers_uid": FieldValue.arrayUnion([currentUser.uid])
     });
     databaseReference.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .where('uid', isEqualTo: currentUser.uid)
         .getDocuments()
         .then((query) => {
               databaseReference.DatabaseReferences()
-                  .userDatabaseReference
+                  .users
                   .document(query.documents[0].documentID)
                   .updateData({
                 "followings_uid": FieldValue.arrayUnion([snapshot["uid"]])
@@ -182,18 +182,18 @@ class SearchTabHelperClass {
   unfollowUser(String documentID, snapshot) async {
     print("HERE");
     databaseReference.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .document(documentID)
         .updateData({
       "followers_uid": FieldValue.arrayRemove([currentUser.uid])
     });
     databaseReference.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .where('uid', isEqualTo: currentUser.uid)
         .getDocuments()
         .then((query) => {
               databaseReference.DatabaseReferences()
-                  .userDatabaseReference
+                  .users
                   .document(query.documents[0].documentID)
                   .updateData({
                 "followings_uid": FieldValue.arrayRemove([snapshot["uid"]])
@@ -212,7 +212,7 @@ class SearchTabHelperClass {
   Widget categoryList(double widthOfContainer) {
     return StreamBuilder<QuerySnapshot>(
         stream: databaseReference.DatabaseReferences()
-            .categoryDatabaseReference
+            .category
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {

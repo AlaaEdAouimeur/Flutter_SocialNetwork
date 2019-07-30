@@ -45,7 +45,7 @@ class UserProfileTabState extends State<UserProfileTab> {
         ),
         child: StreamBuilder<QuerySnapshot>(
             stream: databaseReference.DatabaseReferences()
-                .userDatabaseReference
+                .users
                 .where("uid", isEqualTo: currentUser.uid)
                 .limit(1)
                 .snapshots(),

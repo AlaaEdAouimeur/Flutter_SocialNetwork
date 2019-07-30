@@ -20,7 +20,7 @@ class DatabaseHelperClass {
     checkIfUserAlreadyExist(user.email).then((val) => val
         ? null
         : databaseReferences.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .document()
         .setData(value)
         .then((val) => print("User data stored to firestore")));
@@ -28,7 +28,7 @@ class DatabaseHelperClass {
 
   Future<bool> checkIfUserAlreadyExist(email) async {
     QuerySnapshot data = await databaseReferences.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .where('email', isEqualTo: email)
         .getDocuments();
     return data.documents.length == 1;

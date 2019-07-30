@@ -11,7 +11,7 @@ class WriteTab extends StatefulWidget {
 }
 
 class WriteTabState extends State<WriteTab> {
-  Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
+  FirebaseUser currentUser;
   TextEditingController writeupController = TextEditingController();
   TextEditingController topicController = TextEditingController();
 
@@ -58,9 +58,9 @@ class WriteTabState extends State<WriteTab> {
                   Container(
                     child: RaisedButton(
                       child: Text("Submit"),
-                      onPressed: () => user.then((user) => {
-                            insertData(
-                                topicController.text, user.displayName, writeupController.text, user.uid),
+                      onPressed: () => FirebaseAuth.instance.currentUser().then((user) => {
+                        currentUser = user,
+                            insertData(),
                           }),
                     ),
                   )
@@ -73,32 +73,44 @@ class WriteTabState extends State<WriteTab> {
     );
   }
 
-  void updateUser(String uid) {
+  updateUser() {
     databaseReferences.DatabaseReferences()
-        .userDatabaseReference
-        .where('uid', isEqualTo: uid)
+        .users
+        .where('uid', isEqualTo: currentUser.uid)
         .getDocuments()
         .then((query) => {
               print(query.documents.first.documentID),
               databaseReferences.DatabaseReferences()
-                  .userDatabaseReference
+                  .users
                   .document(query.documents.first.documentID)
                   .updateData({"posts": FieldValue.increment(1)}).then(
                       (data) => print("User value updated")),
             });
   }
 
-  void insertData(String topic, String name, String writeup, String uid) {
+  insertPost() {
     var value = {
-      "uid": uid,
-      "topic": topic,
-      "name": name,
-      "writeup": writeup,
+      "uid": currentUser.uid,
+      "topic": topicController.text,
+      "name": currentUser.displayName,
+      "writeup": writeupController.text,
       "createdAt": DateTime.now(),
       "upvotes": 0,
       "upvotedUsers": [],
       "tpqSelected": false,
     };
+
+    databaseReferences.DatabaseReferences()
+        .posts
+        .document()
+        .setData(value);
+  }
+
+  addPostLikes() {
+
+  }
+
+  void insertData() async {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -110,20 +122,7 @@ class WriteTabState extends State<WriteTab> {
             ),
           );
         });
-    databaseReferences.DatabaseReferences()
-        .postDatabaseReference
-        .document()
-        .setData(value)
-        .then((_) => {
-              updateUser(uid),
-              print("Here"),
-              Future.delayed(
-                  Duration(seconds: 2),
-                  () => {
-                        print("After 2 seconds"),
-                        Navigator.pop(context),
-                        Navigator.pop(context),
-                      }),
-            });
+    await insertPost();
+    await updateUser();
   }
 }

@@ -29,7 +29,7 @@ class CategoryDropdown extends StatefulWidget {
     switch (dropdownValue) {
       case "TPQ Selected":
         query = databaseReference.DatabaseReferences()
-            .postDatabaseReference
+            .posts
             .where("tpqSelected", isEqualTo: true)
             .orderBy('createdAt', descending: true)
             .snapshots();
@@ -37,14 +37,14 @@ class CategoryDropdown extends StatefulWidget {
 
       case "Following":
         query = databaseReference.DatabaseReferences()
-            .postDatabaseReference
+            .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
         break;
 
       default:
         query = databaseReference.DatabaseReferences()
-            .postDatabaseReference
+            .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
         break;

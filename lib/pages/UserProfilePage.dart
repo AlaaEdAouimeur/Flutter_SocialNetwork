@@ -29,7 +29,7 @@ class UserProfilePageState extends State<UserProfilePage> {
           child: FutureBuilder<DocumentSnapshot>(
               future: databaseReference
                   .DatabaseReferences()
-                  .userDatabaseReference
+                  .users
               .document(widget.documentID)
               .get(),
               builder: (BuildContext context,

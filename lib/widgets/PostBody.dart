@@ -198,7 +198,7 @@ class PostBodyState extends State<PostBody> {
 
   Future<DocumentSnapshot> getUpvotedUserList(String documentID) {
     return databaseReference.DatabaseReferences()
-        .postDatabaseReference
+        .posts
         .document(documentID)
         .get();
   }
@@ -208,14 +208,14 @@ class PostBodyState extends State<PostBody> {
     List userIds = snapshot.data["upvotedUsers"];
     if (userIds.contains(currentUser.uid)) {
       databaseReference.DatabaseReferences()
-          .postDatabaseReference
+          .posts
           .document(documentID)
           .updateData({
         "upvotes": FieldValue.increment(-1),
       });
     } else {
       databaseReference.DatabaseReferences()
-          .postDatabaseReference
+          .posts
           .document(documentID)
           .updateData({
         "upvotes": FieldValue.increment(1),
@@ -228,14 +228,14 @@ class PostBodyState extends State<PostBody> {
     List userIds = snapshot.data["upvotedUsers"];
     if (userIds.contains(currentUser.uid)) {
       databaseReference.DatabaseReferences()
-          .postDatabaseReference
+          .posts
           .document(documentID)
           .updateData({
         "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
       });
     } else {
       databaseReference.DatabaseReferences()
-          .postDatabaseReference
+          .posts
           .document(documentID)
           .updateData({
         "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
@@ -246,7 +246,7 @@ class PostBodyState extends State<PostBody> {
   void openUserProfile() {
     String uid = widget.snapshot.data["uid"];
     databaseReference.DatabaseReferences()
-        .userDatabaseReference
+        .users
         .where("uid", isEqualTo: uid)
         .getDocuments()
         .then((query) => {
