@@ -17,34 +17,55 @@ class WriteTabState extends State<WriteTab> {
 
   Widget build(BuildContext context) {
     return Material(
-      child: Container(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        color: Colors.white,
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height - 150,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Start writing...',
+      child: SafeArea(
+        child: Scaffold(
+          body: Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.white,
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 24.0,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: "Title",
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
-                  controller: writeupController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 999,
-                ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Start writing...',
+                        ),
+                        controller: writeupController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 10,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      child: Text("Submit"),
+                      onPressed: () => user.then((user) => {
+                            insertData(
+                                user.displayName, writeupController.text, user.uid),
+                          }),
+                    ),
+                  )
+                ],
               ),
-              RaisedButton(
-                child: Text("Submit"),
-                onPressed: () => user.then((user) => {
-                      insertData(
-                          user.displayName, writeupController.text, user.uid),
-                    }),
-              )
-            ],
+            ),
           ),
         ),
       ),
@@ -79,17 +100,11 @@ class WriteTabState extends State<WriteTab> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Material(
-            child: Container(
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Icon(loadingIcon),
-                    Text(loadingText),
-                  ],
-                ),
-              ),
+          return Center(
+            child: SizedBox(
+              height: 50.0,
+              width: 50.0,
+              child: CircularProgressIndicator(),
             ),
           );
         });
