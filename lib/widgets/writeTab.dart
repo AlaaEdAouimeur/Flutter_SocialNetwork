@@ -103,6 +103,7 @@ class WriteTabState extends State<WriteTab> {
   }
 
   insertPost() {
+    postID = uuid.v1();
     var value = {
       "uid": currentUser.uid,
       "topic": topicController.text,
@@ -114,18 +115,16 @@ class WriteTabState extends State<WriteTab> {
       "tpqSelected": false,
     };
 
-    postID = uuid.
-
     databaseReferences.DatabaseReferences()
         .posts
-        .document("documentI22")
+        .document(postID)
         .setData(value);
   }
 
   addPostLikes() {
     var data = {
       "likes": [],
-      "post_id": null,
+      "post_id": postID,
     };
 
     databaseReferences.DatabaseReferences().likes
