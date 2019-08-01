@@ -117,7 +117,7 @@ class PostBodyState extends State<PostBody> {
                               },
                         ),
                         Text(
-                          "2",
+                          widget.snapshot.data["upvotes"].toString(),
                           style: TextStyle(
                             color: Colors.white,
                           ),
