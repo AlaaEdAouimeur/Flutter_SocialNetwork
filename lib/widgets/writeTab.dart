@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
@@ -146,6 +145,7 @@ class WriteTabState extends State<WriteTab> {
         });
     await insertPost();
     await updateUser();
+    await addPostLikes();
     Navigator.pop(context);
     Navigator.pop(context);
   }
