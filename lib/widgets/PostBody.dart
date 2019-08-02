@@ -112,9 +112,9 @@ class PostBodyState extends State<PostBody> {
                         GestureDetector(
                           child: getUpIcon(widget.snapshot.documentID),
                           onTap: () => {
-                                upVote(widget.snapshot.documentID),
-                                updateUpvotedUserList(widget.snapshot.documentID),
-                              },
+                            upVote(widget.snapshot.documentID),
+                            updateUpvotedUserList(widget.snapshot.documentID),
+                          },
                         ),
                         Text(
                           widget.snapshot.data["upvotes"].toString(),
@@ -233,12 +233,33 @@ class PostBodyState extends State<PostBody> {
           .updateData({
         "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
       });
+      updateLikeDB(documentID, false);
     } else {
       databaseReference.DatabaseReferences()
           .posts
           .document(documentID)
           .updateData({
         "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
+      });
+      updateLikeDB(documentID, true);
+    }
+  }
+
+  void updateLikeDB(String documentID, bool status) {
+    if (status) {
+      databaseReference.DatabaseReferences()
+          .likes
+          .where("post_id", isEqualTo: documentID)
+          .getDocuments()
+          .updateData({
+        "likes": FieldValue.arrayUnion([currentUser.uid]),
+      });
+    } else {
+      databaseReference.DatabaseReferences()
+          .likes
+          .document(documentID)
+          .updateData({
+        "likes": FieldValue.arrayRemove([currentUser.uid]),
       });
     }
   }
