@@ -246,22 +246,7 @@ class PostBodyState extends State<PostBody> {
   }
 
   void updateLikeDB(String documentID, bool status) {
-    if (status) {
-      databaseReference.DatabaseReferences()
-          .likes
-          .where("post_id", isEqualTo: documentID)
-          .getDocuments()
-          .updateData({
-        "likes": FieldValue.arrayUnion([currentUser.uid]),
-      });
-    } else {
-      databaseReference.DatabaseReferences()
-          .likes
-          .document(documentID)
-          .updateData({
-        "likes": FieldValue.arrayRemove([currentUser.uid]),
-      });
-    }
+
   }
 
   void openUserProfile() {

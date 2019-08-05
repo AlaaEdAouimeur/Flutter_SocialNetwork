@@ -3,7 +3,6 @@ import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
@@ -14,13 +13,10 @@ class WriteTabState extends State<WriteTab> {
   FirebaseUser currentUser;
   TextEditingController writeupController = TextEditingController();
   TextEditingController topicController = TextEditingController();
-  var uuid;
-  var postID;
 
   @override
   void initState() {
     super.initState();
-    uuid = new Uuid();
   }
 
   @override
@@ -102,7 +98,6 @@ class WriteTabState extends State<WriteTab> {
   }
 
   insertPost() {
-    postID = uuid.v1();
     var value = {
       "uid": currentUser.uid,
       "topic": topicController.text,
@@ -112,23 +107,13 @@ class WriteTabState extends State<WriteTab> {
       "upvotes": 0,
       "upvotedUsers": [],
       "tpqSelected": false,
+      "visibleTo": [],
     };
 
     databaseReferences.DatabaseReferences()
         .posts
-        .document(postID)
-        .setData(value);
-  }
-
-  addPostLikes() {
-    var data = {
-      "likes": [],
-      "post_id": postID,
-    };
-
-    databaseReferences.DatabaseReferences().likes
         .document()
-        .setData(data);
+        .setData(value);
   }
 
   void insertData() async {
@@ -145,7 +130,6 @@ class WriteTabState extends State<WriteTab> {
         });
     await insertPost();
     await updateUser();
-    await addPostLikes();
     Navigator.pop(context);
     Navigator.pop(context);
   }
