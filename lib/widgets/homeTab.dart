@@ -3,13 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'PostList.dart';
 import '../widgets/CategoryDropdown.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class DropdownValueHolder {
   static String dropdownValue = "TPQ Selected";
 }
 
 class HomeTab extends StatefulWidget {
-
   String getDropdownValue() {
     return DropdownValueHolder.dropdownValue;
   }
@@ -30,6 +30,9 @@ class _HomeTabState extends State<HomeTab> {
   ScrollController scrollController;
   String category;
   Stream<QuerySnapshot> query;
+  final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(
+    functionName: 'helloWorld',
+  );
 
   @override
   void initState() {
@@ -92,6 +95,13 @@ class _HomeTabState extends State<HomeTab> {
     return query;
   }
 
+  callCloudFunction() async {
+    dynamic response = await callable.call(<String, dynamic>{
+      'request': 'YOUR_PARAMETER_VALUE',
+    });
+    print(response.toString());
+  }
+
   Widget streamBuilder() {
     query = buildQuery();
     return StreamBuilder<QuerySnapshot>(
@@ -112,6 +122,12 @@ class _HomeTabState extends State<HomeTab> {
             default:
               return Column(
                 children: <Widget>[
+                  Center(
+                    child:
+                        RaisedButton(child: Text("Button"), onPressed: () {
+                          callCloudFunction();
+                        }),
+                  ),
                   Expanded(
                     child: Container(
                       color: Color.fromRGBO(7, 8, 11, 1),
