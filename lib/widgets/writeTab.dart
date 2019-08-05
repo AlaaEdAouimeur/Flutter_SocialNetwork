@@ -6,6 +6,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
+
   WriteTabState createState() => WriteTabState();
 }
 
@@ -67,10 +68,21 @@ class WriteTabState extends State<WriteTab> {
                   Container(
                     child: RaisedButton(
                       child: Text("Submit"),
-                      onPressed: () => FirebaseAuth.instance.currentUser().then((user) => {
-                        currentUser = user,
-                            insertData(),
-                          }),
+                      onPressed: () =>
+                          FirebaseAuth.instance.currentUser().then((user) => {
+                                currentUser = user,
+                                insertData(),
+                              }),
+                    ),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      child: Text("Followers"),
+                      onPressed: () =>
+                          FirebaseAuth.instance.currentUser().then((user) => {
+                                currentUser = user,
+                                getFollowersList(),
+                              }),
                     ),
                   )
                 ],
@@ -97,7 +109,17 @@ class WriteTabState extends State<WriteTab> {
             });
   }
 
-  insertPost() {
+  getFollowersList() {
+    return databaseReferences.DatabaseReferences()
+        .users
+        .where('uid', isEqualTo: currentUser.uid)
+        .getDocuments();
+  }
+
+  insertPost() async {
+    QuerySnapshot query;
+    query = await getFollowersList();
+    List<dynamic> visibleTo = query.documents.first.data["followers_uid"];
     var value = {
       "uid": currentUser.uid,
       "topic": topicController.text,
@@ -107,13 +129,10 @@ class WriteTabState extends State<WriteTab> {
       "upvotes": 0,
       "upvotedUsers": [],
       "tpqSelected": false,
-      "visibleTo": [],
+      "visibleTo": visibleTo,
     };
 
-    databaseReferences.DatabaseReferences()
-        .posts
-        .document()
-        .setData(value);
+    databaseReferences.DatabaseReferences().posts.document().setData(value);
   }
 
   void insertData() async {
