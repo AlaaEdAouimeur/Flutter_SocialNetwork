@@ -7,16 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class SearchTabHelperClass {
   FirebaseUser currentUser;
+
   SearchTabHelperClass() {
     getCurrentUser().then((user) => currentUser = user);
   }
 
-
   Widget suggestionList(String query) {
     return StreamBuilder<QuerySnapshot>(
-        stream: databaseReference.DatabaseReferences()
-            .users
-            .snapshots(),
+        stream: databaseReference.DatabaseReferences().users.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -85,12 +83,11 @@ class SearchTabHelperClass {
                   ]),
             ),
             onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        UserProfilePage(snapshot.documentID),
-                  ),
-                ),
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserProfilePage(snapshot.documentID),
+              ),
+            ),
           ),
           SizedBox(
             width: 10.0,
@@ -119,9 +116,8 @@ class SearchTabHelperClass {
     List filteredList = new List();
     for (int i = 0; i < userList.length; i++) {
       if ((userList[i]["name"].toString().contains(query) ||
-          userList[i]["username"].toString().contains(query)) &&
-          userList[i]["uid"].toString() != currentUser.uid
-      ) {
+              userList[i]["username"].toString().contains(query)) &&
+          userList[i]["uid"].toString() != currentUser.uid) {
         filteredList.add(userList[i]);
       }
     }
@@ -153,7 +149,7 @@ class SearchTabHelperClass {
 
   followButtonTap(documentID, snapshot) {
     isFollowing(snapshot)
-        ? unfollowUser(documentID, snapshot)
+        ? unFollowUser(documentID, snapshot)
         : followUser(documentID, snapshot);
   }
 
@@ -174,12 +170,41 @@ class SearchTabHelperClass {
                   .users
                   .document(query.documents[0].documentID)
                   .updateData({
-                "followings_uid": FieldValue.arrayUnion([snapshot["uid"]])
+                "followings_uid": FieldValue.arrayUnion([snapshot["uid"]]),
               }),
+            });
+    databaseReference.DatabaseReferences()
+        .posts
+        .where("uid", isEqualTo: snapshot["uid"])
+        .getDocuments()
+        .then((posts) => {
+              addVisibleToId(posts),
             });
   }
 
-  unfollowUser(String documentID, snapshot) async {
+  addVisibleToId(QuerySnapshot posts) {
+    for (int i = 0; i < posts.documents.length; i++) {
+      databaseReference.DatabaseReferences()
+          .posts
+          .document(posts.documents[i].documentID)
+          .updateData({
+        "visibleTo": FieldValue.arrayUnion([currentUser.uid]),
+      });
+    }
+  }
+
+  removeVisibleToId(QuerySnapshot posts) {
+    for (int i = 0; i < posts.documents.length; i++) {
+      databaseReference.DatabaseReferences()
+          .posts
+          .document(posts.documents[i].documentID)
+          .updateData({
+        "visibleTo": FieldValue.arrayRemove([currentUser.uid]),
+      });
+    }
+  }
+
+  unFollowUser(String documentID, snapshot) async {
     print("HERE");
     databaseReference.DatabaseReferences()
         .users
@@ -199,6 +224,13 @@ class SearchTabHelperClass {
                 "followings_uid": FieldValue.arrayRemove([snapshot["uid"]])
               }),
             });
+    databaseReference.DatabaseReferences()
+        .posts
+        .where("uid", isEqualTo: snapshot["uid"])
+        .getDocuments()
+        .then((posts) => {
+      removeVisibleToId(posts),
+    });
   }
 
   Widget categoryListBuilder(DocumentSnapshot snapshot) {
@@ -211,9 +243,7 @@ class SearchTabHelperClass {
 
   Widget categoryList(double widthOfContainer) {
     return StreamBuilder<QuerySnapshot>(
-        stream: databaseReference.DatabaseReferences()
-            .category
-            .snapshots(),
+        stream: databaseReference.DatabaseReferences().category.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:

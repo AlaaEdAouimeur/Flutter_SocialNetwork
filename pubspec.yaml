@@ -67,6 +67,9 @@ flutter:
     - family: LatoLight
       fonts:
         - asset: assets/fonts/Lato-Light.ttf
+    - family: SourceSans
+      fonts:
+        - asset: assets/fonts/SourceSansPro-Regular.ttf
     - family: MyFlutterApp
       fonts:
         - asset: assets/fonts/MyFlutterApp.ttf

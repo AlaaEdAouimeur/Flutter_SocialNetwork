@@ -36,6 +36,7 @@ class _HomeTabState extends State<HomeTab> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((user) => setCurrentUser(user));
+    category = "Following";
   }
 
   @override
@@ -58,7 +59,17 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
+        child: currentUser == null ?
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: Container(
+            color: Colors.black,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ) :
+        Container(
           child: Column(
             children: <Widget>[
               CategoryDropdown(notifyParent: categoryChanged),
@@ -73,10 +84,13 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Stream<QuerySnapshot> buildQuery() {
+    print("Test: Inside Build Query");
     Stream<QuerySnapshot> query;
     switch (category) {
       case "TPQ Selected":
+        print("Test: TPQ Selected");
         setState(() {
+          print("Test: Setting state");
           query = databaseReference.DatabaseReferences()
               .posts
               .where("tpqSelected", isEqualTo: true)
@@ -86,7 +100,9 @@ class _HomeTabState extends State<HomeTab> {
         break;
 
       case "Following":
+        print("Test: Following");
         setState(() {
+          print("Test: Setting state");
           query = databaseReference.DatabaseReferences()
               .posts
               .where("visibleTo", arrayContains: currentUser.uid)
@@ -96,7 +112,9 @@ class _HomeTabState extends State<HomeTab> {
         break;
 
       case "All":
+        print("Test: All");
         setState(() {
+          print("Test: Setting state");
           query = databaseReference
               .DatabaseReferences()
               .posts
@@ -106,6 +124,7 @@ class _HomeTabState extends State<HomeTab> {
         break;
 
       default:
+        print("Test: Default");
         query = null;
         break;
     }
@@ -116,11 +135,13 @@ class _HomeTabState extends State<HomeTab> {
     dynamic response = await callable.call(<String, dynamic>{
       'request': 'YOUR_PARAMETER_VALUE',
     });
+    print(response.toString());
   }
 
   Widget streamBuilder() {
     query = buildQuery();
     if (query == null) {
+      print("Query is null");
       return new Container(
         width: MediaQuery.of(context).size.width,
         child: Container(
@@ -137,6 +158,7 @@ class _HomeTabState extends State<HomeTab> {
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
+                print("waiting");
                 return new Container(
                   width: MediaQuery.of(context).size.width,
                   child: Container(
@@ -147,6 +169,7 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 );
                 break;
+
               default:
                 if(snapshot.data.documents.length == 0) {
                   return Container(
