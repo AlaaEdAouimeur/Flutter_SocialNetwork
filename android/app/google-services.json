@@ -15,10 +15,78 @@
       },
       "oauth_client": [
         {
+          "client_id": "1085137849184-t6i9o349qn5tt56de78rfeqriff5mb1h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.redux_example",
+            "certificate_hash": "75355e5a0c38f662d6c1471bd18997798a7a4182"
+          }
+        },
+        {
+          "client_id": "1085137849184-61m2oipakgh1svo8e6p3d7eva7g692gg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.redux_example",
+            "certificate_hash": "9f8b26f8cf8d4cec8971ffd0a63e4373b35a7c65"
+          }
+        },
+        {
           "client_id": "1085137849184-nd95bnf8c0bn17tdos3oi7q7ir49n7kg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.redux_example",
+            "certificate_hash": "50fcc30ad4f7ccb35f1749fdd1e49873ee4cb364"
+          }
+        },
+        {
+          "client_id": "1085137849184-iasiph8fi00vn8gdng3egmu57aibq6rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwPOisp-nJTucZ2cwLmGEmmNIvyZ4s52c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1085137849184-iasiph8fi00vn8gdng3egmu57aibq6rc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1085137849184-4ojr57qg20t8hsm1ehpb2prmlg6mun6k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tpqsample.com"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085137849184:android:b46ad35c483fafd2",
+        "android_client_info": {
+          "package_name": "com.theprojectquote.tpq_admin_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085137849184-gs4pivo48knss712cr5ad1lhithug2l6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theprojectquote.tpq_admin_app",
+            "certificate_hash": "9f8b26f8cf8d4cec8971ffd0a63e4373b35a7c65"
+          }
+        },
+        {
+          "client_id": "1085137849184-q20itpki0l7snac9ma4gm6fius3fu2fk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theprojectquote.tpq_admin_app",
             "certificate_hash": "50fcc30ad4f7ccb35f1749fdd1e49873ee4cb364"
           }
         },
