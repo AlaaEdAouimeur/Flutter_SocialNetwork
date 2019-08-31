@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="redux_example"
+        android:label="The Project Quote"
         android:icon="@mipmap/logo">
         <activity
             android:name=".MainActivity"

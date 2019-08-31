@@ -7,16 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class SearchTabHelperClass {
   FirebaseUser currentUser;
+
   SearchTabHelperClass() {
     getCurrentUser().then((user) => currentUser = user);
   }
 
-
   Widget suggestionList(String query) {
     return StreamBuilder<QuerySnapshot>(
-        stream: databaseReference.DatabaseReferences()
-            .users
-            .snapshots(),
+        stream: databaseReference.DatabaseReferences().users.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -26,7 +24,7 @@ class SearchTabHelperClass {
                 ),
               );
               break;
-            default:
+            case ConnectionState.active:
               List userList = new List();
               for (int i = 0; i < snapshot.data.documents.length; i++) {
                 userList.add(snapshot.data.documents[i]);
@@ -40,6 +38,14 @@ class SearchTabHelperClass {
                   itemBuilder: (context, index) {
                     return suggestionsListBuilder(filteredList[index], context);
                   });
+              break;
+
+            default:
+              return new Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
               break;
           }
         });
@@ -85,12 +91,11 @@ class SearchTabHelperClass {
                   ]),
             ),
             onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        UserProfilePage(snapshot.documentID),
-                  ),
-                ),
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserProfilePage(snapshot.documentID),
+              ),
+            ),
           ),
           SizedBox(
             width: 10.0,
@@ -119,9 +124,8 @@ class SearchTabHelperClass {
     List filteredList = new List();
     for (int i = 0; i < userList.length; i++) {
       if ((userList[i]["name"].toString().contains(query) ||
-          userList[i]["username"].toString().contains(query)) &&
-          userList[i]["uid"].toString() != currentUser.uid
-      ) {
+              userList[i]["username"].toString().contains(query)) &&
+          userList[i]["uid"].toString() != currentUser.uid) {
         filteredList.add(userList[i]);
       }
     }
@@ -153,7 +157,7 @@ class SearchTabHelperClass {
 
   followButtonTap(documentID, snapshot) {
     isFollowing(snapshot)
-        ? unfollowUser(documentID, snapshot)
+        ? unFollowUser(documentID, snapshot)
         : followUser(documentID, snapshot);
   }
 
@@ -174,12 +178,41 @@ class SearchTabHelperClass {
                   .users
                   .document(query.documents[0].documentID)
                   .updateData({
-                "followings_uid": FieldValue.arrayUnion([snapshot["uid"]])
+                "followings_uid": FieldValue.arrayUnion([snapshot["uid"]]),
               }),
+            });
+    databaseReference.DatabaseReferences()
+        .posts
+        .where("uid", isEqualTo: snapshot["uid"])
+        .getDocuments()
+        .then((posts) => {
+              addVisibleToId(posts),
             });
   }
 
-  unfollowUser(String documentID, snapshot) async {
+  addVisibleToId(QuerySnapshot posts) {
+    for (int i = 0; i < posts.documents.length; i++) {
+      databaseReference.DatabaseReferences()
+          .posts
+          .document(posts.documents[i].documentID)
+          .updateData({
+        "visibleTo": FieldValue.arrayUnion([currentUser.uid]),
+      });
+    }
+  }
+
+  removeVisibleToId(QuerySnapshot posts) {
+    for (int i = 0; i < posts.documents.length; i++) {
+      databaseReference.DatabaseReferences()
+          .posts
+          .document(posts.documents[i].documentID)
+          .updateData({
+        "visibleTo": FieldValue.arrayRemove([currentUser.uid]),
+      });
+    }
+  }
+
+  unFollowUser(String documentID, snapshot) async {
     print("HERE");
     databaseReference.DatabaseReferences()
         .users
@@ -199,21 +232,39 @@ class SearchTabHelperClass {
                 "followings_uid": FieldValue.arrayRemove([snapshot["uid"]])
               }),
             });
+    databaseReference.DatabaseReferences()
+        .posts
+        .where("uid", isEqualTo: snapshot["uid"])
+        .getDocuments()
+        .then((posts) => {
+              removeVisibleToId(posts),
+            });
   }
 
   Widget categoryListBuilder(DocumentSnapshot snapshot) {
     return new Container(
-      child: Text(snapshot["category_name"] == null
-          ? "Null"
-          : snapshot["category_name"]),
+      height: 40,
+      margin: EdgeInsets.only(bottom: 5.0),
+      padding: EdgeInsets.only(left: 5.0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color.fromRGBO(0, 0, 0, 0.1),
+        ),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          snapshot["category_name"],
+          textAlign: TextAlign.start,
+        ),
+      ),
     );
   }
 
   Widget categoryList(double widthOfContainer) {
     return StreamBuilder<QuerySnapshot>(
-        stream: databaseReference.DatabaseReferences()
-            .category
-            .snapshots(),
+        stream: databaseReference.DatabaseReferences().category.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -225,13 +276,17 @@ class SearchTabHelperClass {
               );
               break;
             default:
-              return new ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    return categoryListBuilder(snapshot.data.documents[index]);
-                  });
+              return Container(
+                padding: EdgeInsets.all(10.0),
+                child: new ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (context, index) {
+                      return categoryListBuilder(
+                          snapshot.data.documents[index]);
+                    }),
+              );
               break;
           }
         });
