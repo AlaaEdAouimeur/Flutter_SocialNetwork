@@ -24,7 +24,7 @@ class SearchTabHelperClass {
                 ),
               );
               break;
-            default:
+            case ConnectionState.active:
               List userList = new List();
               for (int i = 0; i < snapshot.data.documents.length; i++) {
                 userList.add(snapshot.data.documents[i]);
@@ -38,6 +38,14 @@ class SearchTabHelperClass {
                   itemBuilder: (context, index) {
                     return suggestionsListBuilder(filteredList[index], context);
                   });
+              break;
+
+            default:
+              return new Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
               break;
           }
         });
@@ -229,15 +237,28 @@ class SearchTabHelperClass {
         .where("uid", isEqualTo: snapshot["uid"])
         .getDocuments()
         .then((posts) => {
-      removeVisibleToId(posts),
-    });
+              removeVisibleToId(posts),
+            });
   }
 
   Widget categoryListBuilder(DocumentSnapshot snapshot) {
     return new Container(
-      child: Text(snapshot["category_name"] == null
-          ? "Null"
-          : snapshot["category_name"]),
+      height: 40,
+      margin: EdgeInsets.only(bottom: 5.0),
+      padding: EdgeInsets.only(left: 5.0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color.fromRGBO(0, 0, 0, 0.1),
+        ),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          snapshot["category_name"],
+          textAlign: TextAlign.start,
+        ),
+      ),
     );
   }
 
@@ -255,13 +276,17 @@ class SearchTabHelperClass {
               );
               break;
             default:
-              return new ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    return categoryListBuilder(snapshot.data.documents[index]);
-                  });
+              return Container(
+                padding: EdgeInsets.all(10.0),
+                child: new ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (context, index) {
+                      return categoryListBuilder(
+                          snapshot.data.documents[index]);
+                    }),
+              );
               break;
           }
         });
