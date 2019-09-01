@@ -1,4 +1,4 @@
-package com.example.redux_example;
+package com.theprojectquote.app;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
