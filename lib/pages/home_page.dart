@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/homeTab.dart';
 import '../widgets/SearchTab.dart';
+import '../widgets/blogTab.dart';
 import '../widgets/userProfileTab.dart';
 import '../widgets/writeTab.dart';
 
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.border_color),
         backgroundColor: Colors.orange,
+        
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
@@ -47,6 +49,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         children: <Widget>[
           HomeTab(),
           SearchTab(),
+          BlogTab(),
           UserProfileTab(),
         ],
       ),
@@ -67,6 +70,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         BottomNavigationBarItem(
           icon: Icon(Icons.search),
           title: Text("Discover"),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.chat),
+          title: Text("Blog"),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
