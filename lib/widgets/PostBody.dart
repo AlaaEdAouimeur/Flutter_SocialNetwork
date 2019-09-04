@@ -20,12 +20,22 @@ class PostBodyState extends State<PostBody> {
   double containerHeight;
   bool showFull = false;
   FirebaseUser currentUser;
+  bool hasUpvotedPost = false;
   IconData upIcon = EvaIcons.arrowCircleUpOutline;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((user) => currentUser = user);
+    FirebaseAuth.instance.currentUser().then((user) {
+      if (widget.snapshot.data['upvotedUsers'] != null) {
+        List userIds = widget.snapshot.data['upvotedUsers'];
+        if (userIds.contains(user.uid))
+          hasUpvotedPost = true;
+        else
+          hasUpvotedPost = false;
+      }
+      currentUser = user;
+    });
   }
 
   Widget build(BuildContext context) {
@@ -113,7 +123,6 @@ class PostBodyState extends State<PostBody> {
                           child: getUpIcon(widget.snapshot.documentID),
                           onTap: () => {
                             upVote(widget.snapshot.documentID),
-                            updateUpvotedUserList(widget.snapshot.documentID),
                           },
                         ),
                         Text(
@@ -168,32 +177,39 @@ class PostBodyState extends State<PostBody> {
     );
   }
 
-  FutureBuilder getUpIcon(String documentID) {
-    List userIds;
-    return new FutureBuilder(
-      future: getUpvotedUserList(documentID),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data['upvotedUsers'] != null) {
-            userIds = snapshot.data['upvotedUsers'];
-            if (userIds.contains(currentUser.uid))
-              upIcon = EvaIcons.arrowCircleUp;
-            else
-              upIcon = EvaIcons.arrowCircleUpOutline;
-          }
-        }
-        return Icon(
-          upIcon,
-          color: Colors.white,
-          size: 24,
-        );
-      },
-      initialData: Icon(
-        EvaIcons.arrowCircleUpOutline,
+  Widget getUpIcon(String documentID) {
+    IconData upIcon;
+    if (currentUser != null) {
+      if (hasUpvotedPost)
+        upIcon = EvaIcons.arrowCircleUp;
+      else
+        upIcon = EvaIcons.arrowCircleUpOutline;
+      return Icon(
+        upIcon,
         color: Colors.white,
         size: 24,
-      ),
-    );
+      );
+    } else {
+      return FutureBuilder(
+        future: getUpvotedUserList(documentID),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data['upvotedUsers'] != null) {
+              List userIds = snapshot.data['upvotedUsers'];
+              if (userIds.contains(currentUser.uid))
+                upIcon = EvaIcons.arrowCircleUp;
+              else
+                upIcon = EvaIcons.arrowCircleUpOutline;
+            }
+          }
+          return Icon(
+            upIcon,
+            color: Colors.white,
+            size: 24,
+          );
+        },
+      );
+    }
   }
 
   Future<DocumentSnapshot> getUpvotedUserList(String documentID) {
@@ -204,50 +220,79 @@ class PostBodyState extends State<PostBody> {
   }
 
   void upVote(String documentID) async {
-    DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
-    List userIds = snapshot.data["upvotedUsers"];
-    if (userIds.contains(currentUser.uid)) {
-      databaseReference.DatabaseReferences()
-          .posts
-          .document(documentID)
-          .updateData({
-        "upvotes": FieldValue.increment(-1),
+    // DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
+    // List userIds = snapshot.data["upvotedUsers"];
+    // if (userIds.contains(currentUser.uid)) {
+    //   databaseReference.DatabaseReferences()
+    //       .posts
+    //       .document(documentID)
+    //       .updateData({
+    //     "upvotes": FieldValue.increment(-1),
+    //   });
+    // } else {
+    //   databaseReference.DatabaseReferences()
+    //       .posts
+    //       .document(documentID)
+    //       .updateData({
+    //     "upvotes": FieldValue.increment(1),
+    //   });
+    // }
+    DocumentReference postRef =
+        databaseReference.DatabaseReferences().posts.document(documentID);
+    if (hasUpvotedPost) {
+      hasUpvotedPost = false;
+      Firestore.instance.runTransaction((Transaction tx) async {
+        await postRef.updateData({
+          "upvotes": FieldValue.increment(-1),
+          "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
+        });
+      }).then((value) {
+        print('Downvoted Successfully.');
+        return true;
+      }).catchError((error) {
+        print('Failed to Downvote: $error');
+        return false;
       });
     } else {
-      databaseReference.DatabaseReferences()
-          .posts
-          .document(documentID)
-          .updateData({
-        "upvotes": FieldValue.increment(1),
+      Firestore.instance.runTransaction((Transaction tx) {
+        hasUpvotedPost = true;
+        return postRef.updateData({
+          "upvotes": FieldValue.increment(1),
+          "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
+        });
+      }).then((value) {
+        print('Upvoted Successfully.');
+        return true;
+      }).catchError((error) {
+        print('Failed to Upvote: $error');
+        return false;
       });
     }
   }
 
-  void updateUpvotedUserList(String documentID) async {
-    DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
-    List userIds = snapshot.data["upvotedUsers"];
-    if (userIds.contains(currentUser.uid)) {
-      databaseReference.DatabaseReferences()
-          .posts
-          .document(documentID)
-          .updateData({
-        "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
-      });
-      updateLikeDB(documentID, false);
-    } else {
-      databaseReference.DatabaseReferences()
-          .posts
-          .document(documentID)
-          .updateData({
-        "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
-      });
-      updateLikeDB(documentID, true);
-    }
-  }
+  // void updateUpvotedUserList(String documentID) async {
+  //   DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
+  //   List userIds = snapshot.data["upvotedUsers"];
+  //   if (userIds.contains(currentUser.uid)) {
+  //     databaseReference.DatabaseReferences()
+  //         .posts
+  //         .document(documentID)
+  //         .updateData({
+  //       "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
+  //     });
+  //     updateLikeDB(documentID, false);
+  //   } else {
+  //     databaseReference.DatabaseReferences()
+  //         .posts
+  //         .document(documentID)
+  //         .updateData({
+  //       "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
+  //     });
+  //     updateLikeDB(documentID, true);
+  //   }
+  // }
 
-  void updateLikeDB(String documentID, bool status) {
-
-  }
+  void updateLikeDB(String documentID, bool status) {}
 
   void openUserProfile() {
     String uid = widget.snapshot.data["uid"];
@@ -255,15 +300,17 @@ class PostBodyState extends State<PostBody> {
         .users
         .where("uid", isEqualTo: uid)
         .getDocuments()
-        .then((query) => {
-              print("Data" + query.documents[0].documentID),
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      UserProfilePage(query.documents[0].documentID),
-                ),
+        .then(
+          (query) => {
+            print("Data" + query.documents[0].documentID),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    UserProfilePage(query.documents[0].documentID),
               ),
-            });
+            ),
+          },
+        );
   }
 }
