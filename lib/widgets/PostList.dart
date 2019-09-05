@@ -45,10 +45,10 @@ class PostListState extends State<PostList> {
                   margin: EdgeInsets.all(25.0),
                   child: PostBody(widget.snapshot.data.documents[index]),
                 ),
-                Center(
+                 Center(
                   child: Container(
                     width: MediaQuery.of(context).size.width / 2,
-                    child: Divider(
+                    child:index + 1 >=widget.snapshot.data.documents.length? null :  Divider(
                       color: Color.fromRGBO(255, 255, 255, 0.3),
                     ),
                   ),

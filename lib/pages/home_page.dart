@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return new Scaffold(
       bottomNavigationBar: bottomNavigator(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.border_color),
         backgroundColor: Colors.orange,
