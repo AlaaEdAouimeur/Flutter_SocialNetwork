@@ -41,17 +41,18 @@ class PostBodyState extends State<PostBody> {
   Widget build(BuildContext context) {
     containerHeight =
         showFull ? double.infinity : MediaQuery.of(context).size.width - 80;
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-            child: Container(
-              margin: EdgeInsets.only(bottom: 15.0),
-              constraints: BoxConstraints(
-                maxHeight: containerHeight,
-              ),
-              child: FadeIn(
+    return FadeIn(
+      delay: 0,
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 15.0),
+                constraints: BoxConstraints(
+                  maxHeight: containerHeight,
+                ),
                 child: Text(
                   widget.snapshot.data['writeup'],
                   style: TextStyle(
@@ -63,116 +64,116 @@ class PostBodyState extends State<PostBody> {
                   softWrap: true,
                   overflow: TextOverflow.fade,
                 ),
-                delay: 0,
               ),
+              onTap: () {
+                print("tap");
+                setState(() {
+                  showFull = !showFull;
+                });
+              },
             ),
-            onTap: () {
-              print("tap");
-              setState(() {
-                showFull = !showFull;
-              });
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    child: GestureDetector(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Container(
+                      child: GestureDetector(
+                        child: Text(
+                          widget.snapshot.data['name'],
+                          style: TextStyle(
+                            color: Colors.teal,
+                            letterSpacing: 0.5,
+                            fontSize: 12.0,
+                            height: 1.0,
+                          ),
+                        ),
+                        onTap: () {
+                          openUserProfile();
+                        },
+                      ),
+                    ),
+                    Text(
+                      " | ",
+                      style: TextStyle(color: Colors.teal),
+                    ),
+                    Container(
                       child: Text(
-                        widget.snapshot.data['name'],
+                        DateFormat.yMMMd()
+                            .format(widget.snapshot.data['createdAt'].toDate())
+                            .toString(),
                         style: TextStyle(
-                          color: Colors.teal,
+                          color: Color.fromRGBO(255, 255, 255, 0.5),
                           letterSpacing: 0.5,
                           fontSize: 12.0,
                           height: 1.0,
                         ),
                       ),
-                      onTap: () {
-                        openUserProfile();
-                      },
-                    ),
-                  ),
-                  Text(
-                    " | ",
-                    style: TextStyle(color: Colors.teal),
-                  ),
-                  Container(
-                    child: Text(
-                      DateFormat.yMMMd()
-                          .format(widget.snapshot.data['createdAt'].toDate())
-                          .toString(),
-                      style: TextStyle(
-                        color: Color.fromRGBO(255, 255, 255, 0.5),
-                        letterSpacing: 0.5,
-                        fontSize: 12.0,
-                        height: 1.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        GestureDetector(
-                          child: getUpIcon(widget.snapshot.documentID),
-                          onTap: () => {
-                            upVote(widget.snapshot.documentID),
-                          },
-                        ),
-                        Text(
-                          widget.snapshot.data["upvotes"].toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Icon(
-                            Icons.info,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                          onTap: () => showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return new Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    new ListTile(
-                                      leading: new Icon(Icons.warning),
-                                      title: new Text('Report'),
-                                      onTap: () => print(""),
-                                    ),
-                                    new ListTile(
-                                      leading: new Icon(Icons.share),
-                                      title: new Text('Share'),
-                                      onTap: () => print(""),
-                                    ),
-                                  ],
-                                );
-                              }),
-                        ),
-                        Text(""),
-                      ],
                     )
                   ],
                 ),
-              )
-            ],
-          ),
-        ],
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          GestureDetector(
+                            child: getUpIcon(widget.snapshot.documentID),
+                            onTap: () => {
+                              upVote(widget.snapshot.documentID),
+                            },
+                          ),
+                          Text(
+                            widget.snapshot.data["upvotes"].toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          GestureDetector(
+                            child: Icon(
+                              Icons.info,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            onTap: () => showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return new Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new ListTile(
+                                        leading: new Icon(Icons.warning),
+                                        title: new Text('Report'),
+                                        onTap: () => print(""),
+                                      ),
+                                      new ListTile(
+                                        leading: new Icon(Icons.share),
+                                        title: new Text('Share'),
+                                        onTap: () => print(""),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          ),
+                          Text(""),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
