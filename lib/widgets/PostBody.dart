@@ -203,7 +203,7 @@ class PostBodyState extends State<PostBody> {
                 upIcon = EvaIcons.arrowCircleUpOutline;
             }
           }else{
-            upIcon = upIcon = EvaIcons.arrowCircleUpOutline;
+            upIcon = EvaIcons.arrowCircleUpOutline;
           }
           return Icon(
             upIcon,
