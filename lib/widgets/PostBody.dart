@@ -42,8 +42,8 @@ class PostBodyState extends State<PostBody> {
     containerHeight =
         showFull ? double.infinity : MediaQuery.of(context).size.width - 80;
     return FadeIn(
-      delay:0,
-          child: Container(
+      delay: 0,
+      child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -53,17 +53,17 @@ class PostBodyState extends State<PostBody> {
                 constraints: BoxConstraints(
                   maxHeight: containerHeight,
                 ),
-                  child: Text(
-                    widget.snapshot.data['writeup'],
-                    style: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 0.2,
-                        height: 1.1,
-                        fontSize: 20),
-                    textAlign: TextAlign.left,
-                    softWrap: true,
-                    overflow: TextOverflow.fade,
-                  ),  
+                child: Text(
+                  widget.snapshot.data['writeup'],
+                  style: TextStyle(
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                      height: 1.1,
+                      fontSize: 20),
+                  textAlign: TextAlign.left,
+                  softWrap: true,
+                  overflow: TextOverflow.fade,
+                ),
               ),
               onTap: () {
                 print("tap");
@@ -110,66 +110,7 @@ class PostBodyState extends State<PostBody> {
                           height: 1.0,
                         ),
                       ),
-                    ),
-<<<<<<< HEAD
-                  ),
-                ],
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        GestureDetector(
-                          child: getUpIcon(widget.snapshot.documentID),
-                          onTap: () => {
-                            upVote(widget.snapshot.documentID),
-                          },
-                        ),
-                        Text(
-                          widget.snapshot.data["upvotes"].toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Icon(
-                            Icons.info,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                          onTap: () => showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return new Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    new ListTile(
-                                      leading: new Icon(Icons.warning),
-                                      title: new Text('Report'),
-                                      onTap: () => print(""),
-                                    ),
-                                    new ListTile(
-                                      leading: new Icon(Icons.share),
-                                      title: new Text('Share'),
-                                      onTap: () => print(""),
-                                    ),
-                                  ],
-                                );
-                              }),
-                        ),
-                        Text(""),
-                      ],
                     )
-=======
->>>>>>> Made whole card to fade in instead of just writeUp
                   ],
                 ),
                 Container(
@@ -181,7 +122,6 @@ class PostBodyState extends State<PostBody> {
                             child: getUpIcon(widget.snapshot.documentID),
                             onTap: () => {
                               upVote(widget.snapshot.documentID),
-                              updateUpvotedUserList(widget.snapshot.documentID),
                             },
                           ),
                           Text(
@@ -228,7 +168,8 @@ class PostBodyState extends State<PostBody> {
                       )
                     ],
                   ),
-                )
+                ),
+                
               ],
             ),
           ],
