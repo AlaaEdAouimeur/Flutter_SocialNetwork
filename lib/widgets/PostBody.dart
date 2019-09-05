@@ -202,6 +202,8 @@ class PostBodyState extends State<PostBody> {
               else
                 upIcon = EvaIcons.arrowCircleUpOutline;
             }
+          }else{
+            upIcon = upIcon = EvaIcons.arrowCircleUpOutline;
           }
           return Icon(
             upIcon,
