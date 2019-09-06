@@ -4,11 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 
 class DropdownValueHolder {
-  static String dropdownValue = "Following";
+  static String dropdownValue = 'Following' ;      
 }
 
 class CategoryHelperFunction {
   String getDropdownValue() {
+  
     return DropdownValueHolder.dropdownValue;
   }
 
@@ -33,6 +34,7 @@ class CategoryDropdown extends StatefulWidget {
             .where("tpqSelected", isEqualTo: true)
             .orderBy('createdAt', descending: true)
             .snapshots();
+            DropdownValueHolder.dropdownValue =dropdownValue;
         break;
 
       case "Following":
@@ -40,6 +42,7 @@ class CategoryDropdown extends StatefulWidget {
             .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
+            DropdownValueHolder.dropdownValue =dropdownValue;
         break;
 
       default:
@@ -47,6 +50,7 @@ class CategoryDropdown extends StatefulWidget {
             .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
+            DropdownValueHolder.dropdownValue =dropdownValue;
         break;
     }
     return query;
@@ -54,7 +58,9 @@ class CategoryDropdown extends StatefulWidget {
 }
 
 class CategoryDropdownState extends State<CategoryDropdown> {
+  
   Widget build(BuildContext context) {
+    
     return Container(
       color: Colors.white,
       height: 50.0,

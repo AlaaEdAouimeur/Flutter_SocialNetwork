@@ -57,6 +57,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget build(BuildContext context) {
+    categoryChanged();
     return Scaffold(
       body: SafeArea(
         child: currentUser == null ?
