@@ -169,7 +169,6 @@ class PostBodyState extends State<PostBody> {
                     ],
                   ),
                 ),
-                
               ],
             ),
           ],
@@ -244,11 +243,9 @@ class PostBodyState extends State<PostBody> {
         databaseReference.DatabaseReferences().posts.document(documentID);
     if (hasUpvotedPost) {
       hasUpvotedPost = false;
-      Firestore.instance.runTransaction((Transaction tx) async {
-        await postRef.updateData({
-          "upvotes": FieldValue.increment(-1),
-          "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
-        });
+      postRef.updateData({
+        "upvotes": FieldValue.increment(-1),
+        "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
       }).then((value) {
         print('Downvoted Successfully.');
         return true;
@@ -257,12 +254,10 @@ class PostBodyState extends State<PostBody> {
         return false;
       });
     } else {
-      Firestore.instance.runTransaction((Transaction tx) {
-        hasUpvotedPost = true;
-        return postRef.updateData({
-          "upvotes": FieldValue.increment(1),
-          "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
-        });
+      hasUpvotedPost = true;
+      postRef.updateData({
+        "upvotes": FieldValue.increment(1),
+        "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
       }).then((value) {
         print('Upvoted Successfully.');
         return true;
