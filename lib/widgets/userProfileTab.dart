@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:strings/strings.dart';
-import '../pages/tutorial_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UserProfileTab extends StatefulWidget {
   UserProfileTab();
@@ -27,8 +27,6 @@ class UserProfileTabState extends State<UserProfileTab> {
       currentUser = user;
     });
   }
-
-  double rowHeight = 45;
 
   Widget build(BuildContext context) {
     if (currentUser == null) {
@@ -60,164 +58,21 @@ class UserProfileTabState extends State<UserProfileTab> {
                 );
               } else {
                 DocumentSnapshot snapshot = query.data.documents[0];
-                return new ListView(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
-                      color: Color.fromRGBO(198,42,68,1),
+                return SafeArea(
+                  child: Scaffold(
+                    body: Center(
                       child: Column(
                         children: <Widget>[
-                          Center(
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 10.0),
-                              width: 120,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.white, width: 3.0),
-                                image: new DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: new NetworkImage(
-                                      snapshot["profilePictureUrl"]),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            camelize(snapshot["name"]),
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.0,
-                            ),
-                          ),
-                          Text(
-                            "Delhi",
-                            style: TextStyle(),
-                            textAlign: TextAlign.right,
-                          ),
+                          userDetail(context, snapshot),
+                          userBio(),
+                          socialIcons(),
+                          flowWidget(),
+                          editProfileButton(),
+                          logoutButton(),
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10.0),
-                      height: rowHeight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "username",
-                          ),
-                          Text(
-                            "Change",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: rowHeight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "posts",
-                          ),
-                          Text(
-                            snapshot["posts"] == null
-                                ? "0"
-                                : snapshot["posts"].toString(),
-                            style: TextStyle(),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: rowHeight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "followers",
-                          ),
-                          Text(
-                            snapshot["followers"] == null
-                                ? "0"
-                                : snapshot["followers"].toString(),
-                            style: TextStyle(),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: rowHeight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "followings",
-                          ),
-                          Text(
-                            snapshot["followings"] == null
-                                ? "0"
-                                : snapshot["followings"].toString(),
-                            style: TextStyle(),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: rowHeight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "Email",
-                          ),
-                          Text(
-                            snapshot["email"],
-                            style: TextStyle(),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: rowHeight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "Location",
-                          ),
-                          Text(
-                            "Delhi",
-                            style: TextStyle(),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
-                      ),
-                    ),
-                    RaisedButton(
-                      child: Text("Logout"),
-                      onPressed: () => loginFunctions.LoginFunctions()
-                          .logout()
-                          .then((_) => Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TutorialPage()),
-                                (Route<dynamic> route) => false,
-                              )),
-                    ),
-                  ],
+                  ),
                 );
               }
             }),
@@ -225,10 +80,288 @@ class UserProfileTabState extends State<UserProfileTab> {
     }
   }
 
-  Widget logoutButton() {
-    return RaisedButton(
-      child: Text("Logout"),
-      onPressed: () => loginFunctions.LoginFunctions().logout(),
+  Container socialIcons() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0),
+      width: 150,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(FontAwesomeIcons.facebookF),
+            color: Colors
+                .blueAccent, //TODO Gray icon if user is not connected to Facebook
+            onPressed: () {
+              //TODO Connection/Disconnection button for Facebook
+            },
+          ),
+          IconButton(
+            icon: Icon(FontAwesomeIcons.twitter),
+            color: Colors
+                .lightBlue, //TODO Gray icon if user is not connected to Twitter
+            onPressed: () {
+              //TODO Connection/Disconnection for Twitter
+            },
+          ),
+          IconButton(
+            icon: Icon(FontAwesomeIcons.instagram),
+            color: Colors
+                .red, //TODO Gray icon if user is not connected to Instagram
+            onPressed: () {
+              //TODO Connection/Disconnection for Instagram
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container userDetail(BuildContext context, DocumentSnapshot snapshot) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.only(top: 80, bottom: 20),
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(
+                snapshot["profilePictureUrl"],
+              ),
+            ),
+            onTap: () {
+              //TODO Clicking will allow user to change their display picture
+            },
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            child: Text(
+              camelize(snapshot["name"]),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(0, 0, 0, 0.8),
+                letterSpacing: 1,
+              ),
+            ),
+          ),
+          /*Loaction*/
+          Container(
+            child: Text(
+              'Oran, Algeria',
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Color.fromRGBO(0, 0, 0, 0.6),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container userBio() {
+    return Container(
+        margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+        width: 300,
+        child: Center(
+          child: Text(
+            'I am a Computer Science Student and a Flutter Developer',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 18,
+                color: Color.fromRGBO(0, 0, 0, 0.8),
+                fontWeight: FontWeight.bold),
+          ),
+        ));
+  }
+
+  Container editProfileButton() {
+    return Container(
+      width: 200,
+      margin: EdgeInsets.only(
+        top: 3,
+        bottom: 3,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: Color.fromRGBO(0, 168, 107, 1),
+      ),
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      child: FlatButton(
+        child: Text(
+          "Edit Profile",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        onPressed: () => {
+          //TODO Clicking on this button will open edit profile page
+        },
+      ),
+    );
+  }
+
+  Container logoutButton() {
+    return Container(
+      width: 200,
+      margin: EdgeInsets.only(
+        top: 3,
+        bottom: 3,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: Color.fromRGBO(234, 60, 83, 1),
+      ),
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      child: FlatButton(
+        child: Text(
+          "Logout",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        onPressed: () => loginFunctions.LoginFunctions().logout(),
+      ),
+    );
+  }
+
+  Container flowWidget() {
+    var textStyle = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: Color.fromRGBO(0, 0, 0, 0.8),
+    );
+    var iconsColor = Color.fromRGBO(0, 0, 0, 0.7);
+    return Container(
+      height: 100,
+      margin: EdgeInsets.only(top: 20.0, bottom: 40.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width / 2.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                GestureDetector(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        '12 Followers',
+                        style: textStyle,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(
+                        FontAwesomeIcons.userTie,
+                        color: iconsColor,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    //TODO: Opens a list of all followers
+                  },
+                ),
+                GestureDetector(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        '12 Blogs',
+                        style: textStyle,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(
+                        FontAwesomeIcons.solidStickyNote,
+                        color: iconsColor,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    //TODO: Opens a list of all blogs by user
+                  },
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: 80,
+            child: VerticalDivider(
+              width: 3.0,
+              color: Colors.black87,
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width / 2.5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                GestureDetector(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        FontAwesomeIcons.userNinja,
+                        color: iconsColor,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        '125 Following',
+                        style: textStyle,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    //TODO: Opens a list of users followerd by current user
+                  },
+                ),
+                GestureDetector(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        FontAwesomeIcons.penNib,
+                        color: iconsColor,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        '10 Posts',
+                        style: textStyle,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    //TODO: Opens a list of all posts by user
+                  },
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
