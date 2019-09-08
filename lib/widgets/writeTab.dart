@@ -3,7 +3,7 @@ import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-
+import 'PostCategory.dart';
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
 
@@ -37,6 +37,7 @@ class WriteTabState extends State<WriteTab> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                 Postcategory(),
                   Container(
                     margin: EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
