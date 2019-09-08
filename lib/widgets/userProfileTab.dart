@@ -151,6 +151,7 @@ class UserProfileTabState extends State<UserProfileTab> {
           /*Loaction*/
           Container(
             child: Text(
+              //TODO User location should come from user profile
               'Oran, Algeria',
               style: TextStyle(
                   fontSize: 18,
@@ -170,6 +171,7 @@ class UserProfileTabState extends State<UserProfileTab> {
         width: 300,
         child: Center(
           child: Text(
+            //TODO User bio should be fetched from user profile
             'I am a Computer Science Student and a Flutter Developer',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -264,6 +266,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
+                        //TODO Fetch number of followers from user profile
                         '12 Followers',
                         style: textStyle,
                       ),
@@ -285,6 +288,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
+                        //TODO Fetch number of blogs from user profile
                         '12 Blogs',
                         style: textStyle,
                       ),
@@ -328,6 +332,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                         width: 5,
                       ),
                       Text(
+                        //TODO Fetch number of followings from user profile
                         '125 Following',
                         style: textStyle,
                       ),
@@ -348,6 +353,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                         width: 5,
                       ),
                       Text(
+                        //TODO Fetch number of posts from user profile
                         '10 Posts',
                         style: textStyle,
                       ),
