@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../HelperClasses/SearchTabHelperClass.dart';
@@ -26,45 +27,53 @@ class SearchTabState extends State<SearchTab> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Container(
-                height: 40,
-                width: widthOfContainer,
-                margin: EdgeInsets.all(10.0),
-                padding: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black12,
-                    style: BorderStyle.solid,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                ),
-                child: GestureDetector(
-                  child: Container(
-                    child: Text(
-                      "Search",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        letterSpacing: 1.0,
-                        fontWeight: FontWeight.w100,
-                      ),
+        child: Container(
+          padding: EdgeInsets.all(5),
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: Container(
+                  width: widthOfContainer,
+                  margin: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Color.fromRGBO(255, 255, 255, 0.3),
+                      style: BorderStyle.solid,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5),
                     ),
                   ),
-                  onTap: () =>
-                      showSearch(context: context, delegate: UserSearch()),
+                  child: GestureDetector(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          EvaIcons.search,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          "  Search",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w100,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () =>
+                        showSearch(context: context, delegate: UserSearch()),
+                  ),
                 ),
               ),
-            ),
-            Flexible(
-              child: categoryList(widthOfContainer),
-            ),
-          ],
+              Flexible(
+                child: categoryList(widthOfContainer),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -107,7 +116,7 @@ class SearchTabState extends State<SearchTab> {
   Widget categoryListBuilder(DocumentSnapshot snapshot) {
     return new Container(
       margin: EdgeInsets.only(bottom: 20.0),
-      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
       decoration: BoxDecoration(
         border: Border.all(
           color: Color.fromRGBO(255, 255, 255, 0.3),
