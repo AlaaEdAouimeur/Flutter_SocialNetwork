@@ -63,8 +63,8 @@ class _BlogDisplayState extends State<BlogDisplay> {
 
                 default:
                   return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -80,44 +80,13 @@ class _BlogDisplayState extends State<BlogDisplay> {
                           SizedBox(
                             height: 20.0,
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: FutureBuilder(
-                              future: databaseReference.DatabaseReferences()
-                                  .users
-                                  .where('uid', isEqualTo: snapshot.data['uid'])
-                                  .getDocuments(),
-                              builder: (context, userSnapshot) {
-                                TextStyle style = TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w600,
-                                );
-                                if (userSnapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  if (userSnapshot.hasData) {
-                                    String userName = userSnapshot
-                                        .data.documents[0]['name']
-                                        .toString();
-                                    return Text(
-                                      "- $userName",
-                                      textAlign: TextAlign.end,
-                                      style: style,
-                                    );
-                                  }
-                                  return Text(
-                                    "- Unknown",
-                                    style: style,
-                                    textAlign: TextAlign.end,
-                                  );
-                                }
-                                return Text(
-                                  "Loading...",
-                                  style: style,
-                                  textAlign: TextAlign.end,
-                                );
-                              },
+                          Text(
+                            "by " + snapshot.data['user_display_name'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              letterSpacing: 0.2,
+                              fontSize: 16,
                             ),
                           ),
                           SizedBox(
@@ -125,11 +94,12 @@ class _BlogDisplayState extends State<BlogDisplay> {
                           ),
                           Text(
                             snapshot.data['content'],
-                            textAlign: TextAlign.justify,
+                            textAlign: TextAlign.start,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 18,
                               height: 1.1,
+                              letterSpacing: 0.3,
                             ),
                           ),
                           SizedBox(

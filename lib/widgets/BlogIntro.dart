@@ -30,7 +30,7 @@ class _BlogIntroState extends State<BlogIntro> {
                 widget.snapshot.data['title'],
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.teal,
                   letterSpacing: 0.2,
                   height: 1.1,
                   fontSize: 20,
@@ -40,8 +40,16 @@ class _BlogIntroState extends State<BlogIntro> {
             Text(
               getExcerpt(widget.snapshot.data['content']),
               style: TextStyle(
-                color: Colors.white70,
+                color: Colors.white,
                 fontSize: 16.0,
+              ),
+            ),
+            Text(
+              widget.snapshot.data['user_display_name'],
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.0,
+                height: 2,
               ),
             ),
           ],
@@ -59,7 +67,7 @@ class _BlogIntroState extends State<BlogIntro> {
 
   String getExcerpt(String content) {
     int wordCount = 0, i;
-    for (i = 0; i < content.length && wordCount < 30; i++) {
+    for (i = 0; i < content.length && wordCount < 50; i++) {
       if (content[i].contains(' ')) wordCount++;
     }
     return content.substring(0, i) + ' ...';
