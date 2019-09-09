@@ -241,54 +241,5 @@ class SearchTabHelperClass {
             });
   }
 
-  Widget categoryListBuilder(DocumentSnapshot snapshot) {
-    return new Container(
-      height: 40,
-      margin: EdgeInsets.only(bottom: 5.0),
-      padding: EdgeInsets.only(left: 5.0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Color.fromRGBO(0, 0, 0, 0.1),
-        ),
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          snapshot["category_name"],
-          textAlign: TextAlign.start,
-        ),
-      ),
-    );
-  }
-
-  Widget categoryList(double widthOfContainer) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: databaseReference.DatabaseReferences().category.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return new Container(
-                width: widthOfContainer,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-              break;
-            default:
-              return Container(
-                padding: EdgeInsets.all(10.0),
-                child: new ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      return categoryListBuilder(
-                          snapshot.data.documents[index]);
-                    }),
-              );
-              break;
-          }
-        });
-  }
+  
 }
