@@ -45,7 +45,17 @@ class SearchTabState extends State<SearchTab> {
                   ),
                 ),
                 child: GestureDetector(
-                  child: Text("Search", style: TextStyle(color: Colors.white),),
+                  child: Container(
+                    child: Text(
+                      "Search",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        letterSpacing: 1.0,
+                        fontWeight: FontWeight.w100,
+                      ),
+                    ),
+                  ),
                   onTap: () =>
                       showSearch(context: context, delegate: UserSearch()),
                 ),
@@ -62,37 +72,41 @@ class SearchTabState extends State<SearchTab> {
 
   Widget categoryList(double widthOfContainer) {
     return StreamBuilder<QuerySnapshot>(
-        stream: databaseReference.DatabaseReferences().category.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return new Container(
-                width: widthOfContainer,
-                child: Center(
-                  child: CircularProgressIndicator(),
+      stream: databaseReference.DatabaseReferences().category.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return new Container(
+              width: widthOfContainer,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+            break;
+          default:
+            return Container(
+              padding: EdgeInsets.all(10.0),
+              child: ScrollConfiguration(
+                behavior: NoGlowScroll(),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    return categoryListBuilder(snapshot.data.documents[index]);
+                  },
                 ),
-              );
-              break;
-            default:
-              return Container(
-                padding: EdgeInsets.all(10.0),
-                child: new ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      return categoryListBuilder(
-                          snapshot.data.documents[index]);
-                    },),
-              );
-              break;
-          }
-        },);
+              ),
+            );
+            break;
+        }
+      },
+    );
   }
 
   Widget categoryListBuilder(DocumentSnapshot snapshot) {
     return new Container(
-      margin: EdgeInsets.only(bottom: 15.0),
+      margin: EdgeInsets.only(bottom: 20.0),
       padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
       decoration: BoxDecoration(
         border: Border.all(
@@ -100,13 +114,36 @@ class SearchTabState extends State<SearchTab> {
         ),
         borderRadius: BorderRadius.circular(5.0),
       ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "TOP ${snapshot['category_name'].toString().toUpperCase()}",
-          textAlign: TextAlign.start,
-          style: TextStyle(color: Colors.white),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "TOP ${snapshot['category_name'].toString().toUpperCase()}",
+            textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.white),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 100.0,
+            child: ScrollConfiguration(
+              behavior: NoGlowScroll(),
+              child: ListView.builder(
+                itemCount: 5,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Image.network('http://via.placeholder.com/200',
+                        height: 100.0, width: 100.0),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -150,5 +187,13 @@ class UserSearch extends SearchDelegate<String> {
     return Container(
       child: helperClass.suggestionList(query),
     );
+  }
+}
+
+class NoGlowScroll extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
