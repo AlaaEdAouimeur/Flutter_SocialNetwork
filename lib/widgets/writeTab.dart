@@ -3,7 +3,7 @@ import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'PostCategory.dart';
+
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
 
@@ -14,6 +14,14 @@ class WriteTabState extends State<WriteTab> {
   FirebaseUser currentUser;
   TextEditingController writeupController = TextEditingController();
   TextEditingController topicController = TextEditingController();
+  static const postCategories = <String>[
+    'Microtale',
+    "Short story",
+    "Snippet",
+    "Quote",
+    "Blog",
+  ];
+  String dropdownValue = 'Microtale';
 
   @override
   void initState() {
@@ -37,59 +45,105 @@ class WriteTabState extends State<WriteTab> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                 Postcategory(),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10.0),
-                    child: TextFormField(
-                      controller: topicController,
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 24.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Title",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Container(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Start writing...',
-                        ),
-                        controller: writeupController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 10,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: RaisedButton(
-                      child: Text("Submit"),
-                      onPressed: () =>
-                          FirebaseAuth.instance.currentUser().then((user) => {
-                                currentUser = user,
-                                insertData(),
-                              }),
-                    ),
-                  ),
-                  Container(
-                    child: RaisedButton(
-                      child: Text("Followers"),
-                      onPressed: () =>
-                          FirebaseAuth.instance.currentUser().then((user) => {
-                                currentUser = user,
-                                getFollowersList(),
-                              }),
-                    ),
-                  )
+                  postCategory(),
+                  titleField(),
+                  writingField(),
+                  submitButton(),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Container postCategory() {
+    return Container(
+      color: Colors.white,
+      height: 50.0,
+      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text("What are you submitting?",
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          Container(
+            padding: EdgeInsets.only(left: 10.0, right: 10.0),
+            margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(0, 128, 128, 0.2),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              style: TextStyle(
+                color: Colors.teal,
+              ),
+              icon: Icon(
+                EvaIcons.arrowIosDownward,
+                color: Colors.teal,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;
+                });
+              },
+              items: postCategories
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container submitButton() {
+    return Container(
+      child: RaisedButton(
+        child: Text("Submit"),
+        onPressed: () => FirebaseAuth.instance.currentUser().then((user) => {
+              currentUser = user,
+              insertData(),
+            }),
+      ),
+    );
+  }
+
+  Flexible writingField() {
+    return Flexible(
+      fit: FlexFit.tight,
+      child: Container(
+        child: TextFormField(
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: 'Start writing...',
+          ),
+          controller: writeupController,
+          keyboardType: TextInputType.multiline,
+          maxLines: 10,
+        ),
+      ),
+    );
+  }
+
+  Container titleField() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10.0),
+      child: TextFormField(
+        controller: topicController,
+        style: TextStyle(
+          color: Colors.green,
+          fontSize: 24.0,
+        ),
+        decoration: InputDecoration(
+          hintText: "Title",
+          border: InputBorder.none,
         ),
       ),
     );
