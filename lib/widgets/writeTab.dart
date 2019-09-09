@@ -64,10 +64,16 @@ class WriteTabState extends State<WriteTab> {
       height: 50.0,
       padding: EdgeInsets.only(left: 15.0, right: 15.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("What are you submitting?",
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            "Category  :  ",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.teal,
+              fontSize: 16,
+            ),
+          ),
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0),
             margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -89,8 +95,8 @@ class WriteTabState extends State<WriteTab> {
                   dropdownValue = newValue;
                 });
               },
-              items: postCategories
-                  .map<DropdownMenuItem<String>>((String value) {
+              items:
+                  postCategories.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
