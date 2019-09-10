@@ -24,16 +24,18 @@ class _StoryPageState extends State<StoryPage> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((user) {
-      if (widget.snapshot.data['upvoted_users'] != null) {
-        List userIds = widget.snapshot.data['upvoted_users'];
-        if (userIds.contains(user.uid))
-          hasUpvotedBlog = true;
-        else
-          hasUpvotedBlog = false;
-      }
+      // if (widget.snapshot.data['upvoted_users'] != null) {
+      //   List userIds = widget.snapshot.data['upvoted_users'];
+      //   if (userIds.contains(user.uid))
+      //     hasUpvotedBlog = true;
+      //   else
+      //     hasUpvotedBlog = false;
+      // }
       currentUser = user;
     });
   }
+
+// JUST A TESTING STORY PAGE
 
   @override
   Widget build(BuildContext context) {
@@ -41,105 +43,126 @@ class _StoryPageState extends State<StoryPage> {
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Container(
-          child: StreamBuilder(
-            stream: Firestore.instance
-                .collection(widget.collectionName)
-                .document(widget.snapshot.documentID)
-                .snapshots(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  print("waiting");
-                  return new Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Container(
-                      color: Colors.black,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  );
-                  break;
-
-                default:
-                  return SingleChildScrollView(
-                    child: Container(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            snapshot.data['title'],
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              letterSpacing: 0.2,
-                              fontSize: 25,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Text(
-                            "by " + snapshot.data['user_display_name'],
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              letterSpacing: 0.2,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Text(
-                            snapshot.data['content'],
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              height: 1.1,
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40.0,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              GestureDetector(
-                                child: getUpIcon(widget.snapshot.documentID),
-                                onTap: () => {
-                                  upVote(widget.snapshot.documentID),
-                                },
-                              ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Text(
-                                snapshot.data['upvoted_users'] == null
-                                    ? '0'
-                                    : snapshot.data['upvoted_users'].length
-                                        .toString(),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-              }
-            },
+          child: Center(
+            child: Text(
+              widget.collectionName,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
     );
   }
+
+  
+// MAIN STORY PAGE WITH BACKEND
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     backgroundColor: Colors.black,
+  //     body: SafeArea(
+  //       child: Container(
+  //         child: StreamBuilder(
+  //           stream: Firestore.instance
+  //               .collection(widget.collectionName)
+  //               .document(widget.snapshot.documentID)
+  //               .snapshots(),
+  //           builder: (context, snapshot) {
+  //             switch (snapshot.connectionState) {
+  //               case ConnectionState.waiting:
+  //                 print("waiting");
+  //                 return new Container(
+  //                   width: MediaQuery.of(context).size.width,
+  //                   child: Container(
+  //                     color: Colors.black,
+  //                     child: Center(
+  //                       child: CircularProgressIndicator(),
+  //                     ),
+  //                   ),
+  //                 );
+  //                 break;
+
+  //               default:
+  //                 return SingleChildScrollView(
+  //                   child: Container(
+  //                     padding: const EdgeInsets.all(20.0),
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: <Widget>[
+  //                         Text(
+  //                           snapshot.data['title'],
+  //                           style: TextStyle(
+  //                             fontWeight: FontWeight.w600,
+  //                             color: Colors.white,
+  //                             letterSpacing: 0.2,
+  //                             fontSize: 25,
+  //                           ),
+  //                         ),
+  //                         SizedBox(
+  //                           height: 20.0,
+  //                         ),
+  //                         Text(
+  //                           "by " + snapshot.data['user_display_name'],
+  //                           style: TextStyle(
+  //                             fontWeight: FontWeight.w600,
+  //                             color: Colors.white,
+  //                             letterSpacing: 0.2,
+  //                             fontSize: 16,
+  //                           ),
+  //                         ),
+  //                         SizedBox(
+  //                           height: 20.0,
+  //                         ),
+  //                         Text(
+  //                           snapshot.data['content'],
+  //                           textAlign: TextAlign.start,
+  //                           style: TextStyle(
+  //                             color: Colors.white,
+  //                             fontSize: 18,
+  //                             height: 1.1,
+  //                             letterSpacing: 0.3,
+  //                           ),
+  //                         ),
+  //                         SizedBox(
+  //                           height: 40.0,
+  //                         ),
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           children: <Widget>[
+  //                             GestureDetector(
+  //                               child: getUpIcon(widget.snapshot.documentID),
+  //                               onTap: () => {
+  //                                 upVote(widget.snapshot.documentID),
+  //                               },
+  //                             ),
+  //                             SizedBox(
+  //                               width: 10.0,
+  //                             ),
+  //                             Text(
+  //                               snapshot.data['upvoted_users'] == null
+  //                                   ? '0'
+  //                                   : snapshot.data['upvoted_users'].length
+  //                                       .toString(),
+  //                               style: TextStyle(
+  //                                   color: Colors.white,
+  //                                   fontSize: 20.0,
+  //                                   fontWeight: FontWeight.bold),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 );
+  //             }
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future<DocumentSnapshot> getUpvotedUserList(String documentID) {
     return Firestore.instance
