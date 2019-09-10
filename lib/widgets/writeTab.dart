@@ -192,8 +192,14 @@ class WriteTabState extends State<WriteTab> {
       "tpqSelected": false,
       "visibleTo": visibleTo,
     };
-
-    databaseReferences.DatabaseReferences().posts.document().setData(value);
+    switch (dropdownValue) {
+      case 'Blog':
+        databaseReferences.DatabaseReferences().blogs.document().setData(value);
+        break;
+      default:
+        databaseReferences.DatabaseReferences().posts.document().setData(value);
+        break;
+    }
   }
 
   void insertData() async {
