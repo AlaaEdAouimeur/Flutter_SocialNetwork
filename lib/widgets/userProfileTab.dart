@@ -81,9 +81,9 @@ class UserProfileTabState extends State<UserProfileTab> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           userDetail(context, snapshot),
-                          userBio(),
+                          userBio(snapshot),
                           socialIcons(),
-                          flowWidget(),
+                          flowWidget(snapshot),
                           editProfileButton(),
                           logoutButton(),
                           themeSwitch(),
@@ -203,36 +203,59 @@ class UserProfileTabState extends State<UserProfileTab> {
           ),
           /*Loaction*/
           Container(
-            child: Text(
-              //TODO User location should come from user profile
-              'Oran, Algeria',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Color.fromRGBO(0, 0, 0, 0.6),
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5),
-            ),
+            child: snapshot["location"] != null
+                ? Text(
+                    snapshot["location"],
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Color.fromRGBO(0, 0, 0, 0.6),
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5),
+                  )
+                : GestureDetector(
+                    child: Text(
+                      "Add Location",
+                      style: TextStyle(
+                        fontSize: 18,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    onTap: () {
+                      //TODO: Open edit profile page
+                    },
+                  ),
           ),
         ],
       ),
     );
   }
 
-  Container userBio() {
+  Container userBio(DocumentSnapshot snapshot) {
     return Container(
-        margin: EdgeInsets.only(top: 20.0),
-        width: 300,
-        child: Center(
-          child: Text(
-            //TODO User bio should be fetched from user profile
-            'I am a Computer Science Student and a Flutter Developer',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 18,
-                color: Color.fromRGBO(0, 0, 0, 0.8),
-                fontWeight: FontWeight.bold),
-          ),
-        ));
+      margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+      width: 300,
+      child: Center(
+        child: snapshot["bio"] != null
+            ? Text(
+                snapshot["bio"],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Color.fromRGBO(0, 0, 0, 0.8),
+                    fontWeight: FontWeight.bold),
+              )
+            : GestureDetector(
+                child: Text(
+                  'Add Your Bio',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color.fromRGBO(0, 0, 0, 0.8),
+                  ),
+                ),
+              ),
+      ),
+    );
   }
 
   Container editProfileButton() {
@@ -291,7 +314,7 @@ class UserProfileTabState extends State<UserProfileTab> {
     );
   }
 
-  Container flowWidget() {
+  Container flowWidget(DocumentSnapshot snapshot) {
     var textStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.bold,
@@ -315,8 +338,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        //TODO Fetch number of followers from user profile
-                        '12 Followers',
+                        snapshot["followers"].toString() + " Followers",
                         style: textStyle,
                       ),
                       SizedBox(
@@ -337,8 +359,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        //TODO Fetch number of blogs from user profile
-                        '12 Blogs',
+                        snapshot["blogs"].toString() + " Blogs",
                         style: textStyle,
                       ),
                       SizedBox(
@@ -382,7 +403,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                       ),
                       Text(
                         //TODO Fetch number of followings from user profile
-                        '125 Following',
+                        snapshot["followings"].toString() + " Following",
                         style: textStyle,
                       ),
                     ],
@@ -403,7 +424,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                       ),
                       Text(
                         //TODO Fetch number of posts from user profile
-                        '10 Posts',
+                        snapshot["posts"].toString() + " Posts",
                         style: textStyle,
                       ),
                     ],
