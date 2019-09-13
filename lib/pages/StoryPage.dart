@@ -24,13 +24,13 @@ class _StoryPageState extends State<StoryPage> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((user) {
-      if (widget.snapshot.data['upvoted_users'] != null) {
-        List userIds = widget.snapshot.data['upvoted_users'];
-        if (userIds.contains(user.uid))
-          hasUpvotedBlog = true;
-        else
-          hasUpvotedBlog = false;
-      }
+      // if (widget.snapshot.data['upvoted_users'] != null) {
+      //   List userIds = widget.snapshot.data['upvoted_users'];
+      //   if (userIds.contains(user.uid))
+      //     hasUpvotedBlog = true;
+      //   else
+      //     hasUpvotedBlog = false;
+      // }
       currentUser = user;
     });
   }
@@ -43,80 +43,81 @@ class _StoryPageState extends State<StoryPage> {
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Container(
-          child: Center(
-            child: SingleChildScrollView(
-                    child: Container(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Dummy Title',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              letterSpacing: 0.2,
-                              fontSize: 25,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Text(
-                            "by " + 'dummy_author',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              letterSpacing: 0.2,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Text(
-                            'This is the dummy body of the dummy story. Nothing much to see!',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              height: 1.1,
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40.0,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              GestureDetector(
-                                child: Icon(EvaIcons.arrowCircleUpOutline),
-                                
-                              ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Text(
-                                '0',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Dummy Title',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                      fontSize: 25,
                     ),
                   ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    "by " + 'dummy_author',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    'This is the dummy body of the dummy story. When implemented actually, they will send collection name and snapshot which will be used to display the actual content using stream builder.',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      height: 1.1,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Icon(
+                          EvaIcons.arrowCircleUpOutline,
+                          color: Colors.white,
+                          size: 24.0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Text(
+                        '0',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  
 // MAIN STORY PAGE WITH BACKEND
   // @override
   // Widget build(BuildContext context) {
