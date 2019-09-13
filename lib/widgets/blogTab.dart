@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:redux_example/widgets/CategoryDropdown.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'BlogIntro.dart';
 
@@ -11,7 +12,8 @@ class BlogTab extends StatefulWidget {
 
 class _BlogTabState extends State<BlogTab> {
   FirebaseUser currentUser;
-
+  String category;
+  Stream query;
   @override
   void initState() {
     FirebaseAuth.instance.currentUser().then((user) {
@@ -22,80 +24,156 @@ class _BlogTabState extends State<BlogTab> {
     super.initState();
   }
 
+  categoryChanged() {
+    setState(() {
+      category = CategoryHelperFunction().getDropdownValue();
+    });
+  }
+
+  Stream<QuerySnapshot> buildQuery() {
+    print("Test: Inside Build Query");
+    Stream<QuerySnapshot> query;
+    switch (category) {
+      case "TPQ Selected":
+        print("Test: TPQ Selected");
+        setState(() {
+          query = databaseReference.DatabaseReferences()
+              .blogs
+              .where("tpqSelected", isEqualTo: true)
+              .orderBy('uploaded_at', descending: true)
+              .snapshots();
+        });
+        break;
+
+      case "Following":
+        print("Following Selected");
+        setState(() {
+          query = databaseReference.DatabaseReferences()
+              .blogs
+              .where("visibleTo", arrayContains: currentUser.uid)
+              .orderBy('uploaded_at', descending: true)
+              .snapshots();
+        });
+        break;
+
+      case "All":
+        print("All Selected");
+        setState(() {
+          query = databaseReference.DatabaseReferences()
+              .blogs
+              .orderBy('uploaded_at', descending: true)
+              .snapshots();
+        });
+        break;
+
+      default:
+        print("Test: Default");
+        query = null;
+        break;
+    }
+    return query;
+  }
+
   @override
   Widget build(BuildContext context) {
+    categoryChanged();
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Colors.black,
           child: currentUser == null
               ? Container(
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : blogList(),
+              : Container(
+                  child: Column(
+                    children: <Widget>[
+                      CategoryDropdown(
+                        notifyParent: categoryChanged,
+                      ),
+                      Flexible(
+                        child: blogList(),
+                      ),
+                    ],
+                  ),
+                ),
         ),
       ),
     );
   }
 
   Widget blogList() {
-    return StreamBuilder(
-      stream: databaseReference.DatabaseReferences().blogs.orderBy('uploaded_at', descending: true).snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        switch (snapshots.connectionState) {
-          case ConnectionState.waiting:
-            print("Waiting for blogs to be loaded.");
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-            break;
-          default:
-            if (snapshots.data.documents.length == 0) {
+    query = buildQuery();
+    if (query == null) {
+      print("Query is null");
+      return new Container(
+        width: MediaQuery.of(context).size.width,
+        child: Container(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    } else {
+      return StreamBuilder<QuerySnapshot>(
+        stream: query,
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+          switch (snapshots.connectionState) {
+            case ConnectionState.waiting:
+              print("Waiting for blogs to be loaded.");
               return Center(
-                child: Container(
-                  child: Text(
-                    "That's all for today.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+                child: CircularProgressIndicator(),
+              );
+              break;
+            default:
+              if (snapshots.data.documents.length == 0) {
+                return Center(
+                  child: Container(
+                    child: Text(
+                      "That's all for today.",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshots.data.documents.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.all(25.0),
-                        child: BlogIntro(
-                            snapshot: snapshots.data.documents[index]),
-                      ),
-                      Center(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: index + 1 >= snapshots.data.documents.length
-                              ? null
-                              : Divider(
-                                  color: Color.fromRGBO(255, 255, 255, 0.5),
-                                ),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: snapshots.data.documents.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.all(25.0),
+                          child: BlogIntro(
+                              snapshot: snapshots.data.documents[index]),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-            break;
-        }
-      },
-    );
+                        Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: index + 1 >= snapshots.data.documents.length
+                                ? null
+                                : Divider(
+                                    color: Color.fromRGBO(255, 255, 255, 0.5),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+              break;
+          }
+        },
+      );
+    }
   }
 }
