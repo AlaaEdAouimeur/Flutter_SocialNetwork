@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +7,7 @@ import '../database/databaseReferences.dart' as databaseReference;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:strings/strings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserProfileTab extends StatefulWidget {
   UserProfileTab();
@@ -14,7 +17,7 @@ class UserProfileTab extends StatefulWidget {
 
 class UserProfileTabState extends State<UserProfileTab> {
   FirebaseUser currentUser;
-
+  File userimg;
   @override
   void initState() {
     super.initState();
@@ -25,6 +28,18 @@ class UserProfileTabState extends State<UserProfileTab> {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     setState(() {
       currentUser = user;
+    });
+  }
+
+  Future pickImg() async {
+    File _file;
+    print("pic image");
+    _file = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    setState(() {
+      userimg = _file;
     });
   }
 
@@ -120,19 +135,33 @@ class UserProfileTabState extends State<UserProfileTab> {
   Container userDetail(BuildContext context, DocumentSnapshot snapshot) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(top: 80, bottom: 20),
+      padding: EdgeInsets.only(top: 35, bottom: 20),
       child: Column(
         children: <Widget>[
-          GestureDetector(
-            child: CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(
-                snapshot["profilePictureUrl"],
-              ),
-            ),
-            onTap: () {
-              //TODO Clicking will allow user to change their display picture
-            },
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: <Widget>[
+              CircleAvatar(
+                  radius: 55,
+                  backgroundImage: userimg == null
+                      ? NetworkImage(
+                          snapshot["profilePictureUrl"],
+                        )
+                      : FileImage(userimg)),
+              InkWell(
+                child: CircleAvatar(
+                  backgroundColor: Colors.orange,
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  radius: 16,
+                ),
+                onTap: () {
+                  pickImg();
+                },
+              )
+            ],
           ),
           SizedBox(
             height: 10,
