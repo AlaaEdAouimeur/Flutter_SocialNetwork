@@ -18,6 +18,7 @@ class UserProfileTab extends StatefulWidget {
 class UserProfileTabState extends State<UserProfileTab> {
   FirebaseUser currentUser;
   File userimg;
+  bool darkTheme = true;
   @override
   void initState() {
     super.initState();
@@ -33,7 +34,6 @@ class UserProfileTabState extends State<UserProfileTab> {
 
   Future pickImg() async {
     File _file;
-    print("pic image");
     _file = await ImagePicker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
@@ -77,6 +77,8 @@ class UserProfileTabState extends State<UserProfileTab> {
                   child: Scaffold(
                     body: Center(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           userDetail(context, snapshot),
                           userBio(),
@@ -84,6 +86,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                           flowWidget(),
                           editProfileButton(),
                           logoutButton(),
+                          themeSwitch(),
                         ],
                       ),
                     ),
@@ -95,9 +98,31 @@ class UserProfileTabState extends State<UserProfileTab> {
     }
   }
 
+  Container themeSwitch() {
+    return Container(
+      margin: EdgeInsets.only(top: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Light Theme"),
+          Switch(
+              value: darkTheme,
+              activeColor: Colors.black,
+              onChanged: (value) {
+                setState(() {
+                  darkTheme = !darkTheme;
+                });
+                print("Value: " + darkTheme.toString());
+              }),
+          Text("Dark Theme"),
+        ],
+      ),
+    );
+  }
+
   Container socialIcons() {
     return Container(
-      margin: EdgeInsets.only(bottom: 20.0),
+      margin: EdgeInsets.only(top: 20.0),
       width: 150,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -135,14 +160,13 @@ class UserProfileTabState extends State<UserProfileTab> {
   Container userDetail(BuildContext context, DocumentSnapshot snapshot) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(top: 35, bottom: 20),
       child: Column(
         children: <Widget>[
           Stack(
             alignment: Alignment.bottomRight,
             children: <Widget>[
               CircleAvatar(
-                  radius: 55,
+                  radius: 50,
                   backgroundImage: userimg == null
                       ? NetworkImage(
                           snapshot["profilePictureUrl"],
@@ -155,7 +179,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                     Icons.edit,
                     color: Colors.white,
                   ),
-                  radius: 16,
+                  radius: 12,
                 ),
                 onTap: () {
                   pickImg();
@@ -196,7 +220,7 @@ class UserProfileTabState extends State<UserProfileTab> {
 
   Container userBio() {
     return Container(
-        margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+        margin: EdgeInsets.only(top: 20.0),
         width: 300,
         child: Center(
           child: Text(
@@ -215,8 +239,7 @@ class UserProfileTabState extends State<UserProfileTab> {
     return Container(
       width: 200,
       margin: EdgeInsets.only(
-        top: 3,
-        bottom: 3,
+        top: 20,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
@@ -245,10 +268,7 @@ class UserProfileTabState extends State<UserProfileTab> {
   Container logoutButton() {
     return Container(
       width: 200,
-      margin: EdgeInsets.only(
-        top: 3,
-        bottom: 3,
-      ),
+      margin: EdgeInsets.only(top: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         color: Color.fromRGBO(234, 60, 83, 1),
@@ -280,7 +300,7 @@ class UserProfileTabState extends State<UserProfileTab> {
     var iconsColor = Color.fromRGBO(0, 0, 0, 0.7);
     return Container(
       height: 100,
-      margin: EdgeInsets.only(top: 20.0, bottom: 40.0),
+      margin: EdgeInsets.only(top: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
