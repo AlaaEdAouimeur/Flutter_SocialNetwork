@@ -18,6 +18,7 @@ class UserProfileTab extends StatefulWidget {
 class UserProfileTabState extends State<UserProfileTab> {
   FirebaseUser currentUser;
   File userimg;
+  bool darkTheme = true;
   @override
   void initState() {
     super.initState();
@@ -33,7 +34,6 @@ class UserProfileTabState extends State<UserProfileTab> {
 
   Future pickImg() async {
     File _file;
-    print("pic image");
     _file = await ImagePicker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
@@ -77,6 +77,8 @@ class UserProfileTabState extends State<UserProfileTab> {
                   child: Scaffold(
                     body: Center(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           userDetail(context, snapshot),
                           userBio(),
@@ -84,6 +86,22 @@ class UserProfileTabState extends State<UserProfileTab> {
                           flowWidget(),
                           editProfileButton(),
                           logoutButton(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text("Light Theme"),
+                              Switch(
+                                  value: darkTheme,
+                                  activeColor: Colors.black,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      darkTheme = !darkTheme;
+                                    });
+                                    print("Value: " + darkTheme.toString());
+                                  }),
+                              Text("Dark Theme"),
+                            ],
+                          ),
                         ],
                       ),
                     ),
