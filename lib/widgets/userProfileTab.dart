@@ -30,13 +30,19 @@ class UserProfileTabState extends State<UserProfileTab> {
       currentUser = user;
     });
   }
-Future pickImg() async {
- File _file;
-  _file = await ImagePicker.pickImage(source: ImageSource.gallery,imageQuality: 50,); 
- setState(()  {
- userimg = _file;
- });
-}
+
+  Future pickImg() async {
+    File _file;
+    print("pic image");
+    _file = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    setState(() {
+      userimg = _file;
+    });
+  }
+
   Widget build(BuildContext context) {
     if (currentUser == null) {
       return new Container(
@@ -130,25 +136,33 @@ Future pickImg() async {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 35, bottom: 20),
-
       child: Column(
         children: <Widget>[
-       Stack(
-         alignment: Alignment.bottomRight,
-         children: <Widget>[
-            CircleAvatar(
-              
-              radius: 55,
-              backgroundImage:userimg==null?  NetworkImage(
-                snapshot["profilePictureUrl"],
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: <Widget>[
+              CircleAvatar(
+                  radius: 55,
+                  backgroundImage: userimg == null
+                      ? NetworkImage(
+                          snapshot["profilePictureUrl"],
+                        )
+                      : FileImage(userimg)),
+              InkWell(
+                child: CircleAvatar(
+                  backgroundColor: Colors.orange,
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  radius: 16,
+                ),
+                onTap: () {
+                  pickImg();
+                },
               )
-              :  FileImage(userimg)
-            ),
-         InkWell(child: CircleAvatar(backgroundColor: Colors.orange,child: Icon(Icons.edit,color: Colors.white,),radius: 16,),onTap: (){pickImg();},)
-         ],
-       ),
-           
-       
+            ],
+          ),
           SizedBox(
             height: 10,
           ),
