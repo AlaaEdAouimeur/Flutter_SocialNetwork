@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:redux_example/pages/StoryPage.dart';
 import '../HelperClasses/SearchTabHelperClass.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 
@@ -145,8 +146,20 @@ class SearchTabState extends State<SearchTab> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Image.network('http://via.placeholder.com/200',
-                        height: 100.0, width: 100.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => StoryPage(),
+                          ),
+                        );
+                      },
+                      child: Image.network(
+                        'http://via.placeholder.com/200',
+                        height: 100.0,
+                        width: 100.0,
+                      ),
+                    ),
                   );
                 },
               ),
