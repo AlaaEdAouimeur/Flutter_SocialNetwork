@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:redux_example/widgets/userPostList.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
 import '../database/databaseReferences.dart' as databaseReference;
@@ -73,6 +74,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                 );
               } else {
                 DocumentSnapshot snapshot = query.data.documents[0];
+                
                 return SafeArea(
                   child: Scaffold(
                     body: Center(
@@ -158,6 +160,7 @@ class UserProfileTabState extends State<UserProfileTab> {
   }
 
   Container userDetail(BuildContext context, DocumentSnapshot snapshot) {
+    print('trying Hard ${ snapshot["uid"]}');
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -371,10 +374,8 @@ class UserProfileTabState extends State<UserProfileTab> {
                       ),
                     ],
                   ),
-                  onTap: () {
-                    //TODO: Opens a list of all blogs by user
-                  },
-                )
+                
+                  onTap: (){} )
               ],
             ),
           ),
@@ -429,9 +430,12 @@ class UserProfileTabState extends State<UserProfileTab> {
                       ),
                     ],
                   ),
-                  onTap: () {
-                    //TODO: Opens a list of all posts by user
-                  },
+                  onTap: ()=> Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Userpostlist(title: 'Posts',snapshot: snapshot,),
+          ),
+                )
                 ),
               ],
             ),
