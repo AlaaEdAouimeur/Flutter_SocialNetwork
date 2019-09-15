@@ -74,7 +74,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                 );
               } else {
                 DocumentSnapshot snapshot = query.data.documents[0];
-                
+
                 return SafeArea(
                   child: Scaffold(
                     body: Center(
@@ -82,7 +82,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          userDetail(context, snapshot),
+                          userDetail(snapshot),
                           userBio(snapshot),
                           socialIcons(),
                           flowWidget(snapshot),
@@ -159,8 +159,8 @@ class UserProfileTabState extends State<UserProfileTab> {
     );
   }
 
-  Container userDetail(BuildContext context, DocumentSnapshot snapshot) {
-    print('trying Hard ${ snapshot["uid"]}');
+  Container userDetail(DocumentSnapshot snapshot) {
+    print('trying Hard ${snapshot["uid"]}');
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -358,24 +358,23 @@ class UserProfileTabState extends State<UserProfileTab> {
                   },
                 ),
                 GestureDetector(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        snapshot["blogs"].toString() + " Blogs",
-                        style: textStyle,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        FontAwesomeIcons.solidStickyNote,
-                        color: iconsColor,
-                      ),
-                    ],
-                  ),
-                
-                  onTap: (){} )
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          snapshot["blogs"].toString() + " Blogs",
+                          style: textStyle,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          FontAwesomeIcons.solidStickyNote,
+                          color: iconsColor,
+                        ),
+                      ],
+                    ),
+                    onTap: () {})
               ],
             ),
           ),
@@ -403,7 +402,6 @@ class UserProfileTabState extends State<UserProfileTab> {
                         width: 5,
                       ),
                       Text(
-                        //TODO Fetch number of followings from user profile
                         snapshot["followings"].toString() + " Following",
                         style: textStyle,
                       ),
@@ -414,29 +412,30 @@ class UserProfileTabState extends State<UserProfileTab> {
                   },
                 ),
                 GestureDetector(
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        FontAwesomeIcons.penNib,
-                        color: iconsColor,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        //TODO Fetch number of posts from user profile
-                        snapshot["posts"].toString() + " Posts",
-                        style: textStyle,
-                      ),
-                    ],
-                  ),
-                  onTap: ()=> Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Userpostlist(title: 'Posts',snapshot: snapshot,),
-          ),
-                )
-                ),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.penNib,
+                          color: iconsColor,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          snapshot["posts"].toString() + " Posts",
+                          style: textStyle,
+                        ),
+                      ],
+                    ),
+                    onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Userpostlist(
+                              title: 'Posts',
+                              snapshot: snapshot,
+                            ),
+                          ),
+                        )),
               ],
             ),
           )
