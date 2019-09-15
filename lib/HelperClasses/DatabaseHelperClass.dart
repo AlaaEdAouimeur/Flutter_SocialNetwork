@@ -3,7 +3,7 @@ import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseHelperClass {
-  void saveUserDataToDatabase(FirebaseUser user) {
+  Future<DocumentSnapshot> saveUserDataToDatabase(FirebaseUser user) {
     var value = {
       "name": user.displayName.toLowerCase(),
       "email": user.email.toLowerCase(),
@@ -17,21 +17,33 @@ class DatabaseHelperClass {
       "blogs": 0,
       "location": null,
       "username": null,
+      "birthday": null,
+      "location": null,
+      "bio": null,
     };
-    checkIfUserAlreadyExist(user.email).then((val) => val
-        ? null
-        : databaseReferences.DatabaseReferences()
-        .users
-        .document()
-        .setData(value)
-        .then((val) => print("User data stored to firestore")));
+    return checkIfUserAlreadyExist(user.email).then((val) async {
+      if (val == null) {
+        print("INITIALIZED USER DETAILS");
+        await databaseReferences.DatabaseReferences()
+            .users
+            .document()
+            .setData(value)
+            .then(
+              (_) => print("User data stored to firestore"),
+            );
+      }
+      return val;
+    });
   }
 
-  Future<bool> checkIfUserAlreadyExist(email) async {
+  Future<DocumentSnapshot> checkIfUserAlreadyExist(email) async {
     QuerySnapshot data = await databaseReferences.DatabaseReferences()
         .users
         .where('email', isEqualTo: email)
         .getDocuments();
-    return data.documents.length == 1;
+    if (data.documents.length == 1)
+      return data.documents[0];
+    else
+      return null;
   }
 }
