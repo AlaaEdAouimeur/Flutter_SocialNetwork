@@ -21,22 +21,14 @@ class RoutesState extends State<Routes> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((user) async {
-      if (user != null) {
-        QuerySnapshot a = await databaseReferences.DatabaseReferences()
-            .users
-            .where('email', isEqualTo: user.email)
-            .getDocuments();
-        if (a.documents.length >= 1) {
-          DocumentSnapshot d = a.documents[0];
-          if (d['username'] == null ||
-              d['birthday'] == null ||
-              d['location'] == null ||
-              d['bio'] == null) {
-            isNewUser = true;
-          } else {
-            isNewUser = false;
-          }
-        }else isNewUser = true;
+      if(user != null){
+        QuerySnapshot a =await databaseReferences.DatabaseReferences().users.where('email', isEqualTo:user.email).getDocuments();
+        DocumentSnapshot d = a.documents[0];
+        if(d['username'] == null || d['birthday'] == null || d['location'] == null || d['bio'] == null){
+          isNewUser = true;
+        }else{
+          isNewUser = false;
+        }
       }
       setCurrentUser(user);
     });
@@ -61,9 +53,8 @@ class RoutesState extends State<Routes> {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : currentUser == null
-                  ? TutorialPage()
-                  : isNewUser ? TutorialPage() : HomePage();
+              : currentUser == null ? TutorialPage()
+              : isNewUser ? TutorialPage() : HomePage();
         });
   }
 }
