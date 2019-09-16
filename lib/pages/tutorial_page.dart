@@ -63,14 +63,7 @@ class TutorialPageState extends State<TutorialPage> {
               tutorialPageHelperClass.tutorialPageText(4900,  "FOLLOW WRITERS"),
               tutorialPageHelperClass.tutorialPageDivider(6100),
               tutorialPageHelperClass.tutorialPageLoginButton(6200, context),
-              RaisedButton(
-                child: Text('Delete Myself'),
-                onPressed: ()async{
-                  QuerySnapshot a = await Firestore.instance.collection('users').where('email', isEqualTo:'mdazharuddin1011999@gmail.com').getDocuments();
-                  await Firestore.instance.collection('users').document(a.documents[0].documentID).delete();
-                  print('Deleted Myself');
-                },
-              ),
+              
             ],
           )),
     );
