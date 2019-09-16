@@ -374,7 +374,15 @@ class UserProfileTabState extends State<UserProfileTab> {
                         ),
                       ],
                     ),
-                    onTap: () {})
+                    onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Userpostlist(
+                              type: 'Blogs',
+                              snapshot: snapshot,
+                            ),
+                          ),
+                        ))
               ],
             ),
           ),
@@ -431,7 +439,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Userpostlist(
-                              title: 'Posts',
+                              type: 'Posts',
                               snapshot: snapshot,
                             ),
                           ),
