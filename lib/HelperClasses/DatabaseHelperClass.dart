@@ -5,8 +5,10 @@ import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseHelperClass {
-  Future<DocumentSnapshot> saveUserDataToDatabase(FirebaseUser user, BuildContext context) {
+  Future<void> saveUserDataToDatabase(
+      FirebaseUser user, BuildContext context) {
     return checkIfUserAlreadyExist(user.email).then((val) async {
+      print('VAL IS NULL: ${val == null}');
       if (val == null || val['username'] == null) {
         bool shouldProceed = true;
         Map<String, dynamic> userUpdate =
@@ -43,9 +45,8 @@ class DatabaseHelperClass {
               .then(
                 (_) => print("User data stored to firestore"),
               );
-        }
+        }else throw NewUserEntryException('FAILURE: Failed to store user details in firestore. Insufficient data.');
       }
-      return val;
     });
   }
 
@@ -59,4 +60,9 @@ class DatabaseHelperClass {
     else
       return null;
   }
+}
+
+class NewUserEntryException implements Exception{
+  String cause;
+  NewUserEntryException(this.cause);
 }

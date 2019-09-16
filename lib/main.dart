@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'OpenSans', 
           ),
           home: Scaffold(
+            backgroundColor: Colors.black,
             resizeToAvoidBottomPadding: false,
             body: Routes(),
           ),
