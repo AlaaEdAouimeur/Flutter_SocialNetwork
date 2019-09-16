@@ -14,6 +14,7 @@ class DatabaseHelperClass {
       "followers": 0,
       "followings": 0,
       "posts": 0,
+      "blogs": 0,
       "location": null,
       "username": null,
     };

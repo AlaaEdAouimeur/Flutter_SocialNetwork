@@ -155,19 +155,37 @@ class WriteTabState extends State<WriteTab> {
     );
   }
 
-  updateUser() {
-    databaseReferences.DatabaseReferences()
-        .users
-        .where('uid', isEqualTo: currentUser.uid)
-        .getDocuments()
-        .then((query) => {
-              print(query.documents.first.documentID),
-              databaseReferences.DatabaseReferences()
-                  .users
-                  .document(query.documents.first.documentID)
-                  .updateData({"posts": FieldValue.increment(1)}).then(
-                      (data) => print("User value updated")),
-            });
+  updateUser(String category) {
+    switch (category) {
+      case "Blog":
+        databaseReferences.DatabaseReferences()
+            .users
+            .where('uid', isEqualTo: currentUser.uid)
+            .getDocuments()
+            .then((query) => {
+                  print(query.documents.first.documentID),
+                  databaseReferences.DatabaseReferences()
+                      .users
+                      .document(query.documents.first.documentID)
+                      .updateData({"blogs": FieldValue.increment(1)}).then(
+                          (data) => print("User value updated")),
+                });
+        break;
+      default:
+        databaseReferences.DatabaseReferences()
+            .users
+            .where('uid', isEqualTo: currentUser.uid)
+            .getDocuments()
+            .then((query) => {
+                  print(query.documents.first.documentID),
+                  databaseReferences.DatabaseReferences()
+                      .users
+                      .document(query.documents.first.documentID)
+                      .updateData({"posts": FieldValue.increment(1)}).then(
+                          (data) => print("User value updated")),
+                });
+        break;
+    }
   }
 
   getFollowersList() {
@@ -192,14 +210,25 @@ class WriteTabState extends State<WriteTab> {
       "tpqSelected": false,
       "visibleTo": visibleTo,
     };
-    switch (dropdownValue) {
-      case 'Blog':
-        databaseReferences.DatabaseReferences().blogs.document().setData(value);
-        break;
-      default:
-        databaseReferences.DatabaseReferences().posts.document().setData(value);
-        break;
-    }
+    databaseReferences.DatabaseReferences().posts.document().setData(value);
+  }
+
+  insertBlog() async {
+    QuerySnapshot query;
+    query = await getFollowersList();
+    List<dynamic> visibleTo = query.documents.first.data["followers_uid"];
+    var value = {
+      "uid": currentUser.uid,
+      "title": topicController.text,
+      "name": currentUser.displayName,
+      "content": writeupController.text,
+      "createdAt": DateTime.now(),
+      "upvotes": 0,
+      "upvotedUsers": [],
+      "tpqSelected": false,
+      "visibleTo": visibleTo,
+    };
+    databaseReferences.DatabaseReferences().blogs.document().setData(value);
   }
 
   void insertData() async {
@@ -214,8 +243,16 @@ class WriteTabState extends State<WriteTab> {
             ),
           );
         });
-    await insertPost();
-    await updateUser();
+    switch (dropdownValue) {
+      case 'Blog':
+        await insertBlog();
+        await updateUser("Blog");
+        break;
+      default:
+        await insertPost();
+        await updateUser("Post");
+        break;
+    }
     Navigator.pop(context);
     Navigator.pop(context);
   }
