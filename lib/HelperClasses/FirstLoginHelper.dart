@@ -63,7 +63,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
       firstDate: DateTime(1950),
       lastDate: DateTime.now(),
     );
-    print(picked);
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
