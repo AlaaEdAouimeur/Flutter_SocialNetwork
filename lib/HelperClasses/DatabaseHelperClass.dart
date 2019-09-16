@@ -5,6 +5,7 @@ import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseHelperClass {
+<<<<<<< HEAD
   Future<DocumentSnapshot> saveUserDataToDatabase(FirebaseUser user) {
     var value = {
       "name": user.displayName.toLowerCase(),
@@ -23,16 +24,48 @@ class DatabaseHelperClass {
       "location": null,
       "bio": null,
     };
+=======
+  Future<DocumentSnapshot> saveUserDataToDatabase(
+      FirebaseUser user, BuildContext context) {
+>>>>>>> Modified to handle data input by user
     return checkIfUserAlreadyExist(user.email).then((val) async {
-      if (val == null) {
-        print("INITIALIZED USER DETAILS");
-        await databaseReferences.DatabaseReferences()
-            .users
-            .document()
-            .setData(value)
-            .then(
-              (_) => print("User data stored to firestore"),
-            );
+      if (val == null || val['username'] == null) {
+        bool shouldProceed = true;
+        Map<String, dynamic> userUpdate =
+            await FirstLoginHelper.showPopup(context);
+        print('USER DETAILS: ${userUpdate.toString()}');
+        if (userUpdate != null) {
+          userUpdate.forEach((key, value) {
+            if (value == null) shouldProceed = false;
+          });
+        } else
+          shouldProceed = false;
+        print('SHOULD PROCEED: $shouldProceed');
+        if (shouldProceed) {
+          var value = {
+            "name": user.displayName.toLowerCase(),
+            "email": user.email.toLowerCase(),
+            "isEmailVerified": user.isEmailVerified.toString(),
+            "profilePictureUrl": user.photoUrl.toString(),
+            "uid": user.uid,
+            "createdAt": DateTime.now(),
+            "followers": 0,
+            "followings": 0,
+            "posts": 0,
+            "username": userUpdate['username'],
+            "birthday": userUpdate['birthday'],
+            "location": userUpdate['location'],
+            "bio": userUpdate['bio'],
+          };
+          print("INITIALIZED USER DETAILS");
+          await databaseReferences.DatabaseReferences()
+              .users
+              .document()
+              .setData(value)
+              .then(
+                (_) => print("User data stored to firestore"),
+              );
+        }
       }
       return val;
     });
