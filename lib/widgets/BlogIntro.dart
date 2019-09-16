@@ -27,7 +27,7 @@ class _BlogIntroState extends State<BlogIntro> {
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
-                widget.snapshot.data['title'],
+                widget.snapshot.data['title'] == null ? "" : widget.snapshot.data['title'],
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Colors.teal,
@@ -45,7 +45,7 @@ class _BlogIntroState extends State<BlogIntro> {
               ),
             ),
             Text(
-              widget.snapshot.data['user_display_name'],
+              widget.snapshot.data['name'] == null ? "" : widget.snapshot.data['name'],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14.0,

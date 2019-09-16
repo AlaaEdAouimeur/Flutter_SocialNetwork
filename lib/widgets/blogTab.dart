@@ -31,11 +31,9 @@ class _BlogTabState extends State<BlogTab> {
   }
 
   Stream<QuerySnapshot> buildQuery() {
-    print("Test: Inside Build Query");
     Stream<QuerySnapshot> query;
     switch (category) {
       case "TPQ Selected":
-        print("Test: TPQ Selected");
         setState(() {
           query = databaseReference.DatabaseReferences()
               .blogs
@@ -61,7 +59,6 @@ class _BlogTabState extends State<BlogTab> {
         setState(() {
           query = databaseReference.DatabaseReferences()
               .blogs
-              .orderBy('uploaded_at', descending: true)
               .snapshots();
         });
         break;
@@ -135,7 +132,7 @@ class _BlogTabState extends State<BlogTab> {
                 return Center(
                   child: Container(
                     child: Text(
-                      "That's all for today.",
+                      "No blogs to show",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
