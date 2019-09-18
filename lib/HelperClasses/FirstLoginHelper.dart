@@ -104,17 +104,18 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
         ),
         Container(
-          alignment: Alignment.topRight,
           child: FlatButton(
             textColor: Colors.green,
             child: Text(
               'Continue',
               style: buttonStyle,
+              textAlign: TextAlign.center,
             ),
             onPressed: () {
               setState(() {
@@ -140,16 +141,17 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           child: Text(
             'Username',
             style: titleStyle,
+            textAlign: TextAlign.center,
           ),
         ),
         Expanded(
           flex: 1,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Enter your name:',
+                'Choose your username',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -170,8 +172,9 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                       return null;
                   },
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.supervised_user_circle),
                     labelText: 'Username',
-                    hintText: 'Your Name',
+                    hintText: 'Your username',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -182,7 +185,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           ),
         ),
         Container(
-          alignment: Alignment.topRight,
           child: FlatButton(
             child: Text(
               'Next',
@@ -220,11 +222,11 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         Expanded(
           flex: 1,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Enter your Date of Birth:',
+                'Date of Birth',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -251,7 +253,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           ),
         ),
         Container(
-          alignment: Alignment.topRight,
           child: FlatButton(
             child: Text(
               'Next',
@@ -290,11 +291,11 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         Expanded(
           flex: 1,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Enter your Address:',
+                'City',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -308,7 +309,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                   keyboardType: TextInputType.text,
                   validator: (String s) {
                     if (s.isEmpty)
-                      return 'Please enter your location';
+                      return 'Please enter your city';
                     else if (s.trim().length < 5)
                       return 'Location too short';
                     else
@@ -326,7 +327,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           ),
         ),
         Container(
-          alignment: Alignment.topRight,
           child: FlatButton(
             child: Text(
               'Next',
@@ -364,11 +364,11 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         Expanded(
           flex: 1,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Write something about you:',
+                'Write something about you',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -400,7 +400,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           ),
         ),
         Container(
-          alignment: Alignment.topRight,
           child: FlatButton(
             child: Text(
               'Done',
