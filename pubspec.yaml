@@ -66,6 +66,7 @@ flutter:
     - assets/images/ig.png
     - assets/images/fb.png
     - assets/images/tw.png
+    - assets/images/popper.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

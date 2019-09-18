@@ -50,13 +50,17 @@ class GoogleLoginButton extends StatelessWidget {
             });
         loginFunctions.LoginFunctions()
             .googleLogin()
-            .then((user) => {
-                  databaseHelperClass.saveUserDataToDatabase(user),
-                })
+            .then((user) async {
+              await databaseHelperClass.saveUserDataToDatabase(user, context);
+            })
             .then((_) => {
-                  Navigator.pop(context),
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage())),
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                    (Route<dynamic> route) => false,
+                  ),
                 })
             .catchError((e) => {
                   Navigator.pop(context),
