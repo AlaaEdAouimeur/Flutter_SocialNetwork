@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../animations/slideAnimation.dart';
 import '../HelperClasses/TutorialPageHelperClass.dart';
