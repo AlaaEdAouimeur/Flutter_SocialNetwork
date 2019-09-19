@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1085137849184-lq868p389dgd4u5gdq212b8vniakknm2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1085137849184-lq868p389dgd4u5gdq212b8vniakknm2</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1085137849184-6hlsa5ejc7otnlrql0ro21c63fu9gfle.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAX5vMO-4POOzNd2-OiORZuB_tg8eBQhVM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1085137849184</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.theprojectquote.mobileapp</string>
+	<key>PROJECT_ID</key>
+	<string>tpq-sample</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tpq-sample.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1085137849184:ios:a9435b6d899ca0e9f8ac05</string>
+	<key>DATABASE_URL</key>
+	<string>https://tpq-sample.firebaseio.com</string>
+</dict>
+</plist>
