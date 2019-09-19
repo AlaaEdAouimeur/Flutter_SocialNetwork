@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:redux_example/database/databaseReferences.dart'
+    as databaseReference;
 import 'package:redux_example/pages/PopupModal.dart';
 
 // This is the main function which is used to show popup, take input and return map of input.
@@ -32,6 +35,8 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   var _locationKey = GlobalKey<FormState>();
   var _bioKey = GlobalKey<FormState>();
 
+  List<String> usernames = [];
+  bool showForm = false;
   DateTime selectedDate = (DateTime.now()).subtract(Duration(days: 365));
   final usernameController = TextEditingController();
   final locationController = TextEditingController();
@@ -53,6 +58,17 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   @override
   void initState() {
     _pageController = PageController(initialPage: 0);
+    databaseReference.DatabaseReferences()
+        .users
+        .getDocuments()
+        .then((QuerySnapshot users) {
+      users.documents.forEach((DocumentSnapshot user) {
+        if (user['username'] != null) usernames.add(user['username']);
+      });
+      setState(() {
+        showForm = true;
+      });
+    });
     super.initState();
   }
 
@@ -168,6 +184,8 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                       return 'Username cannot be empty';
                     else if (s.trim().length < 3)
                       return 'Username too short';
+                    else if (usernames.contains(s.trim()))
+                      return "Username already exists";
                     else
                       return null;
                   },
