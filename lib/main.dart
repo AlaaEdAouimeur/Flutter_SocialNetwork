@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
           ),
           home: Scaffold(
             backgroundColor: Colors.black,
-            resizeToAvoidBottomPadding: false,
             body: Routes(),
           ),
         ));
