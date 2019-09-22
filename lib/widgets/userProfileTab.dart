@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:redux_example/pages/EditProfile.dart';
 import 'package:redux_example/widgets/userPostList.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,7 +87,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                           userBio(snapshot),
                           socialIcons(),
                           flowWidget(snapshot),
-                          editProfileButton(),
+                          editProfileButton(snapshot),
                           logoutButton(),
                           themeSwitch(),
                         ],
@@ -261,7 +262,7 @@ class UserProfileTabState extends State<UserProfileTab> {
     );
   }
 
-  Container editProfileButton() {
+  Container editProfileButton(DocumentSnapshot snapshot) {
     return Container(
       width: 200,
       margin: EdgeInsets.only(
@@ -285,7 +286,13 @@ class UserProfileTabState extends State<UserProfileTab> {
           ),
         ),
         onPressed: () => {
-          //TODO Clicking on this button will open edit profile page
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EditProfile(
+                documentID: snapshot.documentID,
+              ),
+            ),
+          ),
         },
       ),
     );
