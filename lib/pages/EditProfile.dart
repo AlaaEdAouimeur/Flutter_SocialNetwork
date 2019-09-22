@@ -298,10 +298,14 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   DateTime dateFromString(String date) {
-    List<String> a = date.split('/');
-    if (a[0].length == 1) a[0] = '0${a[0]}';
-    if (a[1].length == 1) a[1] = '0${a[1]}';
-    return DateTime.parse('${a[2]}-${a[0]}-${a[1]} 00:00:00.000');
+    //TODO: User birthdate is set to null when user clicks on next without selecting b'day. It is giving error, so adding this condition. This should be removed later
+    if(date != null) {
+      List<String> a = date.split('/');
+      if (a[0].length == 1) a[0] = '0${a[0]}';
+      if (a[1].length == 1) a[1] = '0${a[1]}';
+      return DateTime.parse('${a[2]}-${a[0]}-${a[1]} 00:00:00.000');
+    }
+    return null;
   }
 
   void updateUserProfile() async {
