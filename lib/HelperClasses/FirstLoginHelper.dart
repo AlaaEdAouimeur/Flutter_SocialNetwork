@@ -10,8 +10,8 @@ class FirstLoginHelper {
   static Future<Map<String, dynamic>> showPopup(BuildContext context) {
     return Navigator.of(context).push(
       PopupModal(
-        top: 100,
-        bottom: 100,
+        top: 50,
+        bottom: 50,
         left: 50,
         right: 50,
         background: Color.fromRGBO(0, 0, 0, 0.3),
@@ -71,7 +71,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   }
 
   // Welcome Page
-  Widget _page0(){
+  Widget _page0() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -133,7 +133,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   }
 
   // Username Page
-  Widget _page1(){
+  Widget _page1() {
     return Column(
       children: <Widget>[
         Container(
@@ -209,7 +209,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   }
 
   // Date of birth page
-  Widget _page2(){
+  Widget _page2() {
     return Column(
       children: <Widget>[
         Container(
@@ -234,7 +234,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
               ),
               SizedBox(height: 30.0),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   _selectDate();
                 },
                 child: Container(
@@ -245,10 +245,18 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(color: Colors.blue),
                   ),
-                  child: Text(DateFormat.yMd().format(selectedDate), style: TextStyle(fontSize: 18.0),),
+                  child: Text(
+                    DateFormat.yMd().format(selectedDate),
+                    style: TextStyle(fontSize: 18.0),
+                  ),
                 ),
               ),
-              Text(dobError, style: TextStyle(color: Colors.red,),),
+              Text(
+                dobError,
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
             ],
           ),
         ),
@@ -267,8 +275,8 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                     duration: Duration(milliseconds: 200),
                     curve: Curves.easeIn,
                   );
-                }
-                else dobError = "Invalid date";
+                } else
+                  dobError = "Invalid date";
               });
             },
           ),
@@ -278,7 +286,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   }
 
   // Location Page
-  Widget _page3(){
+  Widget _page3() {
     return Column(
       children: <Widget>[
         Container(
@@ -351,7 +359,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   }
 
   // Bio Page
-  Widget _page4(){
+  Widget _page4() {
     return Column(
       children: <Widget>[
         Container(
@@ -423,30 +431,51 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         )
       ],
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
-      resizeToAvoidBottomPadding: false,
       body: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
         ),
-        padding: const EdgeInsets.all(16.0),
-        child: PageView(
-          controller: _pageController,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            _page0(),
-            _page1(),
-            _page2(),
-            _page3(),
-            _page4(),
-          ],
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            double maxHeight;
+            if (constraints.maxHeight < 300)
+              maxHeight = 300;
+            else
+              maxHeight = constraints.maxHeight;
+            return ScrollConfiguration(
+              behavior: NoGlowScroll(),
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: maxHeight,
+                    minHeight: 300.0,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: PageView(
+                      controller: _pageController,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: <Widget>[
+                        _page0(),
+                        _page1(),
+                        _page2(),
+                        _page3(),
+                        _page4(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -458,5 +487,13 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
     locationController.dispose();
     bioController.dispose();
     super.dispose();
+  }
+}
+
+class NoGlowScroll extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
