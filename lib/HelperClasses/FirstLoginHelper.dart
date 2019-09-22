@@ -32,6 +32,7 @@ class _FirstLoginForm extends StatefulWidget {
 
 class _FirstLoginFormState extends State<_FirstLoginForm> {
   var _userNameKey = GlobalKey<FormState>();
+  var _birthdayKey = GlobalKey<FormState>();
   var _locationKey = GlobalKey<FormState>();
   var _bioKey = GlobalKey<FormState>();
 
@@ -39,11 +40,11 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   bool showForm = false;
   DateTime selectedDate = (DateTime.now()).subtract(Duration(days: 365));
   final usernameController = TextEditingController();
+  final birthdayController = TextEditingController();
   final locationController = TextEditingController();
   final bioController = TextEditingController();
   String username, dob, location, bio;
   PageController _pageController;
-  String dobError = '';
 
   TextStyle buttonStyle = TextStyle(
     fontSize: 16,
@@ -57,6 +58,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
 
   @override
   void initState() {
+    birthdayController.text = DateFormat.yMd().format(selectedDate);
     _pageController = PageController(initialPage: 0);
     databaseReference.DatabaseReferences()
         .users
@@ -82,6 +84,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        birthdayController.text = DateFormat.yMd().format(selectedDate);
       });
     }
   }
@@ -255,24 +258,32 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 onTap: () {
                   _selectDate();
                 },
-                child: Container(
-                  padding: EdgeInsets.all(10.0),
-                  height: 60.0,
-                  alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    border: Border.all(color: Colors.blue),
+                child: AbsorbPointer(
+                  child: Form(
+                    key: _birthdayKey,
+                    child: TextFormField(
+                      readOnly: true,
+                      keyboardType: TextInputType.datetime,
+                      controller: birthdayController,
+                      validator: (val) {
+                        if (val.isEmpty)
+                          return "Enter your birthday";
+                        else if (DateTime.now()
+                                .difference(selectedDate)
+                                .inDays <
+                            365 * 13)
+                          return "You should be atleast 13 years old.";
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.calendar_today),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    DateFormat.yMd().format(selectedDate),
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                ),
-              ),
-              Text(
-                dobError,
-                style: TextStyle(
-                  color: Colors.red,
                 ),
               ),
             ],
@@ -286,15 +297,15 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
             ),
             onPressed: () {
               setState(() {
-                if (selectedDate != null) {
-                  dob = DateFormat.yMd().format(selectedDate);
+                dob = DateFormat.yMd().format(selectedDate);
+                birthdayController.text = dob;
+                if (_birthdayKey.currentState.validate()) {
                   _pageController.animateToPage(
                     3,
                     duration: Duration(milliseconds: 200),
                     curve: Curves.easeIn,
                   );
-                } else
-                  dobError = "Invalid date";
+                }
               });
             },
           ),
@@ -342,6 +353,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                       return null;
                   },
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.location_on),
                     labelText: 'Location',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -415,6 +427,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                       return null;
                   },
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.edit),
                     labelText: 'Bio',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
