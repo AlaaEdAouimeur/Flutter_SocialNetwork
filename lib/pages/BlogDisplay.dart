@@ -23,7 +23,6 @@ class _BlogDisplayState extends State<BlogDisplay> {
   @override
   void initState() {
     super.initState();
-    print(widget.snapshot.data.toString());
     FirebaseAuth.instance.currentUser().then((user) {
       if (widget.snapshot.data['upvotedUsers'] != null) {
         List userIds = widget.snapshot.data['upvotedUsers'];
