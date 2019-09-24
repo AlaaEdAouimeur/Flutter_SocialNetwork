@@ -21,13 +21,15 @@ class _BlogIntroState extends State<BlogIntro> {
       delay: 0,
       child: GestureDetector(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
-                widget.snapshot.data['title'] == null ? "" : widget.snapshot.data['title'],
+                widget.snapshot.data['title'] == null
+                    ? ""
+                    : widget.snapshot.data['title'],
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Colors.teal,
@@ -45,7 +47,9 @@ class _BlogIntroState extends State<BlogIntro> {
               ),
             ),
             Text(
-              widget.snapshot.data['name'] == null ? "" : widget.snapshot.data['name'],
+              widget.snapshot.data['name'] == null
+                  ? ""
+                  : widget.snapshot.data['name'],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14.0,
@@ -57,7 +61,9 @@ class _BlogIntroState extends State<BlogIntro> {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => BlogDisplay(snapshot: widget.snapshot,),
+              builder: (context) => BlogDisplay(
+                snapshot: widget.snapshot,
+              ),
             ),
           );
         },
@@ -70,6 +76,8 @@ class _BlogIntroState extends State<BlogIntro> {
     for (i = 0; i < content.length && wordCount < 50; i++) {
       if (content[i].contains(' ')) wordCount++;
     }
-    return content.substring(0, i) + ' ...';
+    String excerpt = content.substring(0, i);
+    if (wordCount >= 50) excerpt += ' ...';
+    return excerpt;
   }
 }

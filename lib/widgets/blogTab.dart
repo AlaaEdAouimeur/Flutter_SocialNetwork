@@ -146,6 +146,8 @@ class _BlogTabState extends State<BlogTab> {
                   itemCount: snapshots.data.documents.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.all(25.0),
