@@ -387,7 +387,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                     ],
                   ),
                   onTap: () {
-                    //TODO: Opens a list of all followers
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Following(
+                          userslist: snapshot["followers_uid"],
+                        ),
+                      ),
+                    );
                   },
                 ),
                 GestureDetector(
