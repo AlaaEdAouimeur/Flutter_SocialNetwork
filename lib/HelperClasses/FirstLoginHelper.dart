@@ -48,7 +48,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
     fontWeight: FontWeight.bold,
   );
   TextStyle titleStyle = TextStyle(
-    fontSize: 25.0,
+    fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
 
@@ -95,8 +95,8 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Image.asset(
-          'assets/images/popper.png',
-          height: 150,
+          'assets/images/logo.png',
+          height: 80,
         ),
         SizedBox(
           height: 20.0,
@@ -123,12 +123,12 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
             ),
           ],
         ),
-        SizedBox(height: 20.0),
+        SizedBox(height: 10.0),
         Container(
           child: FlatButton(
             textColor: Colors.green,
             child: Text(
-              'Continue',
+              'CONTINUE',
               style: buttonStyle,
               textAlign: TextAlign.center,
             ),
@@ -152,61 +152,51 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          child: Text(
-            'Username',
-            style: titleStyle,
-            textAlign: TextAlign.center,
-          ),
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(
-              'Choose your username',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
+            SizedBox(
+              height: 20.0,
             ),
-            SizedBox(height: 20.0),
             Form(
               key: _userNameKey,
               child: TextFormField(
                 controller: usernameController,
                 keyboardType: TextInputType.text,
                 validator: (String s) {
-                  if (s.isEmpty)
+                  if (s.isEmpty) {
                     return 'Username cannot be empty';
-                  else if (s.trim().length < 3)
+                  } else if (s.trim().length < 3) {
                     return 'Username too short';
-                  else if (usernames.contains(s.trim()))
+                  } else if (usernames.contains(s.trim())) {
                     return "Username already exists";
-                  else
+                  } else {
                     return null;
+                  }
                 },
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.supervised_user_circle),
-                  labelText: 'Username',
-                  hintText: 'Your username',
+                  labelText: 'choose an username',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
+                onChanged: (value) {
+                  _userNameKey.currentState.validate();
+                },
               ),
             ),
           ],
         ),
         SizedBox(
-          height: 20.0,
+          height: 10.0,
         ),
         Container(
           child: FlatButton(
             child: Text(
-              'Next',
+              'NEXT',
               style: buttonStyle,
             ),
             onPressed: () {
@@ -232,25 +222,18 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          child: Text(
-            'Birthday',
-            style: titleStyle,
-          ),
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Date of Birth',
+              'Date Of Birth',
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 30.0),
+            SizedBox(height: 20.0),
             GestureDetector(
               onTap: () {
                 _selectDate();
@@ -277,6 +260,9 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
+                    onChanged: (val) {
+                      _birthdayKey.currentState.validate();
+                    },
                   ),
                 ),
               ),
@@ -284,12 +270,12 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           ],
         ),
         SizedBox(
-          height: 20.0,
+          height: 10.0,
         ),
         Container(
           child: FlatButton(
             child: Text(
-              'Next',
+              'NEXT',
               style: buttonStyle,
             ),
             onPressed: () {
@@ -316,25 +302,20 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          child: Text(
-            'Location',
-            style: titleStyle,
-          ),
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'City',
+              'Location',
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20.0),
+            SizedBox(
+              height: 20.0,
+            ),
             Form(
               key: _locationKey,
               child: TextFormField(
@@ -355,17 +336,20 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
+                onChanged: (val) {
+                  _locationKey.currentState.validate();
+                },
               ),
             ),
           ],
         ),
         SizedBox(
-          height: 20.0,
+          height: 10.0,
         ),
         Container(
           child: FlatButton(
             child: Text(
-              'Next',
+              'NEXT',
               style: buttonStyle,
             ),
             onPressed: () {
@@ -391,19 +375,12 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          child: Text(
-            'Bio',
-            style: titleStyle,
-          ),
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Write something about you',
+              'Tell other people something about you',
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -417,24 +394,27 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 keyboardType: TextInputType.text,
                 validator: (String s) {
                   if (s.isEmpty)
-                    return 'Please enter your short bio';
+                    return 'People want to know about you, tell them!';
                   else if (s.trim().length < 5)
-                    return 'Bio is too short';
+                    return "Don't be shy! Tell us someting more.";
                   else
                     return null;
                 },
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.edit),
-                  labelText: 'Bio',
+                  labelText: 'Your Bio',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
+                onChanged: (val) {
+                  _bioKey.currentState.validate();
+                },
               ),
             ),
           ],
         ),
-        SizedBox(height: 20.0),
+        SizedBox(height: 10.0),
         Container(
           child: FlatButton(
             child: Text(
@@ -465,7 +445,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black,
       body: Align(
         alignment: Alignment.center,
         child: Container(
@@ -478,10 +458,10 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 alignment: Alignment.center,
                 child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: _page0(),
                 ),
@@ -490,10 +470,10 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 alignment: Alignment.center,
                 child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: _page1(),
                 ),
@@ -502,10 +482,10 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 alignment: Alignment.center,
                 child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: _page2(),
                 ),
@@ -514,10 +494,10 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 alignment: Alignment.center,
                 child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: _page3(),
                 ),
@@ -526,10 +506,10 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                 alignment: Alignment.center,
                 child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: _page4(),
                 ),
