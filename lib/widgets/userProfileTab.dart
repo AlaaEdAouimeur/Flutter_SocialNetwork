@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:redux_example/widgets/followinglist.dart';
 import 'package:redux_example/pages/EditProfile.dart';
 import 'package:redux_example/routes/namedRoutes.dart';
 import 'package:redux_example/widgets/followinglist.dart';
