@@ -7,9 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class DatabaseHelperClass {
   Future<void> saveUserDataToDatabase(FirebaseUser user, BuildContext context) {
     return checkIfUserAlreadyExist(user.email).then((val) async {
-      if (val == null || val['username'] == null) {
+      if (val == null) {
         bool shouldProceed = true;
-        Map<String, dynamic> userUpdate = await FirstLoginHelper.showPopup(context);
+        Map<String, dynamic> userUpdate =
+            await FirstLoginHelper.showPopup(context);
         if (userUpdate != null) {
           userUpdate.forEach((key, value) {
             if (value == null) shouldProceed = false;
