@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:redux_example/HelperClasses/themes.dart';
+import 'package:redux_example/models/CustomTheme.dart';
 import 'package:redux_example/store.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_example/routes/namedRoutes.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+  CustomTheme(
+      initialThemeKey: ThemeKeys.White,
+      child: MyApp(),
+    ),
+);
 
 class MyApp extends StatelessWidget {
   final String title = "The Project Quote";
@@ -13,9 +20,8 @@ class MyApp extends StatelessWidget {
         store: store,
         child: new MaterialApp(
           title: title,
-          theme: ThemeData(
-            fontFamily: 'OpenSans', 
-          ),
+          theme: CustomTheme.of(context),
+      
           home: Scaffold(
             backgroundColor: Colors.black,
             body: Routes(),
