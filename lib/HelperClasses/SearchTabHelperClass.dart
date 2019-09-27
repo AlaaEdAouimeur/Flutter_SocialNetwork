@@ -162,12 +162,12 @@ class SearchTabHelperClass {
   }
 
   followUser(String documentID, snapshot) async {
-    print("Follow");
     databaseReference.DatabaseReferences()
         .users
         .document(documentID)
         .updateData({
-      "followers_uid": FieldValue.arrayUnion([currentUser.uid])
+      "followers_uid": FieldValue.arrayUnion([currentUser.uid]),
+      "followers": FieldValue.increment(1),
     });
     databaseReference.DatabaseReferences()
         .users
@@ -179,6 +179,7 @@ class SearchTabHelperClass {
                   .document(query.documents[0].documentID)
                   .updateData({
                 "followings_uid": FieldValue.arrayUnion([snapshot["uid"]]),
+                "followings": FieldValue.increment(1),
               }),
             });
     databaseReference.DatabaseReferences()
@@ -218,7 +219,8 @@ class SearchTabHelperClass {
         .users
         .document(documentID)
         .updateData({
-      "followers_uid": FieldValue.arrayRemove([currentUser.uid])
+      "followers_uid": FieldValue.arrayRemove([currentUser.uid]),
+      "followers": FieldValue.increment(-1),
     });
     databaseReference.DatabaseReferences()
         .users
@@ -229,7 +231,8 @@ class SearchTabHelperClass {
                   .users
                   .document(query.documents[0].documentID)
                   .updateData({
-                "followings_uid": FieldValue.arrayRemove([snapshot["uid"]])
+                "followings_uid": FieldValue.arrayRemove([snapshot["uid"]]),
+                "followings": FieldValue.increment(-1),
               }),
             });
     databaseReference.DatabaseReferences()
@@ -240,6 +243,4 @@ class SearchTabHelperClass {
               removeVisibleToId(posts),
             });
   }
-
-  
 }
