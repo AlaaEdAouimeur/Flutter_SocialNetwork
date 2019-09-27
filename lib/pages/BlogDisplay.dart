@@ -24,8 +24,8 @@ class _BlogDisplayState extends State<BlogDisplay> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((user) {
-      if (widget.snapshot.data['upvoted_users'] != null) {
-        List userIds = widget.snapshot.data['upvoted_users'];
+      if (widget.snapshot.data['upvotedUsers'] != null) {
+        List userIds = widget.snapshot.data['upvotedUsers'];
         if (userIds.contains(user.uid))
           hasUpvotedBlog = true;
         else
@@ -81,7 +81,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
                             height: 20.0,
                           ),
                           Text(
-                            "by " + snapshot.data['user_display_name'],
+                            "by " + snapshot.data['name'],
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
@@ -118,9 +118,9 @@ class _BlogDisplayState extends State<BlogDisplay> {
                                 width: 10.0,
                               ),
                               Text(
-                                snapshot.data['upvoted_users'] == null
+                                snapshot.data['upvotedUsers'] == null
                                     ? '0'
-                                    : snapshot.data['upvoted_users'].length
+                                    : snapshot.data['upvotedUsers'].length
                                         .toString(),
                                 style: TextStyle(
                                     color: Colors.white,
@@ -168,8 +168,8 @@ class _BlogDisplayState extends State<BlogDisplay> {
         future: getUpvotedUserList(documentID),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data['upvoted_users'] != null) {
-              List userIds = snapshot.data['upvoted_users'];
+            if (snapshot.data['upvotedUsers'] != null) {
+              List userIds = snapshot.data['upvotedUsers'];
               if (userIds.contains(currentUser.uid))
                 upIcon = EvaIcons.arrowCircleUp;
               else
@@ -194,7 +194,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
     if (hasUpvotedBlog) {
       hasUpvotedBlog = false;
       blogRef.updateData({
-        "upvoted_users": FieldValue.arrayRemove([currentUser.uid]),
+        "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
       }).then((value) {
         print('Downvoted Successfully.');
         return true;
@@ -205,7 +205,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
     } else {
       hasUpvotedBlog = true;
       blogRef.updateData({
-        "upvoted_users": FieldValue.arrayUnion([currentUser.uid]),
+        "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
       }).then((value) {
         print('Upvoted Successfully.');
         return true;
