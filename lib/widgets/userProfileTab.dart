@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:redux_example/pages/EditProfile.dart';
+import 'package:redux_example/routes/namedRoutes.dart';
 import 'package:redux_example/widgets/userPostList.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -225,7 +226,13 @@ class UserProfileTabState extends State<UserProfileTab> {
                       ),
                     ),
                     onTap: () {
-                      //TODO: Open edit profile page
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditProfile(
+                            documentID: snapshot.documentID,
+                          ),
+                        ),
+                      );
                     },
                   ),
           ),
@@ -257,6 +264,15 @@ class UserProfileTabState extends State<UserProfileTab> {
                     color: Color.fromRGBO(0, 0, 0, 0.8),
                   ),
                 ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditProfile(
+                        documentID: snapshot.documentID,
+                      ),
+                    ),
+                  );
+                },
               ),
       ),
     );
@@ -319,7 +335,17 @@ class UserProfileTabState extends State<UserProfileTab> {
             fontSize: 18,
           ),
         ),
-        onPressed: () => loginFunctions.LoginFunctions().logout(),
+        onPressed: () {
+          loginFunctions.LoginFunctions().logout().then((_) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Routes(),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          });
+        },
       ),
     );
   }
