@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:redux_example/widgets/followinglist.dart';
 import 'package:redux_example/pages/EditProfile.dart';
 import 'package:redux_example/routes/namedRoutes.dart';
 import 'package:redux_example/widgets/followinglist.dart';
@@ -387,7 +388,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                     ],
                   ),
                   onTap: () {
-                    //TODO: Opens a list of all followers
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Following(
+                          userslist: snapshot["followers_uid"],
+                        ),
+                      ),
+                    );
                   },
                 ),
                 GestureDetector(
