@@ -9,19 +9,25 @@ class Themes {
     buttonColor: Colors.orange,
     textTheme: TextTheme(
       headline:TextStyle(color: Colors.black),
-      subhead: TextStyle(color: Colors.black12),
+      subhead: TextStyle(  fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: Color.fromRGBO(0, 0, 0, 0.8),),
       subtitle: TextStyle(color: Colors.black26),
-      )
+      ),
+      accentColor: Colors.black87
   );
 
   static final ThemeData blacktheme = ThemeData(
+    accentColor: Colors.white70,
      fontFamily: 'OpenSans',
     backgroundColor: Colors.black,
     brightness: Brightness.dark,
     buttonColor: Colors.purple,
     textTheme: TextTheme(
       headline:TextStyle(color: Colors.white),
-      subhead: TextStyle(color: Colors.white10),
+      subhead: TextStyle(  fontSize: 18,
+      fontWeight: FontWeight.bold
+      ,color: Colors.white70),
       subtitle: TextStyle(color: Colors.white24),
       )
   );

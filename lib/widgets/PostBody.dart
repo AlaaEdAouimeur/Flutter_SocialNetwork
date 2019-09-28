@@ -56,7 +56,7 @@ class PostBodyState extends State<PostBody> {
                 child: Text(
                   widget.snapshot.data['writeup'],
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).accentColor,
                       letterSpacing: 0.2,
                       height: 1.1,
                       fontSize: 20),
@@ -104,7 +104,7 @@ class PostBodyState extends State<PostBody> {
                             .format(widget.snapshot.data['createdAt'].toDate())
                             .toString(),
                         style: TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, 0.5),
+                          color:Theme.of(context).accentColor,
                           letterSpacing: 0.5,
                           fontSize: 12.0,
                           height: 1.0,

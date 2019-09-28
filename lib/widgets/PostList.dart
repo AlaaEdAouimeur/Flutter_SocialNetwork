@@ -49,7 +49,7 @@ class PostListState extends State<PostList> {
                   child: Container(
                     width: MediaQuery.of(context).size.width / 2,
                     child:index + 1 >=widget.snapshot.data.documents.length? null :  Divider(
-                      color: Color.fromRGBO(255, 255, 255, 0.3),
+                      color: Theme.of(context).buttonColor,
                     ),
                   ),
                 ),

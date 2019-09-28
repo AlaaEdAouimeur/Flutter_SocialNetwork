@@ -31,12 +31,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       bottomNavigationBar: bottomNavigator(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.border_color),
-        backgroundColor: Colors.orange,
+        child: Icon(Icons.border_color,color: Colors.white),
+        backgroundColor: Theme.of(context).buttonColor,
         
         onPressed: () => Navigator.push(
           context,
@@ -60,9 +60,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   Widget bottomNavigator() {
     return BottomNavigationBar(
-      selectedItemColor: Colors.white,
-      backgroundColor: Colors.black,
-      unselectedItemColor: Colors.white30,
+      selectedItemColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).backgroundColor,
+      unselectedItemColor: Theme.of(context).accentColor,
       iconSize: 15,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(

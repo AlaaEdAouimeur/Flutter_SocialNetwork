@@ -82,11 +82,13 @@ class _BlogTabState extends State<BlogTab> {
           height: MediaQuery.of(context).size.height,
           child: currentUser == null
               ? Container(
+                color: Theme.of(context).backgroundColor,
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
               : Container(
+                color: Theme.of(context).backgroundColor,
                   child: Column(
                     children: <Widget>[
                       CategoryDropdown(
@@ -131,10 +133,11 @@ class _BlogTabState extends State<BlogTab> {
               if (snapshots.data.documents.length == 0) {
                 return Center(
                   child: Container(
+                    color: Theme.of(context).backgroundColor,
                     child: Text(
                       "No blogs to show",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).accentColor,
                         fontSize: 24,
                       ),
                       textAlign: TextAlign.center,
@@ -160,7 +163,7 @@ class _BlogTabState extends State<BlogTab> {
                             child: index + 1 >= snapshots.data.documents.length
                                 ? null
                                 : Divider(
-                                    color: Color.fromRGBO(255, 255, 255, 0.5),
+                                    color: Theme.of(context).buttonColor,
                                   ),
                           ),
                         ),

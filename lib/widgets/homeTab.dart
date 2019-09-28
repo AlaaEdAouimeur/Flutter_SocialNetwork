@@ -65,7 +65,7 @@ class _HomeTabState extends State<HomeTab> {
         Container(
           width: MediaQuery.of(context).size.width,
           child: Container(
-            color: Colors.black,
+            color: Theme.of(context).backgroundColor,
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -147,7 +147,7 @@ class _HomeTabState extends State<HomeTab> {
       return new Container(
         width: MediaQuery.of(context).size.width,
         child: Container(
-          color: Colors.black,
+          color: Theme.of(context).backgroundColor,
           child: Center(
             child: CircularProgressIndicator(),
           ),
@@ -164,7 +164,7 @@ class _HomeTabState extends State<HomeTab> {
                 return new Container(
                   width: MediaQuery.of(context).size.width,
                   child: Container(
-                    color: Colors.black,
+                    color:Theme.of(context).backgroundColor,
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -175,13 +175,13 @@ class _HomeTabState extends State<HomeTab> {
               default:
                 if(snapshot.data.documents.length == 0) {
                   return Container(
-                    color: Colors.black,
+                    color: Theme.of(context).backgroundColor,
                     child: Center(
                       child: Container(
                         child: Text(
                           "Nothing To Show\nChoose Another Category",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).accentColor,
                             fontSize: 24,
                           ),
                           textAlign: TextAlign.center,
@@ -194,7 +194,7 @@ class _HomeTabState extends State<HomeTab> {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          color: Color.fromRGBO(7, 8, 11, 1),
+                          color: Theme.of(context).backgroundColor,
                           child: PostList(snapshot),
                         ),
                       ),
