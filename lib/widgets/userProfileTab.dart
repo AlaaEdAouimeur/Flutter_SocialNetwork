@@ -5,7 +5,6 @@ import 'package:redux_example/HelperClasses/themes.dart';
 import 'package:redux_example/models/CustomTheme.dart';
 import 'package:redux_example/pages/EditProfile.dart';
 import 'package:redux_example/routes/namedRoutes.dart';
-import 'package:redux_example/widgets/followinglist.dart';
 import 'package:redux_example/widgets/userPostList.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,14 +21,12 @@ class UserProfileTab extends StatefulWidget {
 }
 
 class UserProfileTabState extends State<UserProfileTab> {
-
-  void _changetheme(){
-      
-        darkTheme==true
+  void _changetheme() {
+    darkTheme == true
         ? CustomTheme.instanceOf(context).changeTheme(ThemeKeys.White)
         : CustomTheme.instanceOf(context).changeTheme(ThemeKeys.Black);
-      
   }
+
   FirebaseUser currentUser;
   File userimg;
   bool darkTheme = true;
@@ -122,17 +119,14 @@ class UserProfileTabState extends State<UserProfileTab> {
         children: <Widget>[
           Text("Dark Theme"),
           Switch(
-
               value: darkTheme,
               activeColor: Colors.black,
               onChanged: (value) {
                 setState(() {
-           darkTheme = value;
-        _changetheme();
+                  darkTheme = value;
+                  _changetheme();
                 });
-              
               }),
-          
           Text("Light Theme"),
         ],
       ),
@@ -215,7 +209,6 @@ class UserProfileTabState extends State<UserProfileTab> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                
                 letterSpacing: 1,
               ),
             ),
@@ -358,7 +351,6 @@ class UserProfileTabState extends State<UserProfileTab> {
   }
 
   Container flowWidget(DocumentSnapshot snapshot) {
-    
     var iconsColor = Color.fromRGBO(0, 0, 0, 0.7);
     return Container(
       height: 100,
@@ -413,7 +405,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                         ),
                         Icon(
                           FontAwesomeIcons.solidStickyNote,
-                          color:  Theme.of(context).accentColor,
+                          color: Theme.of(context).accentColor,
                         ),
                       ],
                     ),
@@ -432,9 +424,7 @@ class UserProfileTabState extends State<UserProfileTab> {
           Container(
             height: 80,
             child: VerticalDivider(
-              width: 3.0,
-              color: Theme.of(context).accentColor
-            ),
+                width: 3.0, color: Theme.of(context).accentColor),
           ),
           Container(
             width: MediaQuery.of(context).size.width / 2.5,
@@ -447,7 +437,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                     children: <Widget>[
                       Icon(
                         FontAwesomeIcons.userNinja,
-                        color:  Theme.of(context).accentColor,
+                        color: Theme.of(context).accentColor,
                       ),
                       SizedBox(
                         width: 5,
@@ -474,7 +464,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                       children: <Widget>[
                         Icon(
                           FontAwesomeIcons.penNib,
-                          color:  Theme.of(context).accentColor,
+                          color: Theme.of(context).accentColor,
                         ),
                         SizedBox(
                           width: 5,
