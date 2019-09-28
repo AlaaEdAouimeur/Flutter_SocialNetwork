@@ -13,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:strings/strings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileTab extends StatefulWidget {
   UserProfileTab();
@@ -21,19 +22,32 @@ class UserProfileTab extends StatefulWidget {
 }
 
 class UserProfileTabState extends State<UserProfileTab> {
-  void _changetheme() {
-    darkTheme == true
-        ? CustomTheme.instanceOf(context).changeTheme(ThemeKeys.White)
-        : CustomTheme.instanceOf(context).changeTheme(ThemeKeys.Black);
-  }
-
   FirebaseUser currentUser;
   File userimg;
-  bool darkTheme = true;
+  bool darkTheme;
+
   @override
   void initState() {
     super.initState();
+    setThemeValue();
     getCurrentUser();
+  }
+
+  void _changetheme() {
+    darkTheme == true
+        ? CustomTheme.instanceOf(context).changeTheme(ThemeKeys.Black)
+        : CustomTheme.instanceOf(context).changeTheme(ThemeKeys.White);
+
+    SharedPreferences.getInstance().then((prefs) => {
+          prefs.setBool("darkTheme", darkTheme),
+        });
+  }
+
+  void setThemeValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      darkTheme = prefs.getBool("darkTheme");
+    });
   }
 
   void getCurrentUser() async {
@@ -117,17 +131,16 @@ class UserProfileTabState extends State<UserProfileTab> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("Dark Theme"),
+          Text("Light Theme"),
           Switch(
-              value: darkTheme,
-              activeColor: Colors.black,
+              value: darkTheme == null ? true : darkTheme,
               onChanged: (value) {
                 setState(() {
                   darkTheme = value;
                   _changetheme();
                 });
               }),
-          Text("Light Theme"),
+          Text("Dark Theme"),
         ],
       ),
     );
@@ -261,7 +274,6 @@ class UserProfileTabState extends State<UserProfileTab> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Color.fromRGBO(0, 0, 0, 0.8),
                   ),
                 ),
                 onTap: () {
@@ -351,7 +363,6 @@ class UserProfileTabState extends State<UserProfileTab> {
   }
 
   Container flowWidget(DocumentSnapshot snapshot) {
-    var iconsColor = Color.fromRGBO(0, 0, 0, 0.7);
     return Container(
       height: 100,
       margin: EdgeInsets.only(top: 20.0),
