@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:redux_example/pages/EditProfile.dart';
 import 'package:redux_example/routes/namedRoutes.dart';
+import 'package:redux_example/widgets/followinglist.dart';
 import 'package:redux_example/widgets/userPostList.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -449,7 +449,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                     ],
                   ),
                   onTap: () {
-                    //TODO: Opens a list of users followerd by current user
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Following(
+                          userslist: snapshot["followings_uid"],
+                        ),
+                      ),
+                    );
                   },
                 ),
                 GestureDetector(
