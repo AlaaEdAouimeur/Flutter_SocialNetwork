@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:redux_example/widgets/followinglist.dart';
+import 'package:redux_example/HelperClasses/themes.dart';
+import 'package:redux_example/models/CustomTheme.dart';
 import 'package:redux_example/pages/EditProfile.dart';
 import 'package:redux_example/routes/namedRoutes.dart';
 import 'package:redux_example/widgets/followinglist.dart';
@@ -20,6 +22,14 @@ class UserProfileTab extends StatefulWidget {
 }
 
 class UserProfileTabState extends State<UserProfileTab> {
+
+  void _changetheme(){
+      
+        darkTheme==true
+        ? CustomTheme.instanceOf(context).changeTheme(ThemeKeys.White)
+        : CustomTheme.instanceOf(context).changeTheme(ThemeKeys.Black);
+      
+  }
   FirebaseUser currentUser;
   File userimg;
   bool darkTheme = true;
@@ -80,6 +90,7 @@ class UserProfileTabState extends State<UserProfileTab> {
 
                 return SafeArea(
                   child: Scaffold(
+                    backgroundColor: Theme.of(context).backgroundColor,
                     body: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -109,17 +120,20 @@ class UserProfileTabState extends State<UserProfileTab> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("Light Theme"),
+          Text("Dark Theme"),
           Switch(
+
               value: darkTheme,
               activeColor: Colors.black,
               onChanged: (value) {
                 setState(() {
-                  darkTheme = !darkTheme;
+           darkTheme = value;
+        _changetheme();
                 });
-                print("Value: " + darkTheme.toString());
+              
               }),
-          Text("Dark Theme"),
+          
+          Text("Light Theme"),
         ],
       ),
     );
@@ -163,7 +177,6 @@ class UserProfileTabState extends State<UserProfileTab> {
   }
 
   Container userDetail(DocumentSnapshot snapshot) {
-    print('trying Hard ${snapshot["uid"]}');
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -180,7 +193,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                       : FileImage(userimg)),
               InkWell(
                 child: CircleAvatar(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Theme.of(context).buttonColor,
                   child: Icon(
                     Icons.edit,
                     color: Colors.white,
@@ -202,7 +215,7 @@ class UserProfileTabState extends State<UserProfileTab> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(0, 0, 0, 0.8),
+                
                 letterSpacing: 1,
               ),
             ),
@@ -212,11 +225,7 @@ class UserProfileTabState extends State<UserProfileTab> {
             child: snapshot["location"] != null
                 ? Text(
                     snapshot["location"],
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Color.fromRGBO(0, 0, 0, 0.6),
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5),
+                    style: Theme.of(context).textTheme.subhead,
                   )
                 : GestureDetector(
                     child: Text(
@@ -251,10 +260,7 @@ class UserProfileTabState extends State<UserProfileTab> {
             ? Text(
                 snapshot["bio"],
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(0, 0, 0, 0.8),
-                    fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.subhead,
               )
             : GestureDetector(
                 child: Text(
@@ -352,11 +358,7 @@ class UserProfileTabState extends State<UserProfileTab> {
   }
 
   Container flowWidget(DocumentSnapshot snapshot) {
-    var textStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-      color: Color.fromRGBO(0, 0, 0, 0.8),
-    );
+    
     var iconsColor = Color.fromRGBO(0, 0, 0, 0.7);
     return Container(
       height: 100,
@@ -376,14 +378,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                     children: <Widget>[
                       Text(
                         snapshot["followers"].toString() + " Followers",
-                        style: textStyle,
+                        style: Theme.of(context).textTheme.subhead,
                       ),
                       SizedBox(
                         width: 5,
                       ),
                       Icon(
                         FontAwesomeIcons.userTie,
-                        color: iconsColor,
+                        color: Theme.of(context).accentColor,
                       ),
                     ],
                   ),
@@ -404,14 +406,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                       children: <Widget>[
                         Text(
                           snapshot["blogs"].toString() + " Blogs",
-                          style: textStyle,
+                          style: Theme.of(context).textTheme.subhead,
                         ),
                         SizedBox(
                           width: 5,
                         ),
                         Icon(
                           FontAwesomeIcons.solidStickyNote,
-                          color: iconsColor,
+                          color:  Theme.of(context).accentColor,
                         ),
                       ],
                     ),
@@ -431,7 +433,7 @@ class UserProfileTabState extends State<UserProfileTab> {
             height: 80,
             child: VerticalDivider(
               width: 3.0,
-              color: Colors.black87,
+              color: Theme.of(context).accentColor
             ),
           ),
           Container(
@@ -445,14 +447,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                     children: <Widget>[
                       Icon(
                         FontAwesomeIcons.userNinja,
-                        color: iconsColor,
+                        color:  Theme.of(context).accentColor,
                       ),
                       SizedBox(
                         width: 5,
                       ),
                       Text(
                         snapshot["followings"].toString() + " Following",
-                        style: textStyle,
+                        style: Theme.of(context).textTheme.subhead,
                       ),
                     ],
                   ),
@@ -472,14 +474,14 @@ class UserProfileTabState extends State<UserProfileTab> {
                       children: <Widget>[
                         Icon(
                           FontAwesomeIcons.penNib,
-                          color: iconsColor,
+                          color:  Theme.of(context).accentColor,
                         ),
                         SizedBox(
                           width: 5,
                         ),
                         Text(
                           snapshot["posts"].toString() + " Posts",
-                          style: textStyle,
+                          style: Theme.of(context).textTheme.subhead,
                         ),
                       ],
                     ),

@@ -38,7 +38,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor:Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Container(
           child: StreamBuilder(
@@ -53,7 +53,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
                   return new Container(
                     width: MediaQuery.of(context).size.width,
                     child: Container(
-                      color: Colors.black,
+                      color: Theme.of(context).backgroundColor,
                       child: Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -72,7 +72,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
                             snapshot.data['title'],
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color:Theme.of(context).accentColor,
                               letterSpacing: 0.2,
                               fontSize: 25,
                             ),
@@ -84,7 +84,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
                             "by " + snapshot.data['name'],
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: Theme.of(context).accentColor,
                               letterSpacing: 0.2,
                               fontSize: 16,
                             ),
@@ -96,7 +96,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
                             snapshot.data['content'],
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).accentColor,
                               fontSize: 18,
                               height: 1.1,
                               letterSpacing: 0.3,
@@ -123,7 +123,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
                                     : snapshot.data['upvotedUsers'].length
                                         .toString(),
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Theme.of(context).accentColor,
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -160,7 +160,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
         upIcon = EvaIcons.arrowCircleUpOutline;
       return Icon(
         upIcon,
-        color: Colors.white,
+        color: Theme.of(context).accentColor,
         size: 24,
       );
     } else {

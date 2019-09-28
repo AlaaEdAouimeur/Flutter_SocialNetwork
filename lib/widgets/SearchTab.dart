@@ -26,7 +26,7 @@ class SearchTabState extends State<SearchTab> {
   Widget build(BuildContext context) {
     widthOfContainer = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.all(5),
@@ -39,7 +39,7 @@ class SearchTabState extends State<SearchTab> {
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color.fromRGBO(255, 255, 255, 0.3),
+                      color: Theme.of(context).accentColor,
                       style: BorderStyle.solid,
                       width: 1.0,
                     ),
@@ -53,12 +53,12 @@ class SearchTabState extends State<SearchTab> {
                       children: <Widget>[
                         Icon(
                           EvaIcons.search,
-                          color: Colors.white,
+                          color: Theme.of(context).accentColor
                         ),
                         Text(
                           "  Search",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).accentColor,
                             fontSize: 18.0,
                             fontWeight: FontWeight.w100,
                           ),
@@ -87,6 +87,7 @@ class SearchTabState extends State<SearchTab> {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return new Container(
+              color: Theme.of(context).backgroundColor,
               width: widthOfContainer,
               child: Center(
                 child: CircularProgressIndicator(),
@@ -120,7 +121,7 @@ class SearchTabState extends State<SearchTab> {
       padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Color.fromRGBO(255, 255, 255, 0.3),
+          color: Theme.of(context).accentColor,
         ),
         borderRadius: BorderRadius.circular(5.0),
       ),
@@ -130,7 +131,7 @@ class SearchTabState extends State<SearchTab> {
           Text(
             "TOP ${snapshot['category_name'].toString().toUpperCase()}",
             textAlign: TextAlign.start,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Theme.of(context).accentColor),
           ),
           SizedBox(
             height: 20.0,

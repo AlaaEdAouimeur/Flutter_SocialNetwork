@@ -42,7 +42,7 @@ class _BlogIntroState extends State<BlogIntro> {
             Text(
               getExcerpt(widget.snapshot.data['content']),
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).accentColor,
                 fontSize: 16.0,
               ),
             ),
@@ -51,7 +51,7 @@ class _BlogIntroState extends State<BlogIntro> {
                   ? ""
                   : widget.snapshot.data['name'],
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).accentColor,
                 fontSize: 14.0,
                 height: 2,
               ),
