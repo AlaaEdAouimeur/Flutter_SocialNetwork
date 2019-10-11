@@ -7,9 +7,6 @@ import 'package:redux_example/pages/PopupModal.dart';
 
 // This is the main function which is used to show popup, take input and return map of input.
 class FirstLoginHelper {
-  static const int NEW = 1;
-  static const int OLD_WITHOUT = 2;
-  static const int OLD_WITH = 3;
   static Future<Map<String, dynamic>> showPopup(BuildContext context) {
     return Navigator.of(context).push(
       PopupModal(
@@ -32,21 +29,25 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   var _locationKey = GlobalKey<FormState>();
   var _bioKey = GlobalKey<FormState>();
 
-  List<String> usernames = [];
-  bool showForm = false;
-  DateTime selectedDate = (DateTime.now()).subtract(Duration(days: 365));
   final usernameController = TextEditingController();
   final birthdayController = TextEditingController();
   final locationController = TextEditingController();
   final bioController = TextEditingController();
+
+  List<String> usernames = [];
+  bool showForm = false;
+  DateTime selectedDate = (DateTime.now()).subtract(Duration(days: 365));
   String username, dob, location, bio;
   PageController _pageController;
+  int _currentPage = 0;
+  int _numberOfForms = 4;
 
-  TextStyle buttonStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.green,
-    fontWeight: FontWeight.bold,
-  );
+  // TextStyle buttonStyle = TextStyle(
+  //   fontSize: 16,
+  //   color: Colors.green,
+  //   fontWeight: FontWeight.bold,
+  // );
+  
   TextStyle titleStyle = TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
@@ -56,7 +57,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   void initState() {
     birthdayController.text = DateFormat.yMd().format(selectedDate);
     _pageController = PageController(
-      initialPage: 0,
+      initialPage: _currentPage,
     );
     databaseReference.DatabaseReferences()
         .users
@@ -83,7 +84,40 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
       setState(() {
         selectedDate = picked;
         birthdayController.text = DateFormat.yMd().format(selectedDate);
+        _birthdayKey.currentState.validate();
       });
+    }
+  }
+
+  void _nextForm() {
+    if (_currentPage == _numberOfForms) {
+      Map<String, dynamic> userUpdate = {
+        'username': username,
+        'birthday': dob,
+        'location': location,
+        'bio': bio,
+      };
+      Navigator.pop(context, userUpdate);
+    } else {
+      _currentPage++;
+      _pageController.animateToPage(
+        _currentPage,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeIn,
+      );
+    }
+  }
+
+  void _previousForm() {
+    if (_currentPage == 0)
+      Navigator.of(context).pop();
+    else {
+      _currentPage--;
+      _pageController.animateToPage(
+        _currentPage,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeIn,
+      );
     }
   }
 
@@ -124,24 +158,32 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           ],
         ),
         SizedBox(height: 10.0),
-        Container(
-          child: FlatButton(
-            textColor: Colors.green,
-            child: Text(
-              'CONTINUE',
-              style: buttonStyle,
-              textAlign: TextAlign.center,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.clear,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                setState(() {
+                  _previousForm();
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                _pageController.animateToPage(
-                  1,
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.easeIn,
-                );
-              });
-            },
-          ),
+            IconButton(
+              icon: Icon(
+                Icons.arrow_forward_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  _nextForm();
+                });
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -157,6 +199,13 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Text(
+              'Username',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SizedBox(
               height: 20.0,
             ),
@@ -193,26 +242,36 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         SizedBox(
           height: 10.0,
         ),
-        Container(
-          child: FlatButton(
-            child: Text(
-              'NEXT',
-              style: buttonStyle,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  _previousForm();
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                if (_userNameKey.currentState.validate()) {
-                  username = usernameController.text;
-                  _pageController.animateToPage(
-                    2,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.easeIn,
-                  );
-                }
-              });
-            },
-          ),
-        )
+            IconButton(
+              icon: Icon(
+                Icons.arrow_forward_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (_userNameKey.currentState.validate()) {
+                    username = usernameController.text;
+                    _nextForm();
+                  }
+                });
+              },
+            ),
+          ],
+        ),
+        
       ],
     );
   }
@@ -260,9 +319,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
-                    onChanged: (val) {
-                      _birthdayKey.currentState.validate();
-                    },
                   ),
                 ),
               ),
@@ -272,27 +328,36 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         SizedBox(
           height: 10.0,
         ),
-        Container(
-          child: FlatButton(
-            child: Text(
-              'NEXT',
-              style: buttonStyle,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  _previousForm();
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                dob = DateFormat.yMd().format(selectedDate);
-                birthdayController.text = dob;
-                if (_birthdayKey.currentState.validate()) {
-                  _pageController.animateToPage(
-                    3,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.easeIn,
-                  );
-                }
-              });
-            },
-          ),
-        )
+            IconButton(
+              icon: Icon(
+                Icons.arrow_forward_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  dob = DateFormat.yMd().format(selectedDate);
+                  birthdayController.text = dob;
+                  if (_birthdayKey.currentState.validate()) {
+                    _nextForm();
+                  }
+                });
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -346,26 +411,35 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         SizedBox(
           height: 10.0,
         ),
-        Container(
-          child: FlatButton(
-            child: Text(
-              'NEXT',
-              style: buttonStyle,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  _previousForm();
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                if (_locationKey.currentState.validate()) {
-                  location = locationController.text;
-                  _pageController.animateToPage(
-                    4,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.easeIn,
-                  );
-                }
-              });
-            },
-          ),
-        )
+            IconButton(
+              icon: Icon(
+                Icons.arrow_forward_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (_locationKey.currentState.validate()) {
+                    location = locationController.text;
+                    _nextForm();
+                  }
+                });
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -415,28 +489,36 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           ],
         ),
         SizedBox(height: 10.0),
-        Container(
-          child: FlatButton(
-            child: Text(
-              'Done',
-              style: buttonStyle,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+              ),
+              onPressed: () {
+                setState(() {
+                  _previousForm();
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                if (_bioKey.currentState.validate()) {
-                  bio = bioController.text;
-                  Map<String, dynamic> userUpdate = {
-                    'username': username,
-                    'birthday': dob,
-                    'location': location,
-                    'bio': bio,
-                  };
-                  Navigator.pop(context, userUpdate);
-                }
-              });
-            },
-          ),
-        )
+            IconButton(
+              icon: Icon(
+                Icons.check,
+                color: Colors.green,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (_bioKey.currentState.validate()) {
+                    bio = bioController.text;
+                    _nextForm();
+                  }
+                });
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
