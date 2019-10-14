@@ -41,13 +41,17 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
   PageController _pageController;
   int _currentPage = 0;
   int _numberOfForms = 4;
+  bool usernameNextButton,
+      birthdayNextButton,
+      locationNextButton,
+      bioNextButton;
 
   // TextStyle buttonStyle = TextStyle(
   //   fontSize: 16,
   //   color: Colors.green,
   //   fontWeight: FontWeight.bold,
   // );
-  
+
   TextStyle titleStyle = TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
@@ -70,6 +74,10 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         showForm = true;
       });
     });
+    usernameNextButton = false;
+    birthdayNextButton = false;
+    locationNextButton = false;
+    bioNextButton = false;
     super.initState();
   }
 
@@ -84,7 +92,12 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
       setState(() {
         selectedDate = picked;
         birthdayController.text = DateFormat.yMd().format(selectedDate);
-        _birthdayKey.currentState.validate();
+        bool dateCurrentState = _birthdayKey.currentState.validate();
+        if (dateCurrentState != birthdayNextButton) {
+          setState(() {
+            birthdayNextButton = dateCurrentState;
+          });
+        }
       });
     }
   }
@@ -233,7 +246,12 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                   ),
                 ),
                 onChanged: (value) {
-                  _userNameKey.currentState.validate();
+                  bool nameCurrentState = _userNameKey.currentState.validate();
+                  if (nameCurrentState != usernameNextButton) {
+                    setState(() {
+                      usernameNextButton = nameCurrentState;
+                    });
+                  }
                 },
               ),
             ),
@@ -260,18 +278,19 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
               icon: Icon(
                 Icons.arrow_forward_ios,
               ),
-              onPressed: () {
-                setState(() {
-                  if (_userNameKey.currentState.validate()) {
-                    username = usernameController.text;
-                    _nextForm();
-                  }
-                });
-              },
+              onPressed: usernameNextButton
+                  ? () {
+                      setState(() {
+                        if (_userNameKey.currentState.validate()) {
+                          username = usernameController.text;
+                          _nextForm();
+                        }
+                      });
+                    }
+                  : null,
             ),
           ],
         ),
-        
       ],
     );
   }
@@ -346,7 +365,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
               icon: Icon(
                 Icons.arrow_forward_ios,
               ),
-              onPressed: () {
+              onPressed: birthdayNextButton?() {
                 setState(() {
                   dob = DateFormat.yMd().format(selectedDate);
                   birthdayController.text = dob;
@@ -354,7 +373,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                     _nextForm();
                   }
                 });
-              },
+              }:null,
             ),
           ],
         ),
@@ -402,7 +421,12 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                   ),
                 ),
                 onChanged: (val) {
-                  _locationKey.currentState.validate();
+                  bool locationCurrentState = _locationKey.currentState.validate();
+                  if(locationCurrentState != locationNextButton){
+                    setState(() {
+                      locationNextButton = locationCurrentState;
+                    });
+                  }
                 },
               ),
             ),
@@ -429,14 +453,14 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
               icon: Icon(
                 Icons.arrow_forward_ios,
               ),
-              onPressed: () {
+              onPressed: locationNextButton?() {
                 setState(() {
                   if (_locationKey.currentState.validate()) {
                     location = locationController.text;
                     _nextForm();
                   }
                 });
-              },
+              }:null,
             ),
           ],
         ),
@@ -482,7 +506,12 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                   ),
                 ),
                 onChanged: (val) {
-                  _bioKey.currentState.validate();
+                  bool bioCurrentState = _bioKey.currentState.validate();
+                  if(bioCurrentState != bioNextButton){
+                    setState(() {
+                      bioNextButton = bioCurrentState;
+                    });
+                  }
                 },
               ),
             ),
@@ -504,18 +533,18 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
               },
             ),
             IconButton(
+              color: Colors.green,
               icon: Icon(
                 Icons.check,
-                color: Colors.green,
               ),
-              onPressed: () {
+              onPressed: bioNextButton?() {
                 setState(() {
                   if (_bioKey.currentState.validate()) {
                     bio = bioController.text;
                     _nextForm();
                   }
                 });
-              },
+              }:null,
             ),
           ],
         ),

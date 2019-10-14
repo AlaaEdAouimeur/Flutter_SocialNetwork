@@ -62,18 +62,10 @@ flutter_icons:
 flutter:
   assets:
     - assets/images/logo.png
-<<<<<<< HEAD
     - assets/images/following.png
     - assets/images/followers.png
     - assets/images/post.png
     - assets/images/blog.png
-=======
-  # - assets/images/google_icon.png
-  # - assets/images/ig.png
-  # - assets/images/fb.png
-  # - assets/images/tw.png
-  # - assets/images/popper.png
->>>>>>> Added back button
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
