@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:redux_example/database/databaseReferences.dart'
     as databaseReference;
 import 'package:redux_example/pages/PopupModal.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // This is the main function which is used to show popup, take input and return map of input.
 class FirstLoginHelper {
@@ -45,12 +46,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
       birthdayNextButton,
       locationNextButton,
       bioNextButton;
-
-  // TextStyle buttonStyle = TextStyle(
-  //   fontSize: 16,
-  //   color: Colors.green,
-  //   fontWeight: FontWeight.bold,
-  // );
 
   TextStyle titleStyle = TextStyle(
     fontSize: 20.0,
@@ -162,7 +157,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
               height: 20.0,
             ),
             Text(
-              'To provide better experience, we would like to know something about you',
+              'To provide personalized experience, we would like to know few details about you',
               style: TextStyle(
                 fontSize: 16.0,
               ),
@@ -173,22 +168,13 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         SizedBox(height: 10.0),
         Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.clear,
-                color: Colors.red,
-              ),
-              onPressed: () {
-                setState(() {
-                  _previousForm();
-                });
-              },
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.arrow_forward_ios,
+                FontAwesomeIcons.chevronCircleRight,
+                size: 30,
+                color: Colors.teal,
               ),
               onPressed: () {
                 setState(() {
@@ -212,16 +198,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(
-              'Username',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
             Form(
               key: _userNameKey,
               child: TextFormField(
@@ -239,11 +215,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                   }
                 },
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.supervised_user_circle),
-                  labelText: 'choose an username',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
+                  labelText: 'username',
                 ),
                 onChanged: (value) {
                   bool nameCurrentState = _userNameKey.currentState.validate();
@@ -262,11 +234,13 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.arrow_back_ios,
+                FontAwesomeIcons.chevronCircleLeft,
+                color: Colors.teal,
+                size: 30,
               ),
               onPressed: () {
                 setState(() {
@@ -276,7 +250,9 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
             ),
             IconButton(
               icon: Icon(
-                Icons.arrow_forward_ios,
+                FontAwesomeIcons.chevronCircleRight,
+                color: usernameNextButton ? Colors.teal : Colors.grey,
+                size: 30,
               ),
               onPressed: usernameNextButton
                   ? () {
@@ -325,17 +301,16 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                     controller: birthdayController,
                     validator: (val) {
                       if (val.isEmpty)
-                        return "Enter your birthday";
+                        return "Enter your birthdate";
                       else if (DateTime.now().difference(selectedDate).inDays <
                           365 * 13)
                         return "You should be atleast 13 years old.";
                       return null;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.calendar_today),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.white),
+                      prefixIcon: Icon(
+                        FontAwesomeIcons.solidCalendarAlt,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -349,11 +324,13 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.arrow_back_ios,
+                FontAwesomeIcons.chevronCircleLeft,
+                color: Colors.teal,
+                size: 30,
               ),
               onPressed: () {
                 setState(() {
@@ -363,17 +340,21 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
             ),
             IconButton(
               icon: Icon(
-                Icons.arrow_forward_ios,
+                FontAwesomeIcons.chevronCircleRight,
+                color: birthdayNextButton ? Colors.teal : Colors.grey,
+                size: 30,
               ),
-              onPressed: birthdayNextButton?() {
-                setState(() {
-                  dob = DateFormat.yMd().format(selectedDate);
-                  birthdayController.text = dob;
-                  if (_birthdayKey.currentState.validate()) {
-                    _nextForm();
-                  }
-                });
-              }:null,
+              onPressed: birthdayNextButton
+                  ? () {
+                      setState(() {
+                        dob = DateFormat.yMd().format(selectedDate);
+                        birthdayController.text = dob;
+                        if (_birthdayKey.currentState.validate()) {
+                          _nextForm();
+                        }
+                      });
+                    }
+                  : null,
             ),
           ],
         ),
@@ -390,16 +371,6 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Location',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
             Form(
               key: _locationKey,
               child: TextFormField(
@@ -414,15 +385,16 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                     return null;
                 },
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.location_on),
-                  labelText: 'Location',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.mapPin,
+                    color: Colors.black,
                   ),
+                  labelText: 'Location',
                 ),
                 onChanged: (val) {
-                  bool locationCurrentState = _locationKey.currentState.validate();
-                  if(locationCurrentState != locationNextButton){
+                  bool locationCurrentState =
+                      _locationKey.currentState.validate();
+                  if (locationCurrentState != locationNextButton) {
                     setState(() {
                       locationNextButton = locationCurrentState;
                     });
@@ -437,11 +409,13 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.arrow_back_ios,
+                FontAwesomeIcons.chevronCircleLeft,
+                color: Colors.teal,
+                size: 30,
               ),
               onPressed: () {
                 setState(() {
@@ -451,16 +425,20 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
             ),
             IconButton(
               icon: Icon(
-                Icons.arrow_forward_ios,
+                FontAwesomeIcons.chevronCircleRight,
+                color: locationNextButton ? Colors.teal : Colors.grey,
+                size: 30,
               ),
-              onPressed: locationNextButton?() {
-                setState(() {
-                  if (_locationKey.currentState.validate()) {
-                    location = locationController.text;
-                    _nextForm();
-                  }
-                });
-              }:null,
+              onPressed: locationNextButton
+                  ? () {
+                      setState(() {
+                        if (_locationKey.currentState.validate()) {
+                          location = locationController.text;
+                          _nextForm();
+                        }
+                      });
+                    }
+                  : null,
             ),
           ],
         ),
@@ -478,7 +456,7 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Tell other people something about you',
+              'Tell us something about you',
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -499,15 +477,15 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
                     return null;
                 },
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.edit),
-                  labelText: 'Your Bio',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.userEdit,
+                    color: Colors.black,
                   ),
+                  labelText: 'Bio',
                 ),
                 onChanged: (val) {
                   bool bioCurrentState = _bioKey.currentState.validate();
-                  if(bioCurrentState != bioNextButton){
+                  if (bioCurrentState != bioNextButton) {
                     setState(() {
                       bioNextButton = bioCurrentState;
                     });
@@ -520,11 +498,13 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
         SizedBox(height: 10.0),
         Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.arrow_back_ios,
+                FontAwesomeIcons.chevronCircleLeft,
+                color: Colors.teal,
+                size: 30,
               ),
               onPressed: () {
                 setState(() {
@@ -535,16 +515,20 @@ class _FirstLoginFormState extends State<_FirstLoginForm> {
             IconButton(
               color: Colors.green,
               icon: Icon(
-                Icons.check,
+                FontAwesomeIcons.solidCheckCircle,
+                color: bioNextButton ? Colors.teal : Colors.grey,
+                size: 30,
               ),
-              onPressed: bioNextButton?() {
-                setState(() {
-                  if (_bioKey.currentState.validate()) {
-                    bio = bioController.text;
-                    _nextForm();
-                  }
-                });
-              }:null,
+              onPressed: bioNextButton
+                  ? () {
+                      setState(() {
+                        if (_bioKey.currentState.validate()) {
+                          bio = bioController.text;
+                          _nextForm();
+                        }
+                      });
+                    }
+                  : null,
             ),
           ],
         ),
