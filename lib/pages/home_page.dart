@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage>
       selectedItemColor: Theme.of(context).accentColor,
       backgroundColor: Theme.of(context).backgroundColor,
       unselectedItemColor: Theme.of(context).accentColor,
-      iconSize: 15,
+      iconSize: 20,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
