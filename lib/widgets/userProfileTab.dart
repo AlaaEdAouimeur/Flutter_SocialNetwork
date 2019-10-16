@@ -46,7 +46,9 @@ class UserProfileTabState extends State<UserProfileTab> {
   void setThemeValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      darkTheme = prefs.getBool("darkTheme");
+      darkTheme = prefs.getBool("darkTheme") == null
+          ? false
+          : prefs.getBool("darkTheme");
     });
   }
 
