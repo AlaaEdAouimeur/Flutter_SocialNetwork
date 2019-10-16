@@ -6,11 +6,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_example/routes/namedRoutes.dart';
 
 void main() => runApp(
-  CustomTheme(
-      initialThemeKey: ThemeKeys.White,
-      child: MyApp(),
-    ),
-);
+      CustomTheme(
+        initialThemeKey: ThemeKeys.White,
+        child: MyApp(),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   final String title = "The Project Quote";
@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
         child: new MaterialApp(
           title: title,
           theme: CustomTheme.of(context),
-      
           home: Scaffold(
             backgroundColor: Colors.black,
             body: Routes(),

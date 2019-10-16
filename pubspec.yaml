@@ -72,10 +72,9 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: OpenSans
+    - family: Didact
       fonts:
-        - asset: assets/fonts/OpenSans-Light.ttf
-        
+        - asset: assets/fonts/DidactGothic-Regular.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
