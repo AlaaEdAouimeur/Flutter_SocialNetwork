@@ -64,26 +64,46 @@ class _HomePageState extends State<HomePage>
 
   Widget bottomNavigator() {
     return BottomNavigationBar(
-      selectedItemColor: Theme.of(context).accentColor,
+      selectedItemColor: Colors.red,
       backgroundColor: Theme.of(context).backgroundColor,
       unselectedItemColor: Theme.of(context).accentColor,
       iconSize: 20,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text("Home"),
+          icon: Icon(FontAwesomeIcons.stream),
+          title: Text(
+            "Stream",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          title: Text("Discover"),
+          icon: Icon(FontAwesomeIcons.search),
+          title: Text(
+            "Discover",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          title: Text("Blog"),
+          icon: Icon(FontAwesomeIcons.blog),
+          title: Text(
+            "Blogs",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          title: Text("Profile"),
+          icon: Icon(FontAwesomeIcons.solidIdBadge),
+          title: Text(
+            "Profile",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
         ),
       ],
       currentIndex: _selectedIndex,

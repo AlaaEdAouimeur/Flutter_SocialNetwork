@@ -9,28 +9,48 @@ class Themes {
       brightness: Brightness.light,
       buttonColor: Colors.orange,
       textTheme: TextTheme(
-        headline: TextStyle(color: Colors.black),
+        headline: TextStyle(
+          color: Colors.black,
+        ),
         subhead: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Color.fromRGBO(0, 0, 0, 0.8),
         ),
-        subtitle: TextStyle(color: Colors.black26),
+        subtitle: TextStyle(
+          color: Colors.black26,
+        ),
       ),
-      accentColor: Colors.black87);
+      accentColor: Colors.black87,
+      iconTheme: IconThemeData(
+        color: Colors.black,
+        size: 20,
+      ));
 
   static final ThemeData blacktheme = ThemeData(
-      accentColor: Colors.white70,
-      fontFamily: 'Didact',
-      backgroundColor: Colors.black,
-      brightness: Brightness.dark,
-      buttonColor: Colors.purple,
-      textTheme: TextTheme(
-        headline: TextStyle(color: Colors.white),
-        subhead: TextStyle(
-            fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white70),
-        subtitle: TextStyle(color: Colors.white24),
-      ));
+    accentColor: Colors.white70,
+    fontFamily: 'Didact',
+    backgroundColor: Colors.black,
+    brightness: Brightness.dark,
+    buttonColor: Colors.purple,
+    textTheme: TextTheme(
+      headline: TextStyle(
+        color: Colors.white,
+      ),
+      subhead: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.white70,
+      ),
+      subtitle: TextStyle(
+        color: Colors.white24,
+      ),
+    ),
+    iconTheme: IconThemeData(
+      color: Colors.black,
+      size: 20,
+    ),
+  );
 
   static ThemeData getThemeFromKey(ThemeKeys themeKey) {
     switch (themeKey) {
