@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/homeTab.dart';
 import '../widgets/SearchTab.dart';
 import '../widgets/blogTab.dart';
@@ -12,7 +13,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   PageController _pageController;
 
@@ -35,9 +37,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       bottomNavigationBar: bottomNavigator(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.border_color,color: Colors.white),
-        backgroundColor: Theme.of(context).buttonColor,
-        
+        child: Icon(
+          FontAwesomeIcons.penNib,
+          size: 20,
+        ),
+        backgroundColor: Theme.of(context).accentColor,
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
