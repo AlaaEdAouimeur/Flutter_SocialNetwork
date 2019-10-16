@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import 'PostList.dart';
 import '../widgets/CategoryDropdown.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DropdownValueHolder {
@@ -28,9 +27,6 @@ class _HomeTabState extends State<HomeTab> {
   String category;
   Stream<QuerySnapshot> query;
   FirebaseUser currentUser;
-  final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(
-    functionName: 'helloWorld',
-  );
 
   @override
   void initState() {
@@ -61,38 +57,35 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: currentUser == null ?
-        Container(
-          width: MediaQuery.of(context).size.width,
-          child: Container(
-            color: Theme.of(context).backgroundColor,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-        ) :
-        Container(
-          child: Column(
-            children: <Widget>[
-              CategoryDropdown(notifyParent: categoryChanged),
-              Flexible(
-                child: streamBuilder(),
+        child: currentUser == null
+            ? Container(
+                width: MediaQuery.of(context).size.width,
+                child: Container(
+                  color: Theme.of(context).backgroundColor,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              )
+            : Container(
+                child: Column(
+                  children: <Widget>[
+                    CategoryDropdown(notifyParent: categoryChanged),
+                    Flexible(
+                      child: streamBuilder(),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
 
   Stream<QuerySnapshot> buildQuery() {
-    print("Test: Inside Build Query");
     Stream<QuerySnapshot> query;
     switch (category) {
       case "TPQ Selected":
-        print("Test: TPQ Selected");
         setState(() {
-          print("Test: Setting state");
           query = databaseReference.DatabaseReferences()
               .posts
               .where("tpqSelected", isEqualTo: true)
@@ -102,9 +95,7 @@ class _HomeTabState extends State<HomeTab> {
         break;
 
       case "Following":
-        print("Test: Following");
         setState(() {
-          print("Test: Setting state");
           query = databaseReference.DatabaseReferences()
               .posts
               .where("visibleTo", arrayContains: currentUser.uid)
@@ -114,11 +105,8 @@ class _HomeTabState extends State<HomeTab> {
         break;
 
       case "All":
-        print("Test: All");
         setState(() {
-          print("Test: Setting state");
-          query = databaseReference
-              .DatabaseReferences()
+          query = databaseReference.DatabaseReferences()
               .posts
               .orderBy('createdAt', descending: true)
               .snapshots();
@@ -126,24 +114,15 @@ class _HomeTabState extends State<HomeTab> {
         break;
 
       default:
-        print("Test: Default");
         query = null;
         break;
     }
     return query;
   }
 
-  callCloudFunction() async {
-    dynamic response = await callable.call(<String, dynamic>{
-      'request': 'YOUR_PARAMETER_VALUE',
-    });
-    print(response.toString());
-  }
-
   Widget streamBuilder() {
     query = buildQuery();
     if (query == null) {
-      print("Query is null");
       return new Container(
         width: MediaQuery.of(context).size.width,
         child: Container(
@@ -160,11 +139,10 @@ class _HomeTabState extends State<HomeTab> {
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                print("waiting");
                 return new Container(
                   width: MediaQuery.of(context).size.width,
                   child: Container(
-                    color:Theme.of(context).backgroundColor,
+                    color: Theme.of(context).backgroundColor,
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -173,7 +151,7 @@ class _HomeTabState extends State<HomeTab> {
                 break;
 
               default:
-                if(snapshot.data.documents.length == 0) {
+                if (snapshot.data.documents.length == 0) {
                   return Container(
                     color: Theme.of(context).backgroundColor,
                     child: Center(
