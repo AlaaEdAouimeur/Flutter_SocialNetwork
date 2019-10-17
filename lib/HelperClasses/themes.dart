@@ -14,11 +14,15 @@ class Themes {
         ),
         subhead: TextStyle(
           fontSize: 18,
-          fontWeight: FontWeight.bold,
           color: Color.fromRGBO(0, 0, 0, 0.8),
         ),
         subtitle: TextStyle(
           color: Colors.black26,
+        ),
+        overline: TextStyle(
+          color: Colors.black54,
+          fontSize: 16,
+          letterSpacing: 0,
         ),
       ),
       accentColor: Colors.black87,
@@ -58,7 +62,6 @@ class Themes {
         return whitetheme;
       case ThemeKeys.Black:
         return blacktheme;
-
       default:
         return whitetheme;
     }

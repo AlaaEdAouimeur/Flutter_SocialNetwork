@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import '../database/databaseReferences.dart' as databaseReference;
 import '../pages/UserProfilePage.dart';
 import '../animations/fadeInAnimation.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PostBody extends StatefulWidget {
   final DocumentSnapshot snapshot;
@@ -21,7 +20,7 @@ class PostBodyState extends State<PostBody> {
   bool showFull = false;
   FirebaseUser currentUser;
   bool hasUpvotedPost = false;
-  IconData upIcon = EvaIcons.arrowCircleUpOutline;
+  IconData upIcon = FontAwesomeIcons.grinHearts;
 
   @override
   void initState() {
@@ -72,102 +71,44 @@ class PostBodyState extends State<PostBody> {
                 });
               },
             ),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    child: Text(
+                      widget.snapshot.data['name'].toString().toUpperCase(),
+                      style: Theme.of(context).textTheme.overline,
+                    ),
+                    onTap: () {
+                      openUserProfile();
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      child: GestureDetector(
-                        child: Text(
-                          widget.snapshot.data['name'],
-                          style: TextStyle(
-                            color: Colors.teal,
-                            letterSpacing: 0.5,
-                            fontSize: 12.0,
-                            height: 1.0,
-                          ),
-                        ),
-                        onTap: () {
-                          openUserProfile();
-                        },
-                      ),
+                    GestureDetector(
+                      child: getUpIcon(widget.snapshot.documentID),
+                      onTap: () => {
+                        upVote(widget.snapshot.documentID),
+                      },
+                    ),
+                    SizedBox(
+                      width: 6,
                     ),
                     Text(
-                      " | ",
-                      style: TextStyle(color: Colors.teal),
+                      widget.snapshot.data["upvotes"].toString(),
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                      ),
                     ),
-                    Container(
-                      child: Text(
-                        DateFormat.yMMMd()
-                            .format(widget.snapshot.data['createdAt'].toDate())
-                            .toString(),
-                        style: TextStyle(
-                          color:Theme.of(context).accentColor,
-                          letterSpacing: 0.5,
-                          fontSize: 12.0,
-                          height: 1.0,
-                        ),
-                      ),
-                    )
                   ],
-                ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          GestureDetector(
-                            child: getUpIcon(widget.snapshot.documentID),
-                            onTap: () => {
-                              upVote(widget.snapshot.documentID),
-                            },
-                          ),
-                          Text(
-                            widget.snapshot.data["upvotes"].toString(),
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          GestureDetector(
-                            child: Icon(
-                              Icons.info,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            onTap: () => showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return new Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new ListTile(
-                                        leading: new Icon(Icons.warning),
-                                        title: new Text('Report'),
-                                        onTap: () => print(""),
-                                      ),
-                                      new ListTile(
-                                        leading: new Icon(Icons.share),
-                                        title: new Text('Share'),
-                                        onTap: () => print(""),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                          ),
-                          Text(""),
-                        ],
-                      )
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -181,13 +122,13 @@ class PostBodyState extends State<PostBody> {
     IconData upIcon;
     if (currentUser != null) {
       if (hasUpvotedPost)
-        upIcon = EvaIcons.arrowCircleUp;
+        upIcon = FontAwesomeIcons.solidGrinHearts;
       else
-        upIcon = EvaIcons.arrowCircleUpOutline;
+        upIcon = FontAwesomeIcons.grinHearts;
       return Icon(
         upIcon,
-        color: Colors.white,
-        size: 24,
+        color: Colors.red,
+        size: 22,
       );
     } else {
       return FutureBuilder(
@@ -197,17 +138,17 @@ class PostBodyState extends State<PostBody> {
             if (snapshot.data['upvotedUsers'] != null) {
               List userIds = snapshot.data['upvotedUsers'];
               if (userIds.contains(currentUser.uid))
-                upIcon = EvaIcons.arrowCircleUp;
+                upIcon = FontAwesomeIcons.solidGrinHearts;
               else
-                upIcon = EvaIcons.arrowCircleUpOutline;
+                upIcon = FontAwesomeIcons.grinHearts;
             }
-          }else{
-            upIcon = EvaIcons.arrowCircleUpOutline;
+          } else {
+            upIcon = FontAwesomeIcons.grinHearts;
           }
           return Icon(
             upIcon,
-            color: Colors.white,
-            size: 24,
+            color: Colors.red,
+            size: 22,
           );
         },
       );
