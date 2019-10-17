@@ -109,7 +109,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          //userDetail(snapshot),
+                          userDetail(snapshot),
                           userBio(snapshot),
                           socialIcons(),
                           flowWidget(snapshot),

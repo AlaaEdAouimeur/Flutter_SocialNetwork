@@ -13,8 +13,8 @@ class Following extends StatefulWidget {
 }
 
 class _FollowingState extends State<Following> {
-  List<DocumentSnapshot> followersList = [];
-  List<DocumentSnapshot> searchedFollowers = [];
+  List<DocumentSnapshot> actualList = [];
+  List<DocumentSnapshot> filteredList = [];
   bool _ready = true;
 
   @override
@@ -29,8 +29,8 @@ class _FollowingState extends State<Following> {
             .limit(1)
             .getDocuments()
             .then((QuerySnapshot snapshot) {
-          followersList.add(snapshot.documents[0]);
-          searchedFollowers.add(snapshot.documents[0]);
+          actualList.add(snapshot.documents[0]);
+          filteredList.add(snapshot.documents[0]);
           if (i == widget.userslist.length - 1) {
             _ready = true;
             setState(() {});
@@ -60,11 +60,11 @@ class _FollowingState extends State<Following> {
           ),
         ),
         onChanged: (val) {
-          searchedFollowers.clear();
-          followersList.forEach((snapshot) {
+          filteredList.clear();
+          actualList.forEach((snapshot) {
             if (snapshot.data['name'].toString().contains(val) ||
                 snapshot.data['username'].toString().contains(val))
-              searchedFollowers.add(snapshot);
+              filteredList.add(snapshot);
           });
           setState(() {});
         },
@@ -137,46 +137,20 @@ class _FollowingState extends State<Following> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  // child: RaisedButton(
-                  //   child: Text('Rule ALL'),
-                  //   onPressed: () async {
-                  //     List<String> users = [];
-                  //     await databaseReference.DatabaseReferences()
-                  //         .users
-                  //         .getDocuments()
-                  //         .then((querySnapshots) {
-                  //       querySnapshots.documents.forEach((snapshot) {
-                  //         String id = snapshot.data['uid'];
-                  //         print(id);
-                  //         if (id != 'W4pKpLwCnNZigYdpOsElWk6P0c63') users.add(id);
-                  //       });
-                  //     });
-                  //     await databaseReference.DatabaseReferences()
-                  //         .users
-                  //         .document('xTD6FVt9ZLJd9JHDOysg')
-                  //         .updateData({
-                  //       "followers_uid": FieldValue.arrayUnion(users),
-                  //       "followers": FieldValue.increment(users.length),
-                  //     });
-                  //     print('ADDED');
-                  //     print(users.toString());
-                  //   },
-                  // ),
                 ),
               ),
             ),
           )
         : Expanded(
             child: ListView.builder(
-              itemCount: searchedFollowers.length,
+              itemCount: filteredList.length,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, i) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    //userCell(context, widget.userslist[i]),
-                    staticUserCell(context, searchedFollowers[i]),
+                    staticUserCell(context, filteredList[i]),
                     Container(
                       width: MediaQuery.of(context).size.width - 200,
                       child: Divider(
@@ -243,75 +217,6 @@ class _FollowingState extends State<Following> {
       ),
     );
   }
-
-  // Widget userCell(context, String uid) {
-  //   Stream<QuerySnapshot> _query = databaseReference.DatabaseReferences()
-  //       .users
-  //       .where("uid", isEqualTo: uid)
-  //       .limit(1)
-  //       .snapshots();
-  //   return StreamBuilder(
-  //     stream: _query,
-  //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> query) {
-  //       if (query.connectionState == ConnectionState.waiting)
-  //         return Center(
-  //           child: CircularProgressIndicator(),
-  //         );
-  //       else {
-  //         DocumentSnapshot snapshot = query.data.documents[0];
-  //         return Container(
-  //           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: <Widget>[
-  //               //<-------------User name and username------>//
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.start,
-  //                 children: <Widget>[
-  //                   CircleAvatar(
-  //                     radius: 20,
-  //                     backgroundImage: NetworkImage(
-  //                       snapshot["profilePictureUrl"],
-  //                     ),
-  //                   ),
-  //                   SizedBox(
-  //                     width: 10,
-  //                   ),
-  //                   Text(
-  //                     camelize(snapshot["name"]),
-  //                     style: TextStyle(
-  //                       fontSize: 18,
-  //                     ),
-  //                   ),
-  //                   Text(
-  //                     snapshot["username"] == null
-  //                         ? ""
-  //                         : " | " + snapshot["username"],
-  //                     style: TextStyle(
-  //                       fontSize: 16,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               //<-------------UserNumber Of posts and blogs------>//
-  //               flowWidget(context, snapshot),
-
-  //               //<-------The Follow Button---->
-  //               OutlineButton(
-  //                 color: Colors.yellow,
-  //                 onPressed: () {
-  //                   //TODO Follow user
-  //                 },
-  //                 child: Text('Follow'),
-  //               )
-  //             ],
-  //           ),
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
