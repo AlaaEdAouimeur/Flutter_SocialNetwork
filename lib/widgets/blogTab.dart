@@ -44,7 +44,6 @@ class _BlogTabState extends State<BlogTab> {
         break;
 
       case "Following":
-        print("Following Selected");
         setState(() {
           query = databaseReference.DatabaseReferences()
               .blogs
@@ -55,16 +54,12 @@ class _BlogTabState extends State<BlogTab> {
         break;
 
       case "All":
-        print("All Selected");
         setState(() {
-          query = databaseReference.DatabaseReferences()
-              .blogs
-              .snapshots();
+          query = databaseReference.DatabaseReferences().blogs.snapshots();
         });
         break;
 
       default:
-        print("Test: Default");
         query = null;
         break;
     }
@@ -82,13 +77,13 @@ class _BlogTabState extends State<BlogTab> {
           height: MediaQuery.of(context).size.height,
           child: currentUser == null
               ? Container(
-                color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).backgroundColor,
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
               : Container(
-                color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).backgroundColor,
                   child: Column(
                     children: <Widget>[
                       CategoryDropdown(
@@ -108,7 +103,6 @@ class _BlogTabState extends State<BlogTab> {
   Widget blogList() {
     query = buildQuery();
     if (query == null) {
-      print("Query is null");
       return new Container(
         width: MediaQuery.of(context).size.width,
         child: Container(
@@ -124,7 +118,6 @@ class _BlogTabState extends State<BlogTab> {
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
           switch (snapshots.connectionState) {
             case ConnectionState.waiting:
-              print("Waiting for blogs to be loaded.");
               return Center(
                 child: CircularProgressIndicator(),
               );

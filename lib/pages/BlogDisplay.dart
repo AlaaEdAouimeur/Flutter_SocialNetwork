@@ -38,7 +38,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Container(
           child: StreamBuilder(
@@ -72,7 +72,7 @@ class _BlogDisplayState extends State<BlogDisplay> {
                             snapshot.data['title'],
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              color:Theme.of(context).accentColor,
+                              color: Theme.of(context).accentColor,
                               letterSpacing: 0.2,
                               fontSize: 25,
                             ),

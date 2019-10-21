@@ -22,21 +22,21 @@ class _BlogIntroState extends State<BlogIntro> {
       child: GestureDetector(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: 
+          MainAxisAlignment.start,
           children: <Widget>[
+            Image.network(
+              "https://storage.cloud.google.com/tpq-blog-images/Sample%20blog%20post.png",
+              height: 100,
+              width: 100,
+            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
                 widget.snapshot.data['title'] == null
                     ? ""
                     : widget.snapshot.data['title'],
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.teal,
-                  letterSpacing: 0.2,
-                  height: 1.1,
-                  fontSize: 20,
-                ),
+                style: Theme.of(context).textTheme.display1,
               ),
             ),
             Text(

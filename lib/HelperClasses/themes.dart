@@ -24,6 +24,13 @@ class Themes {
           fontSize: 16,
           letterSpacing: 0,
         ),
+        display1: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: Colors.red,
+          letterSpacing: 0.2,
+          height: 1.1,
+          fontSize: 20,
+        ),
       ),
       accentColor: Colors.black87,
       iconTheme: IconThemeData(
