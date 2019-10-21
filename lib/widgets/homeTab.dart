@@ -55,13 +55,12 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     categoryChanged();
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: currentUser == null
             ? Container(
                 width: MediaQuery.of(context).size.width,
                 child: Container(
-                  color: Theme.of(context).backgroundColor,
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -126,7 +125,6 @@ class _HomeTabState extends State<HomeTab> {
       return new Container(
         width: MediaQuery.of(context).size.width,
         child: Container(
-          color: Theme.of(context).backgroundColor,
           child: Center(
             child: CircularProgressIndicator(),
           ),
@@ -142,7 +140,6 @@ class _HomeTabState extends State<HomeTab> {
                 return new Container(
                   width: MediaQuery.of(context).size.width,
                   child: Container(
-                    color: Theme.of(context).backgroundColor,
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -153,7 +150,6 @@ class _HomeTabState extends State<HomeTab> {
               default:
                 if (snapshot.data.documents.length == 0) {
                   return Container(
-                    color: Theme.of(context).backgroundColor,
                     child: Center(
                       child: Container(
                         child: Text(
@@ -172,7 +168,6 @@ class _HomeTabState extends State<HomeTab> {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          color: Theme.of(context).backgroundColor,
                           child: PostList(snapshot),
                         ),
                       ),
