@@ -38,6 +38,10 @@ dependencies:
   strings: ^0.1.0
   font_awesome_flutter: ^8.0.0
   firebase_storage: ^3.0.6
+  redux:
+  flutter_redux:
+  eva_icons_flutter: ^2.0.0
+  intl: ^0.15.8
 
 dev_dependencies:
   flutter_test:
