@@ -65,7 +65,6 @@ class PostBodyState extends State<PostBody> {
                 ),
               ),
               onTap: () {
-                print("tap");
                 setState(() {
                   showFull = !showFull;
                 });
@@ -163,23 +162,6 @@ class PostBodyState extends State<PostBody> {
   }
 
   void upVote(String documentID) async {
-    // DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
-    // List userIds = snapshot.data["upvotedUsers"];
-    // if (userIds.contains(currentUser.uid)) {
-    //   databaseReference.DatabaseReferences()
-    //       .posts
-    //       .document(documentID)
-    //       .updateData({
-    //     "upvotes": FieldValue.increment(-1),
-    //   });
-    // } else {
-    //   databaseReference.DatabaseReferences()
-    //       .posts
-    //       .document(documentID)
-    //       .updateData({
-    //     "upvotes": FieldValue.increment(1),
-    //   });
-    // }
     DocumentReference postRef =
         databaseReference.DatabaseReferences().posts.document(documentID);
     if (hasUpvotedPost) {
@@ -188,10 +170,8 @@ class PostBodyState extends State<PostBody> {
         "upvotes": FieldValue.increment(-1),
         "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
       }).then((value) {
-        print('Downvoted Successfully.');
         return true;
       }).catchError((error) {
-        print('Failed to Downvote: $error');
         return false;
       });
     } else {
@@ -200,36 +180,12 @@ class PostBodyState extends State<PostBody> {
         "upvotes": FieldValue.increment(1),
         "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
       }).then((value) {
-        print('Upvoted Successfully.');
         return true;
       }).catchError((error) {
-        print('Failed to Upvote: $error');
         return false;
       });
     }
   }
-
-  // void updateUpvotedUserList(String documentID) async {
-  //   DocumentSnapshot snapshot = await getUpvotedUserList(documentID);
-  //   List userIds = snapshot.data["upvotedUsers"];
-  //   if (userIds.contains(currentUser.uid)) {
-  //     databaseReference.DatabaseReferences()
-  //         .posts
-  //         .document(documentID)
-  //         .updateData({
-  //       "upvotedUsers": FieldValue.arrayRemove([currentUser.uid]),
-  //     });
-  //     updateLikeDB(documentID, false);
-  //   } else {
-  //     databaseReference.DatabaseReferences()
-  //         .posts
-  //         .document(documentID)
-  //         .updateData({
-  //       "upvotedUsers": FieldValue.arrayUnion([currentUser.uid]),
-  //     });
-  //     updateLikeDB(documentID, true);
-  //   }
-  // }
 
   void updateLikeDB(String documentID, bool status) {}
 
@@ -241,7 +197,6 @@ class PostBodyState extends State<PostBody> {
         .getDocuments()
         .then(
           (query) => {
-            print("Data" + query.documents[0].documentID),
             Navigator.push(
               context,
               MaterialPageRoute(
