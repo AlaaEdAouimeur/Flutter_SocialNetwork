@@ -150,16 +150,6 @@ class _BlogTabState extends State<BlogTab> {
                           child: BlogIntro(
                               snapshot: snapshots.data.documents[index]),
                         ),
-                        Center(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: index + 1 >= snapshots.data.documents.length
-                                ? null
-                                : Divider(
-                                    color: Theme.of(context).buttonColor,
-                                  ),
-                          ),
-                        ),
                       ],
                     );
                   },
