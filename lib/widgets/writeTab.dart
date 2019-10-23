@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../database/databaseReferences.dart' as databaseReferences;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WriteTab extends StatefulWidget {
   WriteTab({Key key}) : super(key: key);
@@ -77,7 +77,7 @@ class WriteTabState extends State<WriteTab> {
               value: dropdownValue,
               style: Theme.of(context).textTheme.subhead,
               icon: Icon(
-                EvaIcons.arrowIosDownward,
+                FontAwesomeIcons.arrowDown,
               ),
               onChanged: (String newValue) {
                 setState(() {
@@ -214,7 +214,9 @@ class WriteTabState extends State<WriteTab> {
             child: SizedBox(
               height: 50.0,
               width: 50.0,
-              child: Icon(EvaIcons.upload),
+              child: Icon(
+                FontAwesomeIcons.upload,
+              ),
             ),
           );
         });

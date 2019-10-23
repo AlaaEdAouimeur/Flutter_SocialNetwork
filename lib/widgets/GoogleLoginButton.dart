@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import '../HelperClasses/DatabaseHelperClass.dart';
 import '../pages/home_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GoogleLoginButton extends StatelessWidget {
   final DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass();
@@ -21,7 +21,7 @@ class GoogleLoginButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                EvaIcons.google,
+                FontAwesomeIcons.google,
                 color: Colors.red,
               ),
               SizedBox(

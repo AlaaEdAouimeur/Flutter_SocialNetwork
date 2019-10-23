@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:redux_example/database/databaseReferences.dart'
     as databaseReference;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BlogDisplay extends StatefulWidget {
   final DocumentSnapshot snapshot;
@@ -155,9 +155,9 @@ class _BlogDisplayState extends State<BlogDisplay> {
     IconData upIcon;
     if (currentUser != null) {
       if (hasUpvotedBlog)
-        upIcon = EvaIcons.arrowCircleUp;
+        upIcon = FontAwesomeIcons.solidGrinHearts;
       else
-        upIcon = EvaIcons.arrowCircleUpOutline;
+        upIcon = FontAwesomeIcons.grinHearts;
       return Icon(
         upIcon,
         color: Theme.of(context).accentColor,
@@ -171,12 +171,12 @@ class _BlogDisplayState extends State<BlogDisplay> {
             if (snapshot.data['upvotedUsers'] != null) {
               List userIds = snapshot.data['upvotedUsers'];
               if (userIds.contains(currentUser.uid))
-                upIcon = EvaIcons.arrowCircleUp;
+                upIcon = FontAwesomeIcons.solidGrinHearts;
               else
-                upIcon = EvaIcons.arrowCircleUpOutline;
+                upIcon = FontAwesomeIcons.grinHearts;
             }
           } else {
-            upIcon = EvaIcons.arrowCircleUpOutline;
+            upIcon = FontAwesomeIcons.grinHearts;
           }
           return Icon(
             upIcon,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import '../functions/login_functions.dart' as loginFunctions;
 import '../HelperClasses/DatabaseHelperClass.dart';
 import '../pages/home_page.dart';
 import '../ErrorHandling/LoginErrorHandling.dart' as loginErrorHandling;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FacebookLoginButton extends StatelessWidget {
   final DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass();
@@ -22,7 +22,7 @@ class FacebookLoginButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                EvaIcons.facebook,
+                FontAwesomeIcons.facebook,
                 color: Colors.blue,
               ),
               SizedBox(
@@ -52,8 +52,8 @@ class FacebookLoginButton extends StatelessWidget {
         loginFunctions.LoginFunctions()
             .loginWithFacebook()
             .then((user) async {
-                  await databaseHelperClass.saveUserDataToDatabase(user, context);
-                })
+              await databaseHelperClass.saveUserDataToDatabase(user, context);
+            })
             .then((_) => {
                   Navigator.pushAndRemoveUntil(
                     context,

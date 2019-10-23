@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../database/databaseReferences.dart' as databaseReference;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DropdownValueHolder {
-  static String dropdownValue = 'Following' ;      
+  static String dropdownValue = 'Following';
 }
 
 class CategoryHelperFunction {
   String getDropdownValue() {
-  
     return DropdownValueHolder.dropdownValue;
   }
 
@@ -34,7 +33,7 @@ class CategoryDropdown extends StatefulWidget {
             .where("tpqSelected", isEqualTo: true)
             .orderBy('createdAt', descending: true)
             .snapshots();
-            DropdownValueHolder.dropdownValue =dropdownValue;
+        DropdownValueHolder.dropdownValue = dropdownValue;
         break;
 
       case "Following":
@@ -42,7 +41,7 @@ class CategoryDropdown extends StatefulWidget {
             .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
-            DropdownValueHolder.dropdownValue =dropdownValue;
+        DropdownValueHolder.dropdownValue = dropdownValue;
         break;
 
       default:
@@ -50,7 +49,7 @@ class CategoryDropdown extends StatefulWidget {
             .posts
             .orderBy('createdAt', descending: true)
             .snapshots();
-            DropdownValueHolder.dropdownValue =dropdownValue;
+        DropdownValueHolder.dropdownValue = dropdownValue;
         break;
     }
     return query;
@@ -58,9 +57,7 @@ class CategoryDropdown extends StatefulWidget {
 }
 
 class CategoryDropdownState extends State<CategoryDropdown> {
-  
   Widget build(BuildContext context) {
-    
     return Container(
       color: Colors.white,
       height: 50.0,
@@ -85,7 +82,7 @@ class CategoryDropdownState extends State<CategoryDropdown> {
                 color: Colors.teal,
               ),
               icon: Icon(
-                EvaIcons.arrowIosDownward,
+                FontAwesomeIcons.arrowDown,
                 color: Colors.teal,
               ),
               underline: Container(),
@@ -95,11 +92,8 @@ class CategoryDropdownState extends State<CategoryDropdown> {
                   widget.notifyParent();
                 });
               },
-              items: <String>[
-                'TPQ Selected',
-                'Following',
-                'All'
-              ].map<DropdownMenuItem<String>>((String value) {
+              items: <String>['TPQ Selected', 'Following', 'All']
+                  .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),

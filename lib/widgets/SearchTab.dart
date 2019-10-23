@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:redux_example/pages/StoryPage.dart';
 import '../HelperClasses/SearchTabHelperClass.dart';
 import '../database/databaseReferences.dart' as databaseReference;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchTab extends StatefulWidget {
   SearchTab({Key key}) : super(key: key);
@@ -52,8 +52,8 @@ class SearchTabState extends State<SearchTab> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(
-                          EvaIcons.search,
-                          color: Theme.of(context).accentColor
+                          FontAwesomeIcons.search,
+                          color: Theme.of(context).accentColor,
                         ),
                         Text(
                           "  Search",

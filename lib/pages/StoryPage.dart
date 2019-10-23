@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StoryPage extends StatefulWidget {
   final String collectionName;
@@ -24,13 +24,6 @@ class _StoryPageState extends State<StoryPage> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((user) {
-      // if (widget.snapshot.data['upvoted_users'] != null) {
-      //   List userIds = widget.snapshot.data['upvoted_users'];
-      //   if (userIds.contains(user.uid))
-      //     hasUpvotedBlog = true;
-      //   else
-      //     hasUpvotedBlog = false;
-      // }
       currentUser = user;
     });
   }
@@ -92,7 +85,7 @@ class _StoryPageState extends State<StoryPage> {
                     children: <Widget>[
                       GestureDetector(
                         child: Icon(
-                          EvaIcons.arrowCircleUpOutline,
+                          FontAwesomeIcons.grinHearts,
                           color: Colors.white,
                           size: 24.0,
                         ),
@@ -239,9 +232,9 @@ class _StoryPageState extends State<StoryPage> {
     IconData upIcon;
     if (currentUser != null) {
       if (hasUpvotedBlog)
-        upIcon = EvaIcons.arrowCircleUp;
+        upIcon = FontAwesomeIcons.solidGrinHearts;
       else
-        upIcon = EvaIcons.arrowCircleUpOutline;
+        upIcon = FontAwesomeIcons.grinHearts;
       return Icon(
         upIcon,
         color: Colors.white,
@@ -255,12 +248,12 @@ class _StoryPageState extends State<StoryPage> {
             if (snapshot.data['upvoted_users'] != null) {
               List userIds = snapshot.data['upvoted_users'];
               if (userIds.contains(currentUser.uid))
-                upIcon = EvaIcons.arrowCircleUp;
+                upIcon = FontAwesomeIcons.solidGrinHearts;
               else
-                upIcon = EvaIcons.arrowCircleUpOutline;
+                upIcon = FontAwesomeIcons.grinHearts;
             }
           } else {
-            upIcon = EvaIcons.arrowCircleUpOutline;
+            upIcon = FontAwesomeIcons.grinHearts;
           }
           return Icon(
             upIcon,
