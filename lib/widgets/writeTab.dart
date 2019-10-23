@@ -73,11 +73,11 @@ class WriteTabState extends State<WriteTab> {
             padding: EdgeInsets.only(left: 10.0, right: 10.0),
             margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: DropdownButton<String>(
-              isDense: true,
               value: dropdownValue,
               style: Theme.of(context).textTheme.subhead,
               icon: Icon(
-                FontAwesomeIcons.arrowDown,
+                FontAwesomeIcons.chevronDown,
+                size: 20,
               ),
               onChanged: (String newValue) {
                 setState(() {

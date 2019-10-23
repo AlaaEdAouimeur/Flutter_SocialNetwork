@@ -82,8 +82,8 @@ class CategoryDropdownState extends State<CategoryDropdown> {
                 color: Colors.teal,
               ),
               icon: Icon(
-                FontAwesomeIcons.arrowDown,
-                color: Colors.teal,
+                FontAwesomeIcons.chevronDown,
+                size: 20,
               ),
               underline: Container(),
               onChanged: (String newValue) {
