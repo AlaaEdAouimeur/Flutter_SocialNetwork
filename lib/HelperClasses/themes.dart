@@ -31,6 +31,12 @@ class Themes {
           height: 1.1,
           fontSize: 20,
         ),
+        caption: TextStyle(
+          color: Colors.white,
+          letterSpacing: 0.2,
+          height: 1.1,
+          fontSize: 16,
+        ),
       ),
       accentColor: Colors.black87,
       iconTheme: IconThemeData(

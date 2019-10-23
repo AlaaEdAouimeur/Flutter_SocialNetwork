@@ -19,7 +19,6 @@ class WriteTabState extends State<WriteTab> {
     "Short story",
     "Snippet",
     "Quote",
-    "Blog",
   ];
   String dropdownValue = 'Microtale';
 
@@ -68,27 +67,17 @@ class WriteTabState extends State<WriteTab> {
         children: <Widget>[
           Text(
             "Category  :  ",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.teal,
-              fontSize: 16,
-            ),
+            style: Theme.of(context).textTheme.subhead,
           ),
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0),
             margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(0, 128, 128, 0.2),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
             child: DropdownButton<String>(
+              isDense: true,
               value: dropdownValue,
-              style: TextStyle(
-                color: Colors.teal,
-              ),
+              style: Theme.of(context).textTheme.subhead,
               icon: Icon(
                 EvaIcons.arrowIosDownward,
-                color: Colors.teal,
               ),
               onChanged: (String newValue) {
                 setState(() {
@@ -112,7 +101,11 @@ class WriteTabState extends State<WriteTab> {
   Container submitButton() {
     return Container(
       child: RaisedButton(
-        child: Text("Submit"),
+        color: Theme.of(context).accentColor,
+        child: Text(
+          "Submit",
+          style: Theme.of(context).textTheme.caption,
+        ),
         onPressed: () => FirebaseAuth.instance.currentUser().then((user) => {
               currentUser = user,
               insertData(),
@@ -155,37 +148,19 @@ class WriteTabState extends State<WriteTab> {
     );
   }
 
-  updateUser(String category) {
-    switch (category) {
-      case "Blog":
-        databaseReferences.DatabaseReferences()
-            .users
-            .where('uid', isEqualTo: currentUser.uid)
-            .getDocuments()
-            .then((query) => {
-                  print(query.documents.first.documentID),
-                  databaseReferences.DatabaseReferences()
-                      .users
-                      .document(query.documents.first.documentID)
-                      .updateData({"blogs": FieldValue.increment(1)}).then(
-                          (data) => print("User value updated")),
-                });
-        break;
-      default:
-        databaseReferences.DatabaseReferences()
-            .users
-            .where('uid', isEqualTo: currentUser.uid)
-            .getDocuments()
-            .then((query) => {
-                  print(query.documents.first.documentID),
-                  databaseReferences.DatabaseReferences()
-                      .users
-                      .document(query.documents.first.documentID)
-                      .updateData({"posts": FieldValue.increment(1)}).then(
-                          (data) => print("User value updated")),
-                });
-        break;
-    }
+  updateUser() {
+    databaseReferences.DatabaseReferences()
+        .users
+        .where('uid', isEqualTo: currentUser.uid)
+        .getDocuments()
+        .then((query) => {
+              print(query.documents.first.documentID),
+              databaseReferences.DatabaseReferences()
+                  .users
+                  .document(query.documents.first.documentID)
+                  .updateData({"posts": FieldValue.increment(1)}).then(
+                      (data) => print("User value updated")),
+            });
   }
 
   getFollowersList() {
@@ -243,16 +218,7 @@ class WriteTabState extends State<WriteTab> {
             ),
           );
         });
-    switch (dropdownValue) {
-      case 'Blog':
-        await insertBlog();
-        await updateUser("Blog");
-        break;
-      default:
-        await insertPost();
-        await updateUser("Post");
-        break;
-    }
+    await updateUser();
     Navigator.pop(context);
     Navigator.pop(context);
   }

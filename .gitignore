@@ -70,3 +70,5 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 android/.project
 android/app/.project
+ios/Flutter/flutter_export_environment.sh
+pubspec.lock
