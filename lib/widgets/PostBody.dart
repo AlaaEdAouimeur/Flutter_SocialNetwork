@@ -54,11 +54,7 @@ class PostBodyState extends State<PostBody> {
                 ),
                 child: Text(
                   widget.snapshot.data['writeup'],
-                  style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      letterSpacing: 0.2,
-                      height: 1.1,
-                      fontSize: 20),
+                  style: Theme.of(context).textTheme.display1,
                   textAlign: TextAlign.left,
                   softWrap: true,
                   overflow: TextOverflow.fade,

@@ -59,7 +59,7 @@ class CategoryDropdown extends StatefulWidget {
 class CategoryDropdownState extends State<CategoryDropdown> {
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).backgroundColor,
       height: 50.0,
       padding: EdgeInsets.only(left: 15.0, right: 15.0),
       child: Row(
@@ -76,7 +76,7 @@ class CategoryDropdownState extends State<CategoryDropdown> {
               ),
               Text(
                 "The Project Quote",
-                style: Theme.of(context).textTheme.subhead,
+                style: Theme.of(context).textTheme.title,
               ),
             ],
           ),
