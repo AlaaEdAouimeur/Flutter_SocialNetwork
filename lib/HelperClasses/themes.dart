@@ -18,7 +18,7 @@ class Themes {
           color: Color.fromRGBO(0, 0, 0, 0.8),
         ),
         subhead: TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           color: Color.fromRGBO(0, 0, 0, 0.8),
         ),
         subtitle: TextStyle(
@@ -67,8 +67,9 @@ class Themes {
         fontSize: 18,
         color: Colors.white,
       ),
+      // Bottom navigator text
       subhead: TextStyle(
-        fontSize: 18,
+        fontSize: 16,
         color: Colors.white,
       ),
       // Writeups

@@ -73,36 +73,28 @@ class _HomePageState extends State<HomePage>
           icon: Icon(FontAwesomeIcons.stream),
           title: Text(
             "Stream",
-            style: TextStyle(
-              color: Colors.black,
-            ),
+            style: Theme.of(context).textTheme.subhead,
           ),
         ),
         BottomNavigationBarItem(
           icon: Icon(FontAwesomeIcons.search),
           title: Text(
             "Discover",
-            style: TextStyle(
-              color: Colors.black,
-            ),
+            style: Theme.of(context).textTheme.subhead,
           ),
         ),
         BottomNavigationBarItem(
           icon: Icon(FontAwesomeIcons.blog),
           title: Text(
             "Blogs",
-            style: TextStyle(
-              color: Colors.black,
-            ),
+            style: Theme.of(context).textTheme.subhead,
           ),
         ),
         BottomNavigationBarItem(
           icon: Icon(FontAwesomeIcons.solidIdBadge),
           title: Text(
             "Profile",
-            style: TextStyle(
-              color: Colors.black,
-            ),
+            style: Theme.of(context).textTheme.subhead,
           ),
         ),
       ],
