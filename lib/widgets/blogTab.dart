@@ -12,7 +12,6 @@ class BlogTab extends StatefulWidget {
 
 class _BlogTabState extends State<BlogTab> {
   FirebaseUser currentUser;
-  String category;
   Stream query;
   @override
   void initState() {
@@ -24,51 +23,16 @@ class _BlogTabState extends State<BlogTab> {
     super.initState();
   }
 
-  categoryChanged() {
-    setState(() {
-      category = CategoryHelperFunction().getDropdownValue();
-    });
-  }
-
   Stream<QuerySnapshot> buildQuery() {
     Stream<QuerySnapshot> query;
-    switch (category) {
-      case "TPQ Selected":
-        setState(() {
-          query = databaseReference.DatabaseReferences()
-              .blogs
-              .where("tpqSelected", isEqualTo: true)
-              .orderBy('uploaded_at', descending: true)
-              .snapshots();
-        });
-        break;
-
-      case "Following":
-        setState(() {
-          query = databaseReference.DatabaseReferences()
-              .blogs
-              .where("visibleTo", arrayContains: currentUser.uid)
-              .orderBy('uploaded_at', descending: true)
-              .snapshots();
-        });
-        break;
-
-      case "All":
-        setState(() {
-          query = databaseReference.DatabaseReferences().blogs.snapshots();
-        });
-        break;
-
-      default:
-        query = null;
-        break;
-    }
+    setState(() {
+      query = databaseReference.DatabaseReferences().blogs.snapshots();
+    });
     return query;
   }
 
   @override
   Widget build(BuildContext context) {
-    categoryChanged();
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -86,9 +50,6 @@ class _BlogTabState extends State<BlogTab> {
                   color: Theme.of(context).backgroundColor,
                   child: Column(
                     children: <Widget>[
-                      CategoryDropdown(
-                        notifyParent: categoryChanged,
-                      ),
                       Flexible(
                         child: blogList(),
                       ),
