@@ -39,6 +39,10 @@ class Themes {
           height: 1.1,
           fontSize: 16,
         ),
+        display2: TextStyle(
+          fontSize: 18,
+          color: Colors.black,
+        ),
       ),
       accentColor: Colors.black87,
       iconTheme: IconThemeData(
@@ -67,6 +71,11 @@ class Themes {
       // Bottom navigator text
       subhead: TextStyle(
         fontSize: 16,
+        color: Colors.white,
+      ),
+      // Vote counts
+      display2: TextStyle(
+        fontSize: 18,
         color: Colors.white,
       ),
       // Writeups

@@ -20,7 +20,7 @@ class PostBodyState extends State<PostBody> {
   bool showFull = false;
   FirebaseUser currentUser;
   bool hasUpvotedPost = false;
-  IconData upIcon = FontAwesomeIcons.grinHearts;
+  IconData upIcon = FontAwesomeIcons.heart;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class PostBodyState extends State<PostBody> {
                 child: Text(
                   widget.snapshot.data['writeup'],
                   style: Theme.of(context).textTheme.display1,
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.justify,
                   softWrap: true,
                   overflow: TextOverflow.fade,
                 ),
@@ -82,7 +82,7 @@ class PostBodyState extends State<PostBody> {
                   ),
                 ),
                 SizedBox(
-                  height: 5,
+                  height: 15,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -99,9 +99,7 @@ class PostBodyState extends State<PostBody> {
                     ),
                     Text(
                       widget.snapshot.data["upvotes"].toString(),
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                      ),
+                      style: Theme.of(context).textTheme.display2,
                     ),
                   ],
                 ),
@@ -117,9 +115,9 @@ class PostBodyState extends State<PostBody> {
     IconData upIcon;
     if (currentUser != null) {
       if (hasUpvotedPost)
-        upIcon = FontAwesomeIcons.solidGrinHearts;
+        upIcon = FontAwesomeIcons.solidHeart;
       else
-        upIcon = FontAwesomeIcons.grinHearts;
+        upIcon = FontAwesomeIcons.heart;
       return Icon(
         upIcon,
         color: Theme.of(context).accentColor,
@@ -133,12 +131,12 @@ class PostBodyState extends State<PostBody> {
             if (snapshot.data['upvotedUsers'] != null) {
               List userIds = snapshot.data['upvotedUsers'];
               if (userIds.contains(currentUser.uid))
-                upIcon = FontAwesomeIcons.solidGrinHearts;
+                upIcon = FontAwesomeIcons.solidHeart;
               else
-                upIcon = FontAwesomeIcons.grinHearts;
+                upIcon = FontAwesomeIcons.heart;
             }
           } else {
-            upIcon = FontAwesomeIcons.grinHearts;
+            upIcon = FontAwesomeIcons.heart;
           }
           return Icon(
             upIcon,
