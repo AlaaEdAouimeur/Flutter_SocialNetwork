@@ -133,7 +133,10 @@ class UserProfileTabState extends State<UserProfileTab> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("Light Theme"),
+          Text(
+            "Light Theme",
+            style: Theme.of(context).textTheme.subhead,
+          ),
           Switch(
               value: darkTheme == null ? true : darkTheme,
               onChanged: (value) {
@@ -142,7 +145,10 @@ class UserProfileTabState extends State<UserProfileTab> {
                   _changetheme();
                 });
               }),
-          Text("Dark Theme"),
+          Text(
+            "Dark Theme",
+            style: Theme.of(context).textTheme.subhead,
+          ),
         ],
       ),
     );

@@ -6,8 +6,9 @@ class Themes {
   static final ThemeData whitetheme = ThemeData(
       fontFamily: 'Didact',
       backgroundColor: Colors.white,
+      cardColor: Color.fromRGBO(0, 0, 0, 0.05),
       brightness: Brightness.light,
-      buttonColor: Colors.orange,
+      buttonColor: Colors.black,
       textTheme: TextTheme(
         headline: TextStyle(
           color: Colors.black,
@@ -49,7 +50,7 @@ class Themes {
     fontFamily: 'Didact',
     backgroundColor: Colors.black,
     brightness: Brightness.dark,
-    buttonColor: Colors.purple,
+    buttonColor: Colors.white,
     textTheme: TextTheme(
       headline: TextStyle(
         color: Colors.white,

@@ -42,7 +42,9 @@ class PostListState extends State<PostList> {
             return Column(
               children: <Widget>[
                 new Container(
-                  margin: EdgeInsets.all(25.0),
+                  color: Theme.of(context).cardColor,
+                  margin: EdgeInsets.all(15.0),
+                  padding: EdgeInsets.all(15.0),
                   child: PostBody(widget.snapshot.data.documents[index]),
                 ),
               ],

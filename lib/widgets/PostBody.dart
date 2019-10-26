@@ -126,7 +126,7 @@ class PostBodyState extends State<PostBody> {
         upIcon = FontAwesomeIcons.grinHearts;
       return Icon(
         upIcon,
-        color: Colors.red,
+        color: Theme.of(context).accentColor,
         size: 22,
       );
     } else {
@@ -146,7 +146,7 @@ class PostBodyState extends State<PostBody> {
           }
           return Icon(
             upIcon,
-            color: Colors.red,
+            color: Theme.of(context).accentColor,
             size: 22,
           );
         },

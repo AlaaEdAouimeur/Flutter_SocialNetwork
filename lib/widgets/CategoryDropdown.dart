@@ -65,21 +65,32 @@ class CategoryDropdownState extends State<CategoryDropdown> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Image.asset(
-            'assets/images/logo.png',
-            width: 30,
+          Row(
+            children: <Widget>[
+              Image.asset(
+                'assets/images/logo.png',
+                width: 30,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "The Project Quote",
+                style: Theme.of(context).textTheme.subhead,
+              ),
+            ],
           ),
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0),
             margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(0, 128, 128, 0.2),
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(5.0),
             ),
             child: DropdownButton<String>(
               value: widget.categoryHelperFunction.getDropdownValue(),
               style: TextStyle(
-                color: Colors.teal,
+                color: Theme.of(context).accentColor,
               ),
               icon: Icon(
                 FontAwesomeIcons.chevronDown,
