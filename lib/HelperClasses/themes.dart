@@ -21,13 +21,10 @@ class Themes {
           fontSize: 16,
           color: Color.fromRGBO(0, 0, 0, 0.8),
         ),
+        // Name of the writer
         subtitle: TextStyle(
-          color: Colors.black26,
-        ),
-        overline: TextStyle(
-          color: Colors.black54,
+          color: Color.fromRGBO(0, 0, 0, 0.6),
           fontSize: 16,
-          letterSpacing: 0,
         ),
         // Writeups
         display1: TextStyle(
@@ -52,7 +49,7 @@ class Themes {
   /// Dark theme for the app
   /// Includes text theme, icon theme and app theme
   static final ThemeData blacktheme = ThemeData(
-    accentColor: Colors.white70,
+    accentColor: Colors.white,
     fontFamily: 'Didact',
     backgroundColor: Colors.black,
     cardColor: Color.fromRGBO(255, 255, 255, 0.05),
@@ -80,7 +77,8 @@ class Themes {
         fontSize: 20,
       ),
       subtitle: TextStyle(
-        color: Colors.white24,
+        color: Color.fromRGBO(255, 255, 255, 0.6),
+        fontSize: 16,
       ),
     ),
     iconTheme: IconThemeData(

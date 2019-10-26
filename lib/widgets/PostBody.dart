@@ -74,7 +74,7 @@ class PostBodyState extends State<PostBody> {
                   child: GestureDetector(
                     child: Text(
                       widget.snapshot.data['name'].toString().toUpperCase(),
-                      style: Theme.of(context).textTheme.overline,
+                      style: Theme.of(context).textTheme.subtitle,
                     ),
                     onTap: () {
                       openUserProfile();
