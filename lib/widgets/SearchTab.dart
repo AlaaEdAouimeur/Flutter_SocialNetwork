@@ -33,21 +33,21 @@ class SearchTabState extends State<SearchTab> {
           child: Column(
             children: <Widget>[
               Center(
-                child: Container(
-                  width: widthOfContainer,
-                  margin: EdgeInsets.all(10.0),
-                  padding: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).accentColor,
-                      style: BorderStyle.solid,
-                      width: 1.0,
+                child: GestureDetector(
+                  child: Container(
+                    width: widthOfContainer,
+                    margin: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).accentColor,
+                        style: BorderStyle.solid,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5),
+                      ),
                     ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
-                  child: GestureDetector(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -65,9 +65,9 @@ class SearchTabState extends State<SearchTab> {
                         ),
                       ],
                     ),
-                    onTap: () =>
-                        showSearch(context: context, delegate: UserSearch()),
                   ),
+                  onTap: () =>
+                      showSearch(context: context, delegate: UserSearch()),
                 ),
               ),
               Flexible(
