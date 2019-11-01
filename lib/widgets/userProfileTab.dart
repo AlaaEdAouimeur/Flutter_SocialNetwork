@@ -117,7 +117,7 @@ class UserProfileTabState extends State<UserProfileTab> {
                           logoutButton(),
                           themeSwitch(),
                         ],
-                      ),
+                      ), 
                     ),
                   ),
                 );
