@@ -1,0 +1,9 @@
+gymnasium>=0.29
+stable-baselines3>=2.3
+torch>=2.2
+pygame>=2.5
+numpy>=1.26
+Pillow>=10.0
+fastapi>=0.110
+uvicorn[standard]>=0.29
+websockets>=12.0
